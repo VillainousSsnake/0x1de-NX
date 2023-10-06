@@ -1,16 +1,17 @@
-# This is a sample Python script.
+"""
+0x1de NX is a tool for modding file formats from The Legend of Zelda: Tears of the Kingdom
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+"""
+
+from tkinter import filedialog
+import turtle
+from __Cache__.data import *
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+# program
+class Program:
+    @staticmethod
+    def main():
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+        window = turtle.Screen()
+        window.title("0x1de NX - VERSION: Dev1.0.0")
