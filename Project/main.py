@@ -11,10 +11,17 @@ from __Cache__.data import *
 from FileFormatLibrary.ZStd.zstd import ZSTD
 
 
-# program
+# Program
 class Program:
-    @staticmethod
-    def main():
+    def main(self):
+        # Configuring the app variables
+        self._Config = {
+            "isFileOpen": False,
+            "isFolderOpen": False,
+            "isFileBtnDropdownShowing": False,
+            "CurrentFilepath": None,
+            "displayingObject": False,
+        }
 
         # Configuring the window
         window = turtle.Screen()
@@ -25,6 +32,12 @@ class Program:
         def on_close():
             turtle.bye()
         root.protocol("WM_DELETE_WINDOW", on_close)
+
+        # Configuring the App Pen
+        pen = turtle.Turtle()
+        pen.pu()
+        pen.ht()
+        pen.speed(0)
 
         # Configure buttons
         fileBtn = turtle.Turtle()
@@ -41,6 +54,10 @@ class Program:
         openFolderBtn.pu()
         openFolderBtn.speed(0)
         openFolderBtn.goto(openBtn.xcor(), openBtn.ycor() - 21)
+
+        # Creating a list of mutable buttons
+        self.mutableButtonsList = [openBtn, openFolderBtn]
+        self.fileDropdownButtons = [openBtn, openFolderBtn]
 
         # Configure button texture
         fileBtnTex = os.path.join(
@@ -76,18 +93,82 @@ class Program:
         openFolderBtn.shape(openFolderBtnTex)
 
         # Configuring the button's onclick functions
-        def file_btn_func():
-            pass
-        def open_btn_func():
-            pass
-        def open_folder_func():
-            pass
+        def file_btn_func(x, y):
+            if self._Config["isFileBtnDropdownShowing"]:
+                # Hiding the dropdown
+                self._Config["isFileBtnDropdownShowing"] = False
+                for button in self.mutableButtonsList:
+                    button.ht()
+            else:
+                self._Config["isFileBtnDropdownShowing"] = True
+                for button in self.fileDropdownButtons:
+                    button.st()
+
+        def open_btn_func(x, y):
+            filetypes = (
+                ('ZStandard', '*.zs'),
+            )
+            filepath = filedialog.askopenfilename(initialdir=os.getcwd(),
+                                                  title="Select a File",
+                                                  filetypes=filetypes)
+            if filepath == "":
+                return -1
+
+            self._Config["isFileOpen"] = True
+            self._Config["currentFilepath"] = filepath
+
+            update()
+
+        def open_folder_func(x, y):
+            filepath = filedialog.askdirectory(initialdir=os.getcwd(), title="Select a Folder")
+
+            if filepath == "":
+                return -1
+
+            self._Config["isFolderOpen"] = True
+            self._Config["currentFilepath"] = filepath
+
+            update()
 
         # Setting the button's onclick functions
         fileBtn.onclick(file_btn_func, 1)
         openBtn.onclick(open_btn_func, 1)
         openFolderBtn.onclick(open_folder_func, 1)
 
+        # Program Functions
+        def update():
+
+            if not self._Config["displayingObject"]:
+                if self._Config["isFileOpen"]:
+                    configure_current_file()
+
+                if self._Config["isFolderOpen"]:
+                    configure_current_folder()
+
+        def configure_current_file():
+
+            currentFile = str(self._Config["currentFilepath"])
+            tempDir = os.path.join(
+                os.getcwd(),
+                "Project",
+                "__Cache__",
+                "_temp_"
+            )
+            dictDir = os.path.join(
+                os.getcwd(),
+                "Project",
+                "__Cache__",
+                "_dict_"
+            )
+
+            if currentFile.endswith("pack.zs"):
+                pass
+
+            # TODO: Stub
+
+        def configure_current_folder():
+            # TODO: Stub
+            pass
 
 
         # Turtle mainloop
@@ -121,4 +202,5 @@ class Program:
 
 
 # running the program
-Program.main()
+app = Program()
+app.main()

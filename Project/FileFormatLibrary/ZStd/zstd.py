@@ -21,6 +21,7 @@ class ZSTD:
         # Decompress the file
         with open(input_file, 'rb') as f_in, open(output_file, 'wb') as f_out:
             f_out.write(dctx.decompress(f_in.read()))
+
     @staticmethod
     def compress(input_file, output_file, dictionary):
         # Load the dictionary
