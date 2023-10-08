@@ -1,4 +1,4 @@
-from App.Program import *
+from Project.App.Program import *
 
 app = Program()
 app.main_menu()
