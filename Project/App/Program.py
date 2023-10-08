@@ -5,6 +5,7 @@ from Project.App.ProgramFunc.selectEditor import *
 from Project.App.ProgramFunc.settings import *
 from Project.App.ProgramFunc.zstandardEditor import *
 from Project.App.ProgramFunc.meshCodecEditor import *
+from Project.App.ProgramFunc.gamePathSelect import *
 
 
 class Program:
@@ -24,6 +25,10 @@ class Program:
     def settings(self):
 
         return settings(self)
+
+    def game_path_select(self):
+
+        return game_path_select(self)
 
     def mesh_codec_editor(self):
 

@@ -14,3 +14,5 @@ while app.returnStatement != "Closed":
         app.zstandard_editor()
     if app.returnStatement == "MESH_CODEC_EDITOR":
         app.mesh_codec_editor()
+    if app.returnStatement == "GAME_PATH_SELECT":
+        app.game_path_select()
