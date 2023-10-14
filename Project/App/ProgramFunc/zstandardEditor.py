@@ -1,16 +1,22 @@
-import os
+# Importing custom libraries
+from Project.FileFormatLibrary.ZStd.zstd import *
+from Project.FileFormatLibrary.SArc.sarchive import *
+
+# Importing external libraries
 import turtle
 from tkinter import filedialog
-from Project.FileFormatLibrary.ZStd.zstd import *
+import os
 
-# Configuring global variables
 _Config = {
+    "tempDir": os.path.join(os.getcwd(), "Project", "__Cache__", "_temp_"),
     "fileDropdown": False,
     "fileOpen": False,
     "currentFilepath": "",
     "displayingFile": False,
     "displayingFileState": "",
+
 }
+# Configuring global variables
 _FileConfig = {
     "basename": "",
     "filepath": "",
@@ -227,7 +233,10 @@ def zstandard_editor(self):
         elif _FileConfig["decompressedFiletype"] == "bcett":
             dictionary = os.path.join(os.getcwd(), "Project", "__Cache__", "_dict_", "bcett.byml.zsdic")
 
-        fileContents = ZSTD.read(_Config["currentFilepath"], dictionary)
+        # If the file is a ZStandard file
+        if 'zs' in _FileConfig["basename"]:
+
+            fileContents = ZSTD.decompress(_Config["currentFilepath"], _Config["tempDir"], dictionary)
 
         _FileConfig["decompressedFileContents"] = fileContents
 
