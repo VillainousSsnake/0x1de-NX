@@ -9,6 +9,7 @@ _Config = {
     "fileOpen": False,
     "currentFilepath": "",
     "displayingFile": False,
+    "displayingFileState": "",
 }
 _FileConfig = {
     "basename": "",
@@ -239,18 +240,52 @@ def zstandard_editor(self):
         _Config["displayingFile"] = True
 
         # Drawing the file
-        pen.goto(-window.window_width()/2 + 100, -window.window_height()/2 + 100)
-        pen.pensize(3)
-        pen.color('black')
-        pen.fillcolor('grey')
-        pen.begin_fill()
-        for loop in range(4):
-            pen.fd(300)
-            pen.lt(90)
-        pen.end_fill()
-        pen.pu()
-        pen.pensize(1)
-        # TODO: Write draw_file
+        pen.clear()
+
+        # Setting the display state
+        _Config["displayingFileState"] = root.state()
+
+        if root.state() != "zoomed":
+
+            pen.goto(-window.window_width()/2 + 100, -window.window_height()/2 + 100)
+            pen.pensize(3)
+            pen.color('black')
+            pen.fillcolor('grey')
+            pen.begin_fill()
+            for loop in range(4):
+                pen.fd(300)
+                pen.lt(90)
+            pen.end_fill()
+            pen.pu()
+            pen.pensize(1)
+
+            # TODO: Finish drawing file while state is not "zoomed"
+
+        else:
+
+            pen.goto((-window.window_width() / 2) + (window.window_width() / 64),
+                     (-window.window_height() / 2) + (window.window_height() / 32))
+            pen.pensize(3)
+            pen.color('black')
+            pen.fillcolor('grey')
+            pen.begin_fill()
+            for loop in range(2):
+                pen.fd(window.window_width() - (window.window_width() / 16))
+                pen.lt(90)
+                pen.fd(window.window_height() - (window.window_height() / 5))
+                pen.lt(90)
+            pen.end_fill()
+            pen.pu()
+            pen.pensize(1)
+
+            # Resetting the turtle textures
+            fileBtn.shape(fileBtnTex)
+            openBtn.shape(openBtnTex)
+            newBtn.shape(newBtnTex)
+            compressBtn.shape(compressBtnTex)
+            decompressBtn.shape(decompressBtnTex)
+
+            # TODO: Finish drawing file while state is "zoomed"
 
     # Configuring update function
     def update():
@@ -283,6 +318,14 @@ def zstandard_editor(self):
                 # Configure and draw file
                 configure_file()
                 draw_file()
+
+            else:
+
+                # Detecting if the file needs to be re-drawn
+                if root.state() != _Config["displayingFileState"]:
+
+                    # Draw file
+                    draw_file()
 
         # Looping the update() function forever
         turtle.ontimer(update, 100)

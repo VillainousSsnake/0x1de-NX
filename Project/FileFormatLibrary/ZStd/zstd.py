@@ -24,6 +24,7 @@ class ZSTD:
 
     @staticmethod
     def compress(input_file, output_file, dictionary):
+
         # Load the dictionary
         with open(dictionary, "rb") as f:
             dict_data = f.read()
@@ -40,6 +41,7 @@ class ZSTD:
 
     @staticmethod
     def read(input_file, dictionary):
+
         # Load the dictionary
         with open(dictionary, 'rb') as f:
             dict_data = f.read()
