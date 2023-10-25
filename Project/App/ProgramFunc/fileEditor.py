@@ -1,6 +1,5 @@
 # Importing custom libraries
 from Project.FileFormatLibrary.ZStd.zstd import *
-from Project.FileFormatLibrary.SArc.sarchive import *
 
 # Importing external libraries
 import turtle
@@ -22,6 +21,7 @@ _FileConfig = {
     "filepath": "",
     "decompressedFiletype": "",
     "decompressedFileContents": "",
+    "isExpanded": False,
 }
 
 
@@ -34,7 +34,6 @@ def file_editor(self):
 
     # Configuring the window
     window = turtle.Screen()
-    window.delay(0)
     window.title("0x1de NX - VERSION: 0.0.1 - File Editor")
     turtleCanvas = window.getcanvas()
     root = turtleCanvas.winfo_toplevel()
@@ -129,8 +128,11 @@ def file_editor(self):
     compressBtn.shape(compressBtnTex)
     decompressBtn.shape(decompressBtnTex)
 
-    # Creating list of buttons
-    fileDropdownButtons = [openBtn, newBtn, compressBtn, decompressBtn]
+    # Creating lists for the buttons
+    fileDropdownButtons = (openBtn,
+                           newBtn,
+                           compressBtn,
+                           decompressBtn)
 
     # Configuring the button onclick methods
     def file_onclick(x, y):
@@ -205,7 +207,6 @@ def file_editor(self):
     compressBtn.onclick(compress_onclick, 1)
     decompressBtn.onclick(decompress_onclick, 1)
 
-    # Defining the program functions
     def configure_file():
 
         # Importing global variables
@@ -238,8 +239,7 @@ def file_editor(self):
         if 'zs' in _FileConfig["basename"]:
 
             fileContents = ZSTD.decompress(_Config["currentFilepath"], _Config["tempDir"], dictionary)
-
-        _FileConfig["decompressedFileContents"] = fileContents
+            _FileConfig["decompressedFileContents"] = fileContents
 
     def draw_file():
 
@@ -257,24 +257,10 @@ def file_editor(self):
 
         if root.state() != "zoomed":
 
-            pen.goto(-window.window_width()/2 + 100, -window.window_height()/2 + 100)
-            pen.pensize(3)
-            pen.color('black')
-            pen.fillcolor('grey')
-            pen.begin_fill()
-            for loop in range(4):
-                pen.fd(300)
-                pen.lt(90)
-            pen.end_fill()
-            pen.pu()
-            pen.pensize(1)
-
-            # TODO: Finish drawing file while state is not "zoomed"
-
-        else:
-
+            # Drawing the border
             pen.goto((-window.window_width() / 2) + (window.window_width() / 64),
                      (-window.window_height() / 2) + (window.window_height() / 32))
+            pen.pd()
             pen.pensize(3)
             pen.color('black')
             pen.fillcolor('grey')
@@ -282,18 +268,50 @@ def file_editor(self):
             for loop in range(2):
                 pen.fd(window.window_width() - (window.window_width() / 16))
                 pen.lt(90)
+                pen.fd(window.window_height() - (window.window_height() / 4))
+                pen.lt(90)
+            pen.end_fill()
+            pen.pu()
+            pen.pensize(1)
+
+            # drawing the file name
+            pen.lt(90)
+            pen.fd(window.window_height() - (window.window_height() / 4) - 25)
+            pen.setx(pen.xcor() + 25)
+            pen.write(_FileConfig["basename"], font=("Courier", 15, "bold"))
+
+            # Resetting the pen heading
+            pen.seth(0)
+
+            # TODO: Finish drawing file while state is not "zoomed"
+
+        else:
+
+            # Drawing the border
+            pen.goto((-window.window_width() / 2) + (window.window_width() / 64),
+                     (-window.window_height() / 2) + (window.window_height() / 32))
+            pen.pd()
+            pen.pensize(3)
+            pen.color('black')
+            pen.fillcolor('grey')
+            pen.begin_fill()
+            for loop in range(2):
+                pen.fd(window.window_width() - (window.window_width() / 25))
+                pen.lt(90)
                 pen.fd(window.window_height() - (window.window_height() / 5))
                 pen.lt(90)
             pen.end_fill()
             pen.pu()
             pen.pensize(1)
 
-            # Resetting the turtle textures
-            fileBtn.shape(fileBtnTex)
-            openBtn.shape(openBtnTex)
-            newBtn.shape(newBtnTex)
-            compressBtn.shape(compressBtnTex)
-            decompressBtn.shape(decompressBtnTex)
+            # drawing the file name
+            pen.lt(90)
+            pen.fd(window.window_height() - (window.window_height() / 5) - 25)
+            pen.setx(pen.xcor() + 25)
+            pen.write(_FileConfig["basename"], font=("Courier", 15, "bold"))
+
+            # Resetting the pen heading
+            pen.seth(0)
 
             # TODO: Finish drawing file while state is "zoomed"
 
