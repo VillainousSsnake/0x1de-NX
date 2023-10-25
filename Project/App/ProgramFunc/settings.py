@@ -36,10 +36,10 @@ def settings(self):
     previousBtn.speed(0)
     previousBtn.goto(-window.canvwidth + 100, window.canvheight - 50)
 
-    gamePathsBtn = turtle.Turtle()
-    gamePathsBtn.pu()
-    gamePathsBtn.speed(0)
-    gamePathsBtn.goto(-175, 50)
+    setGamePathBtn = turtle.Turtle()
+    setGamePathBtn.pu()
+    setGamePathBtn.speed(0)
+    setGamePathBtn.goto(-175, 50)
 
     # Configuring textures
     logoTex = os.path.join(
@@ -58,27 +58,27 @@ def settings(self):
         "settings",
         "previousButton.gif"
     )
-    gamePathsBtnTex = os.path.join(
+    setGamePathBtnTex = os.path.join(
         os.getcwd(),
         "Project",
         "Screen",
         "Texture",
         "settings",
-        "gamePathsButton.gif"
+        "setTotKDump.gif"
     )
 
     # Registering the textures
     window.register_shape(logoTex)
     window.register_shape(previousBtnTex)
-    window.register_shape(gamePathsBtnTex)
+    window.register_shape(setGamePathBtnTex)
 
     # Applying the textures
     logo.shape(logoTex)
     previousBtn.shape(previousBtnTex)
-    gamePathsBtn.shape(gamePathsBtnTex)
+    setGamePathBtn.shape(setGamePathBtnTex)
 
     # Configuring the button onclick methods
-    def previous_button_conclick(x, y):
+    def previous_button_onclick(x, y):
 
         if x is None or y is None:
             on_close()
@@ -97,7 +97,7 @@ def settings(self):
         self.returnStatement = "GAME_PATH_SELECT"
 
     # Applying the onclick methods
-    previousBtn.onclick(previous_button_conclick, 1)
-    gamePathsBtn.onclick(game_paths_button_onclick, 1)
+    previousBtn.onclick(previous_button_onclick, 1)
+    setGamePathBtn.onclick(game_paths_button_onclick, 1)
 
     window.mainloop()
