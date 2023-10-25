@@ -226,22 +226,29 @@ def file_editor(self):
         _FileConfig["decompressedFiletype"] = decompressedFiletype
 
         # Configuring the decompressed contents of the file
-        dictionary = ""
-
-        if _FileConfig["decompressedFiletype"] == "pack":
-            dictionary = os.path.join(os.getcwd(), "Project", "__Cache__", "_dict_", "pack.zsdic")
-
-        elif _FileConfig["decompressedFiletype"] == "byml":
-            dictionary = os.path.join(os.getcwd(), "Project", "__Cache__", "_dict_", "bcett.byml.zsdic")
-
-        elif _FileConfig["decompressedFiletype"] == "bcett":
-            dictionary = os.path.join(os.getcwd(), "Project", "__Cache__", "_dict_", "bcett.byml.zsdic")
 
         # If the file is a ZStandard file
         if 'zs' in _FileConfig["basename"]:
+            # Setting the dictionary based on what format the decompressed file will be
+            dictionary = ""
 
-            fileContents = ZSTD.decompress(_Config["currentFilepath"], _Config["tempDir"], dictionary)
+            if _FileConfig["decompressedFiletype"] == "pack":
+                dictionary = os.path.join(os.getcwd(), "Project", "__Cache__", "_dict_", "pack.zsdic")
+
+            elif _FileConfig["decompressedFiletype"] == "byml":
+                dictionary = os.path.join(os.getcwd(), "Project", "__Cache__", "_dict_", "bcett.byml.zsdic")
+
+            elif _FileConfig["decompressedFiletype"] == "bcett":
+                dictionary = os.path.join(os.getcwd(), "Project", "__Cache__", "_dict_", "bcett.byml.zsdic")
+
+            # Getting the decompressed contents of the file
+            fileContents = ZSTD.read(_Config["currentFilepath"], dictionary)
             _FileConfig["decompressedFileContents"] = fileContents
+
+            print(_FileConfig["decompressedFileContents"])
+
+            if '.pack' in _FileConfig["basename"]:
+                pass  # TODO: Write the .pack decompression
 
     def draw_file():
 
@@ -281,6 +288,14 @@ def file_editor(self):
             pen.fd(window.window_height() - (window.window_height() / 4) - 25)
             pen.setx(pen.xcor() + 25)
             pen.write(_FileConfig["basename"], font=("Courier", 15, "bold"))
+
+            # Moving the pen near the bottom-left of the border
+            pen.goto((-window.window_width() / 2) + (window.window_width() / 64) + 15,
+                     (-window.window_height() / 2) + (window.window_height() / 32) + 15)
+
+            # Writing the file contents depending on the decompressed file format
+            if _FileConfig["decompressedFiletype"] == "pack":
+                print(SARC.read_data(_FileConfig["decompressedFileContents"], 'l'))
 
             # Resetting the pen heading
             pen.seth(0)
