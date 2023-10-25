@@ -29,12 +29,17 @@ def main_menu(self):
     settingsBtn = turtle.Turtle()
     settingsBtn.pu()
     settingsBtn.speed(0)
-    settingsBtn.goto(160, -200)
+    settingsBtn.goto(160, -125)
 
     editorBtn = turtle.Turtle()
     editorBtn.pu()
     editorBtn.speed(0)
-    editorBtn.goto(-160, -200)
+    editorBtn.goto(-160, -125)
+
+    mergeBtn = turtle.Turtle()
+    mergeBtn.pu()
+    mergeBtn.speed(0)
+    mergeBtn.goto(0, -200)
 
     logo = turtle.Turtle()
     logo.pu()
@@ -58,6 +63,14 @@ def main_menu(self):
         "main",
         "editorBtn.gif"
     )
+    mergeBtnTex = os.path.join(
+        os.getcwd(),
+        "Project",
+        "Screen",
+        "Texture",
+        "main",
+        "mergeBtn.gif"
+    )
     logoTex = os.path.join(
         os.getcwd(),
         "Project",
@@ -70,11 +83,13 @@ def main_menu(self):
     # Registering the textures
     window.register_shape(settingsBtnTex)
     window.register_shape(editorBtnTex)
+    window.register_shape(mergeBtnTex)
     window.register_shape(logoTex)
 
     # Applying the textures
     settingsBtn.shape(settingsBtnTex)
     editorBtn.shape(editorBtnTex)
+    mergeBtn.shape(mergeBtnTex)
     logo.shape(logoTex)
 
     # Configuring the button turtle's onclick method
@@ -96,9 +111,19 @@ def main_menu(self):
         on_close()
         self.returnStatement = "SELECT_EDITOR"
 
+    def merge_onclick(x, y):
+
+        if x is None or y is None:
+            on_close()
+            raise TypeError("Onclick Coordinates cannot be NoneType")
+
+        on_close()
+        self.returnStatement = "MERGE_MODS"
+
     # Applying the onclick methods
     settingsBtn.onclick(settings_onclick, 1)
     editorBtn.onclick(editor_onclick, 1)
+    mergeBtn.onclick(merge_onclick, 1)
 
     # Turtle mainloop
     window.mainloop()
