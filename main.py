@@ -26,7 +26,7 @@ while app.returnStatement != "Closed":
         app.game_path_select()
 
     else:
-        app.display_error_code("#001", "returnStatment Doesn't Exist")
+        app.display_error_code("#001", str("returnStatement" + '"' + str(app.returnStatement) + '"' + " Doesn't Exist"))
 
 
 #  Deleting files in Project\__Cache__\_temp_  #
