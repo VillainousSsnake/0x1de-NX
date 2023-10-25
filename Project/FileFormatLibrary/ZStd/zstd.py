@@ -44,8 +44,6 @@ class ZSTD:
         with open(input_file, "rb") as f_in, open(output_file, "wb") as f_out:
             f_out.write(dctx.compress(f_in.read()))
 
-        print("Compressed File")
-
     @staticmethod
     def read(input_file, dictionary):
 
