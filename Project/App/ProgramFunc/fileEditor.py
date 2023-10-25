@@ -1,5 +1,6 @@
 # Importing custom libraries
 from Project.FileFormatLibrary.ZStd.zstd import *
+from Project.FileFormatLibrary.SArc.sarchive import *
 
 # Importing external libraries
 import turtle
@@ -44,6 +45,7 @@ def file_editor(self):
         self.returnStatement = "Closed"
 
     root.protocol("WM_DELETE_WINDOW", on_close)
+    window.bgcolor("#131642")
 
     # Creating the Screen pen
     pen = turtle.Turtle()
