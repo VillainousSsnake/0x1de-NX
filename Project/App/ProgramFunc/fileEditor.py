@@ -245,8 +245,6 @@ def file_editor(self):
             fileContents = ZSTD.read(_Config["currentFilepath"], dictionary)
             _FileConfig["decompressedFileContents"] = fileContents
 
-            print(_FileConfig["decompressedFileContents"])
-
             if '.pack' in _FileConfig["basename"]:
                 pass  # TODO: Write the .pack decompression
 
@@ -295,7 +293,22 @@ def file_editor(self):
 
             # Writing the file contents depending on the decompressed file format
             if _FileConfig["decompressedFiletype"] == "pack":
-                print(SARC.read_data(_FileConfig["decompressedFileContents"], 'l'))
+
+                # Grabbing the list of files in the SArc
+                sarcContents = SARC.read_data(_FileConfig["decompressedFileContents"], 'l')
+
+                # formatting sarcContents
+                sarcKeys = []
+
+                for key in sarcContents.mapping.keys():
+                    sarcKeys.append(key)
+
+                sarcContentOutput = ''
+
+                # TODO: Looking at each item in sarcKeys and determining the directories on the root
+
+                # Writing the formatted list of files in the SArc
+                pen.write(sarcContentOutput, font=("Courier", 15, "bold"))
 
             # Resetting the pen heading
             pen.seth(0)
