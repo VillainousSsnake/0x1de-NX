@@ -26,7 +26,7 @@ _FileConfig = {
 
 
 # The Program method
-def zstandard_editor(self):
+def file_editor(self):
 
     # Initializing
     turtle.TurtleScreen._RUNNING = True
@@ -35,7 +35,7 @@ def zstandard_editor(self):
     # Configuring the window
     window = turtle.Screen()
     window.delay(0)
-    window.title("0x1de NX - VERSION: 0.0.1 - ZStandard Editor")
+    window.title("0x1de NX - VERSION: 0.0.1 - File Editor")
     turtleCanvas = window.getcanvas()
     root = turtleCanvas.winfo_toplevel()
     root.iconbitmap(os.path.join(os.getcwd(), "Project", "Screen", "Texture", "main", "0x1de.ico"))
@@ -79,7 +79,7 @@ def zstandard_editor(self):
         "Project",
         "Screen",
         "Texture",
-        "zstandard_editor",
+        "file_editor",
         "fileBtn.gif"
     )
     openBtnTex = os.path.join(
@@ -87,7 +87,7 @@ def zstandard_editor(self):
         "Project",
         "Screen",
         "Texture",
-        "zstandard_editor",
+        "file_editor",
         "openBtn.gif"
     )
     newBtnTex = os.path.join(
@@ -95,7 +95,7 @@ def zstandard_editor(self):
         "Project",
         "Screen",
         "Texture",
-        "zstandard_editor",
+        "file_editor",
         "newBtn.gif"
     )
     compressBtnTex = os.path.join(
@@ -103,7 +103,7 @@ def zstandard_editor(self):
         "Project",
         "Screen",
         "Texture",
-        "zstandard_editor",
+        "file_editor",
         "compressBtn.gif"
     )
     decompressBtnTex = os.path.join(
@@ -111,7 +111,7 @@ def zstandard_editor(self):
         "Project",
         "Screen",
         "Texture",
-        "zstandard_editor",
+        "file_editor",
         "decompressBtn.gif"
     )
 

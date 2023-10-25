@@ -16,8 +16,8 @@ while app.returnStatement != "Closed":
     if app.returnStatement == "SETTINGS":
         app.settings()
 
-    if app.returnStatement == "ZSTANDARD_EDITOR":
-        app.zstandard_editor()
+    if app.returnStatement == "FILE_EDITOR":
+        app.file_editor()
 
     if app.returnStatement == "MESH_CODEC_EDITOR":
         app.mesh_codec_editor()

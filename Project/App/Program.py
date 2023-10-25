@@ -3,7 +3,7 @@
 from Project.App.ProgramFunc.mainMenu import *
 from Project.App.ProgramFunc.selectEditor import *
 from Project.App.ProgramFunc.settings import *
-from Project.App.ProgramFunc.zstandardEditor import *
+from Project.App.ProgramFunc.fileEditor import *
 from Project.App.ProgramFunc.meshCodecEditor import *
 from Project.App.ProgramFunc.gamePathSelect import *
 
@@ -34,6 +34,6 @@ class Program:
 
         return mesh_codec_editor(self)
 
-    def zstandard_editor(self):
+    def file_editor(self):
 
-        return zstandard_editor(self)
+        return file_editor(self)

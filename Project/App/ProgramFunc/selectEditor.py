@@ -40,10 +40,10 @@ def select_editor(self):
     meshCodecEditorBtn.speed(0)
     meshCodecEditorBtn.goto(0, -79)
 
-    zStandardEditorBtn = turtle.Turtle()
-    zStandardEditorBtn.pu()
-    zStandardEditorBtn.speed(0)
-    zStandardEditorBtn.goto(0, -100)
+    fileEditorBtn = turtle.Turtle()
+    fileEditorBtn.pu()
+    fileEditorBtn.speed(0)
+    fileEditorBtn.goto(0, -100)
 
     previousBtn = turtle.Turtle()
     previousBtn.pu()
@@ -59,13 +59,13 @@ def select_editor(self):
         "select_editor",
         "MeshCodecEditorButton.gif"
     )
-    zStandardEditorBtnTex = os.path.join(
+    fileEditorBtnTex = os.path.join(
         os.getcwd(),
         "Project",
         "Screen",
         "Texture",
         "select_editor",
-        "ZStandardEditorButton.gif"
+        "fileEditorButton.gif"
     )
     logoTex = os.path.join(
         os.getcwd(),
@@ -86,14 +86,14 @@ def select_editor(self):
 
     # Registering the textures
     window.register_shape(meshCodecEditorBtnTex)
-    window.register_shape(zStandardEditorBtnTex)
+    window.register_shape(fileEditorBtnTex)
     window.register_shape(logoTex)
     window.register_shape(previousBtnTex)
 
     # Applying the textures
     logo.shape(logoTex)
     meshCodecEditorBtn.shape(meshCodecEditorBtnTex)
-    zStandardEditorBtn.shape(zStandardEditorBtnTex)
+    fileEditorBtn.shape(fileEditorBtnTex)
     previousBtn.shape(previousBtnTex)
 
     # Configuring the button onclick methods
@@ -115,19 +115,19 @@ def select_editor(self):
         on_close()
         self.returnStatement = "MESH_CODEC_EDITOR"
 
-    def zstandard_editor_onclick(x, y):
+    def file_editor_onclick(x, y):
 
         if x is None or y is None:
             on_close()
             raise TypeError("Onclick Coordinates cannot be NoneType")
 
         on_close()
-        self.returnStatement = "ZSTANDARD_EDITOR"
+        self.returnStatement = "FILE_EDITOR"
 
     # Applying the onclick methods
     previousBtn.onclick(previous_button_conclick, 1)
     meshCodecEditorBtn.onclick(mesh_codec_editor_onclick, 1)
-    zStandardEditorBtn.onclick(zstandard_editor_onclick, 1)
+    fileEditorBtn.onclick(file_editor_onclick, 1)
 
     # The window mainloop
     window.mainloop()

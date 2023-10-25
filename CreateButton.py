@@ -18,7 +18,7 @@ def create_button(text="", size=[1,1], color="grey", shape="square", textPos=[0,
     turtle.mainloop()
 
 create_button(
-    "Non-ZStandard Editor",
+    "File Editor",
     [1,11],
     "grey",
     "square",
