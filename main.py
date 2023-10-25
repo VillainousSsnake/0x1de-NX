@@ -10,20 +10,23 @@ while app.returnStatement != "Closed":
     if app.returnStatement == "MAIN_MENU":
         app.main_menu()
 
-    if app.returnStatement == "SELECT_EDITOR":
+    elif app.returnStatement == "SELECT_EDITOR":
         app.select_editor()
 
-    if app.returnStatement == "SETTINGS":
+    elif app.returnStatement == "SETTINGS":
         app.settings()
 
-    if app.returnStatement == "FILE_EDITOR":
+    elif app.returnStatement == "FILE_EDITOR":
         app.file_editor()
 
-    if app.returnStatement == "MESH_CODEC_EDITOR":
+    elif app.returnStatement == "MESH_CODEC_EDITOR":
         app.mesh_codec_editor()
 
-    if app.returnStatement == "GAME_PATH_SELECT":
+    elif app.returnStatement == "GAME_PATH_SELECT":
         app.game_path_select()
+
+    else:
+        app.display_error_code("#001", "returnStatment Doesn't Exist")
 
 
 #  Deleting files in Project\__Cache__\_temp_  #

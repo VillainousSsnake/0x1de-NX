@@ -6,6 +6,7 @@ from Project.App.ProgramFunc.settings import *
 from Project.App.ProgramFunc.fileEditor import *
 from Project.App.ProgramFunc.meshCodecEditor import *
 from Project.App.ProgramFunc.gamePathSelect import *
+from Project.App.ProgramFunc.displayErrorCode import *
 
 
 class Program:
@@ -37,3 +38,7 @@ class Program:
     def file_editor(self):
 
         return file_editor(self)
+
+    def display_error_code(self, error_code, error_details):
+
+        return display_error_code(self, error_code, error_details)
