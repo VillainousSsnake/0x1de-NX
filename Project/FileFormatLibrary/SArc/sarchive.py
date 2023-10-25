@@ -3,7 +3,7 @@ This is the class for the file formats that are SArc archives (.pack)
 """
 
 
-import sarc
+from sarc import sarc
 
 
 class SARC:
@@ -18,7 +18,7 @@ class SARC:
         pass
 
     @staticmethod
-    def read(input_file_path, mode):
+    def read_file(input_file_path, mode):
 
         if mode == 'l':
 
@@ -30,3 +30,12 @@ class SARC:
             if sarc_archive:
                 for file_name in sarc_archive.list_files():
                     output.append(file_name)
+
+    @staticmethod
+    def read_data(input_data, mode):
+
+        if mode == 'l':
+
+            sarcController = sarc.SARC(input_data)
+
+            return sarcController.list_files()
