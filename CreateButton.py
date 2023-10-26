@@ -22,12 +22,12 @@ def create_button(text="", size=[1,1], color="grey", outline_color="black", shap
     turtle.mainloop()
 
 create_button(
-    "New",
-    [1.25,7],
+    "Exit to Main Menu",
+    [1.25,11],
     "#8b41bf",
     "#ba75eb",
     "square",
-    [-60,-12.5],
+    [-100,-12.5],
     15,
     "Courier"
 )
