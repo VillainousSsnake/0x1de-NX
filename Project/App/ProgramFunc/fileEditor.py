@@ -67,6 +67,15 @@ def file_editor(self):
     newBtn.pu()
     newBtn.speed(0)
 
+    exitToMainBtn = turtle.Turtle()
+    exitToMainBtn.pu()
+    exitToMainBtn.speed(0)
+
+    closeFileBtn = turtle.Turtle()
+    closeFileBtn.pu()
+    closeFileBtn.speed(0)
+    closeFileBtn.ht()
+
     # Configuring textures
     fileBtnTex = os.path.join(
         os.getcwd(),
@@ -92,16 +101,36 @@ def file_editor(self):
         "file_editor",
         "newBtn.gif"
     )
+    exitToMainBtnTex = os.path.join(
+        os.getcwd(),
+        "Project",
+        "Screen",
+        "Texture",
+        "file_editor",
+        "exitToMainMenu.gif"
+    )
+    closeFileBtnTex = os.path.join(
+        os.getcwd(),
+        "Project",
+        "Screen",
+        "Texture",
+        "file_editor",
+        "closeBtn.gif"
+    )
 
     # Registering the textures
     window.register_shape(fileBtnTex)
     window.register_shape(openBtnTex)
     window.register_shape(newBtnTex)
+    window.register_shape(exitToMainBtnTex)
+    window.register_shape(closeFileBtnTex)
 
     # Applying the texture
     fileBtn.shape(fileBtnTex)
     openBtn.shape(openBtnTex)
     newBtn.shape(newBtnTex)
+    exitToMainBtn.shape(exitToMainBtnTex)
+    closeFileBtn.shape(closeFileBtnTex)
 
     # Creating lists for the buttons
     fileDropdownButtons = (openBtn,
@@ -157,11 +186,31 @@ def file_editor(self):
 
         # TODO: write new_onclick function
 
+    def exit_to_main_onclick(x, y):
+
+        if x is None or y is None:
+            on_close()
+            raise TypeError("Onclick Coordinates cannot be NoneType")
+
+        turtle.bye()
+        self.returnStatement = "MAIN_MENU"
+
+    def close_file_onclick(x, y):
+
+        if x is None or y is None:
+            on_close()
+            raise TypeError("Onclick Coordinates cannot be NoneType")
+
+        # TODO: write new_onclick function
+
     # Applying the button onclick methods
     fileBtn.onclick(file_onclick, 1)
     openBtn.onclick(open_onclick, 1)
     newBtn.onclick(new_onclick, 1)
+    exitToMainBtn.onclick(exit_to_main_onclick, 1)
+    closeFileBtn.onclick(close_file_onclick, 1)
 
+    # Program Functions:
     def configure_file():
 
         # Importing global variables
@@ -198,8 +247,45 @@ def file_editor(self):
             fileContents = ZSTD.read(_Config["currentFilepath"], dictionary)
             _FileConfig["decompressedFileContents"] = fileContents
 
-            if '.pack' in _FileConfig["basename"]:
-                pass  # TODO: Write the .pack decompression
+    def get_contents_to_draw(mode='root'):
+
+        if mode == "root":
+
+            if ".zs" in _FileConfig["basename"]:
+
+                if _FileConfig["decompressedFiletype"] == "pack":
+
+                    # Grabbing the list of files in the SArc
+                    sarcContents = SARC.read_data(_FileConfig["decompressedFileContents"], 'l')
+
+                    # formatting sarcContents to sarcKeys
+                    sarcKeys = []
+
+                    for key in sarcContents.mapping.keys():
+                        sarcKeys.append(key)
+
+                    # formatting sarcKeys into sarcRootFolders
+                    sarcRootFolders = []
+                    sarcSplitKeys = []
+
+                    for key in sarcKeys:
+                        splitKey = key.split("/")
+                        sarcSplitKeys.append(splitKey)
+
+                    for key in sarcSplitKeys:
+                        if key[0] not in sarcRootFolders:
+                            sarcRootFolders.append(key[0])
+
+                    # formatting sarcRootFolders into output
+                    output = ""
+
+                    for rootFolder in sarcRootFolders:
+                        output += '\n' + rootFolder
+
+                    # Returning output
+                    return output
+
+                    # TODO: Finish get_contents_to_draw when decompressed format is pack
 
     def draw_file():
 
@@ -209,7 +295,7 @@ def file_editor(self):
         # Setting the 'displayingFile' to True so this function doesn't get called infinitely
         _Config["displayingFile"] = True
 
-        # Drawing the file
+        # Clearing the screen of the ink that belongs to pen
         pen.clear()
 
         # Setting the display state
@@ -222,8 +308,8 @@ def file_editor(self):
                      (-window.window_height() / 2) + (window.window_height() / 32))
             pen.pd()
             pen.pensize(3)
-            pen.color('black')
-            pen.fillcolor('grey')
+            pen.color('#ba75eb')
+            pen.fillcolor('#8b41bf')
             pen.begin_fill()
             for loop in range(2):
                 pen.fd(window.window_width() - (window.window_width() / 16))
@@ -238,30 +324,25 @@ def file_editor(self):
             pen.lt(90)
             pen.fd(window.window_height() - (window.window_height() / 4) - 25)
             pen.setx(pen.xcor() + 25)
-            pen.write(_FileConfig["basename"], font=("Courier", 15, "bold"))
+            pen.color('black')
+            pen.write(_FileConfig["basename"], font=("Courier", 17, "bold"))
+
+            # Moving the closeBtn turtle next to the file name and showing the turtle
+            closeFileBtn.goto(pen.xcor(), pen.ycor())
+            closeFileBtn.st()
 
             # Moving the pen near the bottom-left of the border
             pen.goto((-window.window_width() / 2) + (window.window_width() / 64) + 15,
                      (-window.window_height() / 2) + (window.window_height() / 32) + 15)
 
             # Writing the file contents depending on the decompressed file format
-            if _FileConfig["decompressedFiletype"] == "pack":
 
-                # Grabbing the list of files in the SArc
-                sarcContents = SARC.read_data(_FileConfig["decompressedFileContents"], 'l')
+            contentOutput = get_contents_to_draw()
 
-                # formatting sarcContents
-                sarcKeys = []
+            # TODO: Looking at each item in sarcKeys and determining the directories on the root
 
-                for key in sarcContents.mapping.keys():
-                    sarcKeys.append(key)
-
-                sarcContentOutput = ''
-
-                # TODO: Looking at each item in sarcKeys and determining the directories on the root
-
-                # Writing the formatted list of files in the SArc
-                pen.write(sarcContentOutput, font=("Courier", 15, "bold"))
+            # Writing the formatted list of files in the SArc
+            pen.write(contentOutput, font=("Courier", 14, "bold"))
 
             # Resetting the pen heading
             pen.seth(0)
@@ -275,8 +356,8 @@ def file_editor(self):
                      (-window.window_height() / 2) + (window.window_height() / 32))
             pen.pd()
             pen.pensize(3)
-            pen.color('black')
-            pen.fillcolor('grey')
+            pen.color('#ba75eb')
+            pen.fillcolor('#8b41bf')
             pen.begin_fill()
             for loop in range(2):
                 pen.fd(window.window_width() - (window.window_width() / 25))
@@ -291,6 +372,7 @@ def file_editor(self):
             pen.lt(90)
             pen.fd(window.window_height() - (window.window_height() / 5) - 25)
             pen.setx(pen.xcor() + 25)
+            pen.color('black')
             pen.write(_FileConfig["basename"], font=("Courier", 15, "bold"))
 
             # Resetting the pen heading
@@ -302,8 +384,10 @@ def file_editor(self):
     def update():
 
         if root.state() == "zoomed":
+            exitToMainBtn.goto(turtleCanvas.winfo_width()/2 - 120, turtleCanvas.winfo_height()/2 - 15)
             fileBtn.goto(-turtleCanvas.winfo_width()/2 + 43, turtleCanvas.winfo_height()/2 - 15)
         else:
+            exitToMainBtn.goto(window.canvwidth - 179, window.canvheight - 27)
             fileBtn.goto(-window.canvwidth + 101, window.canvheight - 27)
 
         if _Config["fileDropdown"]:
