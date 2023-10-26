@@ -25,26 +25,4 @@ def game_path_select(self):
     root.protocol("WM_DELETE_WINDOW", on_close)
     window.bgcolor("#131642")
 
-    # Configuring the buttons
-    setTearsOfTheKingdomDump = turtle.Turtle()
-    setTearsOfTheKingdomDump.pu()
-    setTearsOfTheKingdomDump.speed(0)
-    setTearsOfTheKingdomDump.goto(0, 0)
-
-    # Configuring the textures
-    setTearsOfTheKingdomDumpTex = os.path.join(
-        os.getcwd(),
-        "Project",
-        "Screen",
-        "Texture",
-        "game_path_select",
-        "setTotKDump.gif"
-    )
-
-    # Registering the textures
-    window.register_shape(setTearsOfTheKingdomDumpTex)
-
-    # Applying the textures
-    setTearsOfTheKingdomDump.shape(setTearsOfTheKingdomDumpTex)
-
     window.mainloop()
