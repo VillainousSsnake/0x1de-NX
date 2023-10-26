@@ -38,12 +38,12 @@ def select_editor(self):
     meshCodecEditorBtn = turtle.Turtle()
     meshCodecEditorBtn.pu()
     meshCodecEditorBtn.speed(0)
-    meshCodecEditorBtn.goto(0, -79)
+    meshCodecEditorBtn.goto(150, -100)
 
     fileEditorBtn = turtle.Turtle()
     fileEditorBtn.pu()
     fileEditorBtn.speed(0)
-    fileEditorBtn.goto(0, -106)
+    fileEditorBtn.goto(-150, -100)
 
     previousBtn = turtle.Turtle()
     previousBtn.pu()
