@@ -43,7 +43,7 @@ def select_editor(self):
     fileEditorBtn = turtle.Turtle()
     fileEditorBtn.pu()
     fileEditorBtn.speed(0)
-    fileEditorBtn.goto(0, -100)
+    fileEditorBtn.goto(0, -106)
 
     previousBtn = turtle.Turtle()
     previousBtn.pu()
