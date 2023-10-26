@@ -36,6 +36,7 @@ def file_editor(self):
 
     # Configuring the window
     window = turtle.Screen()
+    window.delay(0)
     window.title("0x1de NX - VERSION: 0.0.1 - File Editor")
     turtleCanvas = window.getcanvas()
     root = turtleCanvas.winfo_toplevel()

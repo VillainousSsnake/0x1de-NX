@@ -3,6 +3,8 @@ import turtle
 
 def display_error_code(self, error_code, error_details):
 
+    turtle.delay(0)
+
     turtle.TurtleScreen._RUNNING = True
     self.returnStatement = None
 

@@ -10,6 +10,7 @@ def game_path_select(self):
 
     # Configuring the window
     window = turtle.Screen()
+    window.delay(0)
     window.title("0x1de NX - VERSION: 0.0.1 - Settings")
     turtleCanvas = window.getcanvas()
     root = turtleCanvas.winfo_toplevel()
