@@ -9,7 +9,8 @@ import os
 
 _Config = {
     "tempDir": os.path.join(os.getcwd(), "Project", "__Cache__", "_temp_"),
-    "fileDropdown": False,
+    "fileDropdown": True,  # This is because it will be set to False when file_onclick()
+                           # is set to the onclick function of fileBtn
     "fileOpen": False,
     "currentFilepath": "",
     "displayingFile": False,
@@ -66,14 +67,6 @@ def file_editor(self):
     newBtn.pu()
     newBtn.speed(0)
 
-    compressBtn = turtle.Turtle()
-    compressBtn.pu()
-    compressBtn.speed(0)
-
-    decompressBtn = turtle.Turtle()
-    decompressBtn.pu()
-    decompressBtn.speed(0)
-
     # Configuring textures
     fileBtnTex = os.path.join(
         os.getcwd(),
@@ -99,42 +92,20 @@ def file_editor(self):
         "file_editor",
         "newBtn.gif"
     )
-    compressBtnTex = os.path.join(
-        os.getcwd(),
-        "Project",
-        "Screen",
-        "Texture",
-        "file_editor",
-        "compressBtn.gif"
-    )
-    decompressBtnTex = os.path.join(
-        os.getcwd(),
-        "Project",
-        "Screen",
-        "Texture",
-        "file_editor",
-        "decompressBtn.gif"
-    )
 
     # Registering the textures
     window.register_shape(fileBtnTex)
     window.register_shape(openBtnTex)
     window.register_shape(newBtnTex)
-    window.register_shape(compressBtnTex)
-    window.register_shape(decompressBtnTex)
 
     # Applying the texture
     fileBtn.shape(fileBtnTex)
     openBtn.shape(openBtnTex)
     newBtn.shape(newBtnTex)
-    compressBtn.shape(compressBtnTex)
-    decompressBtn.shape(decompressBtnTex)
 
     # Creating lists for the buttons
     fileDropdownButtons = (openBtn,
-                           newBtn,
-                           compressBtn,
-                           decompressBtn)
+                           newBtn)
 
     # Configuring the button onclick methods
     def file_onclick(x, y):
@@ -186,28 +157,10 @@ def file_editor(self):
 
         # TODO: write new_onclick function
 
-    def compress_onclick(x, y):
-
-        if x is None or y is None:
-            on_close()
-            raise TypeError("Onclick Coordinates cannot be NoneType")
-
-        # TODO: write compress_onclick function
-
-    def decompress_onclick(x, y):
-
-        if x is None or y is None:
-            on_close()
-            raise TypeError("Onclick Coordinates cannot be NoneType")
-
-        # TODO: write decompress_onclick function
-
     # Applying the button onclick methods
     fileBtn.onclick(file_onclick, 1)
     openBtn.onclick(open_onclick, 1)
     newBtn.onclick(new_onclick, 1)
-    compressBtn.onclick(compress_onclick, 1)
-    decompressBtn.onclick(decompress_onclick, 1)
 
     def configure_file():
 
@@ -349,9 +302,9 @@ def file_editor(self):
     def update():
 
         if root.state() == "zoomed":
-            fileBtn.goto(-turtleCanvas.winfo_width()/2 + 32, turtleCanvas.winfo_height()/2 - 12)
+            fileBtn.goto(-turtleCanvas.winfo_width()/2 + 43, turtleCanvas.winfo_height()/2 - 15)
         else:
-            fileBtn.goto(-window.canvwidth + 90, window.canvheight - 24)
+            fileBtn.goto(-window.canvwidth + 101, window.canvheight - 27)
 
         if _Config["fileDropdown"]:
 
@@ -364,10 +317,8 @@ def file_editor(self):
                 btn.st()
 
         # Updating turtle positions
-        openBtn.goto(fileBtn.xcor() + 40, fileBtn.ycor() - 21)
-        newBtn.goto(openBtn.xcor(), openBtn.ycor() - 21)
-        compressBtn.goto(newBtn.xcor(), newBtn.ycor() - 21)
-        decompressBtn.goto(newBtn.xcor(), newBtn.ycor() - 42)
+        openBtn.goto(fileBtn.xcor() + 33, fileBtn.ycor() - 28)
+        newBtn.goto(openBtn.xcor(), openBtn.ycor() - 27)
 
         # Detecting if the Screen pen drew the file (if a file is opened)
         if _Config["fileOpen"]:

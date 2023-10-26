@@ -1,11 +1,15 @@
 import turtle
 
-def create_button(text="", size=[1,1], color="grey", shape="square", textPos=[0,0], textSize=15, textFont="Courier", textType="bold"):
+window = turtle.Screen()
+window.bgcolor("#131642")
+
+def create_button(text="", size=[1,1], color="grey", outline_color="black", shape="square", textPos=[0,0], textSize=15, textFont="Courier", textType="bold"):
 
     btn = turtle.Turtle()
     btn.pu()
     btn.shape(shape)
-    btn.shapesize(size[0], size[1])
+    btn.shapesize(size[0], size[1], 1.5)
+    btn.color(outline_color)
     btn.fillcolor(color)
 
     pen = turtle.Turtle()
@@ -18,11 +22,12 @@ def create_button(text="", size=[1,1], color="grey", shape="square", textPos=[0,
     turtle.mainloop()
 
 create_button(
-    "File Editor",
-    [1,11],
-    "grey",
+    "New",
+    [1.25,7],
+    "#8b41bf",
+    "#ba75eb",
     "square",
-    [-107.5,-12.5],
+    [-60,-12.5],
     15,
     "Courier"
 )
