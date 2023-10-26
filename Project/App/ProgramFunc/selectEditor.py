@@ -97,7 +97,7 @@ def select_editor(self):
     previousBtn.shape(previousBtnTex)
 
     # Configuring the button onclick methods
-    def previous_button_conclick(x, y):
+    def previous_button_onclick(x, y):
 
         if x is None or y is None:
             on_close()
@@ -125,7 +125,7 @@ def select_editor(self):
         self.returnStatement = "FILE_EDITOR"
 
     # Applying the onclick methods
-    previousBtn.onclick(previous_button_conclick, 1)
+    previousBtn.onclick(previous_button_onclick, 1)
     meshCodecEditorBtn.onclick(mesh_codec_editor_onclick, 1)
     fileEditorBtn.onclick(file_editor_onclick, 1)
 
