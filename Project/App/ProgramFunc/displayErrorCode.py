@@ -1,7 +1,7 @@
 import turtle
 
 
-def display_error_code(self, error_code, error_details):
+def display_error_code(self, error_code, error_details): 
 
     turtle.TurtleScreen._RUNNING = True
     self.returnStatement = None
