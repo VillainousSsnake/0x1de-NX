@@ -25,6 +25,8 @@ _FileConfig = {
     "decompressedFileContents": "",
     "isExpanded": False,
 }
+# Configuring the variables that stops the update function's infinite loop
+_isReturningToMainMenu = False
 
 
 # The Program method
@@ -155,6 +157,10 @@ def file_editor(self):
 
         global _Config
 
+        _Config["fileOpen"] = False
+        _Config["displayingFile"] = False
+        _Config["displayingFileState"] = ""
+
         if x is None or y is None:
             on_close()
             raise TypeError("Onclick Coordinates cannot be NoneType")
@@ -189,12 +195,13 @@ def file_editor(self):
 
     def exit_to_main_onclick(x, y):
 
+        global _isReturningToMainMenu
+
         if x is None or y is None:
             on_close()
             raise TypeError("Onclick Coordinates cannot be NoneType")
 
-        turtle.bye()
-        self.returnStatement = "MAIN_MENU"
+        _isReturningToMainMenu = True
 
     def close_file_onclick(x, y):
 
@@ -337,10 +344,7 @@ def file_editor(self):
                      (-window.window_height() / 2) + (window.window_height() / 32) + 15)
 
             # Writing the file contents depending on the decompressed file format
-
             contentOutput = get_contents_to_draw()
-
-            # TODO: Looking at each item in sarcKeys and determining the directories on the root
 
             # Writing the formatted list of files in the SArc
             pen.write(contentOutput, font=("Courier", 14, "bold"))
@@ -376,6 +380,20 @@ def file_editor(self):
             pen.color('black')
             pen.write(_FileConfig["basename"], font=("Courier", 15, "bold"))
 
+            # Moving the closeBtn turtle next to the file name and showing the turtle
+            closeFileBtn.goto(pen.xcor(), pen.ycor())
+            closeFileBtn.st()
+
+            # Moving the pen near the bottom-left of the border
+            pen.goto((-window.window_width() / 2) + (window.window_width() / 64) + 15,
+                     (-window.window_height() / 2) + (window.window_height() / 32) + 15)
+
+            # Writing the file contents depending on the decompressed file format
+            contentOutput = get_contents_to_draw()
+
+            # Writing the formatted list of files in the SArc
+            pen.write(contentOutput, font=("Courier", 14, "bold"))
+
             # Resetting the pen heading
             pen.seth(0)
 
@@ -383,6 +401,8 @@ def file_editor(self):
 
     # Configuring update function
     def update():
+
+        global _isReturningToMainMenu
 
         if root.state() == "zoomed":
             exitToMainBtn.goto(turtleCanvas.winfo_width()/2 - 120, turtleCanvas.winfo_height()/2 - 15)
@@ -422,7 +442,12 @@ def file_editor(self):
                     draw_file()
 
         # Looping the update() function forever
-        turtle.ontimer(update, 100)
+        if not _isReturningToMainMenu:
+            turtle.ontimer(update, 100)
+        else:
+            turtle.bye()
+            self.returnStatement = "MAIN_MENU"
+            _isReturningToMainMenu = False
 
     # Running the update() function
     update()
