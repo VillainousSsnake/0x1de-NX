@@ -25,6 +25,9 @@ while app.returnStatement != "Closed":
     elif app.returnStatement == "GAME_PATH_SELECT":
         app.game_path_select()
 
+    elif app.returnStatement == "PLUGINS_MENU":
+        app.plugins_menu()
+
     else:
         app.display_error_code("#001", str("returnStatement" + '"' + str(app.returnStatement) + '"' + " Doesn't Exist"))
 
