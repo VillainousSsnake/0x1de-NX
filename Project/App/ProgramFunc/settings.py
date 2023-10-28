@@ -65,7 +65,7 @@ def settings(self):
         "Screen",
         "Texture",
         "settings",
-        "setTotKDump.gif"
+        "setTotKDumpBtn.gif"
     )
 
     # Registering the textures
