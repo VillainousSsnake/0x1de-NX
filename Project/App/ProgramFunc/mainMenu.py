@@ -30,22 +30,22 @@ def main_menu(self):
     settingsBtn = turtle.Turtle()
     settingsBtn.pu()
     settingsBtn.speed(0)
-    settingsBtn.goto(160, -125)
+    settingsBtn.goto(160, -50)
 
     editorBtn = turtle.Turtle()
     editorBtn.pu()
     editorBtn.speed(0)
-    editorBtn.goto(-160, -125)
+    editorBtn.goto(-160, -50)
 
     mergeBtn = turtle.Turtle()
     mergeBtn.pu()
     mergeBtn.speed(0)
-    mergeBtn.goto(-125, -200)
+    mergeBtn.goto(-125, -125)
 
     pluginsBtn = turtle.Turtle()
     pluginsBtn.pu()
     pluginsBtn.speed(0)
-    pluginsBtn.goto(125, -200)
+    pluginsBtn.goto(125, -125)
 
     logo = turtle.Turtle()
     logo.pu()
