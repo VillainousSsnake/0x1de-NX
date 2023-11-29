@@ -27,9 +27,7 @@ Requirements:
 - SARCEztract (https://github.com/aboood40091/SARCExtract)
 
 #### Part 1. Installing pip Dependencies:
-Go to your command prompt and enter the following commands:
-"pip install sarc==2.0.4"
-"pip install zstandard"
+Go to your command prompt and enter `pip install sarc==2.0.4` then press enter, then enter `pip install zstandard` and press enter.
 
 #### Part 2. Downloading, extracting and setting up the zip:
 Download the source code as a zip file, then extract it to a folder anywhere on your computer (just put it in a folder anywhere) then delete the zip file after you extracted it (if you want)
