@@ -22,6 +22,7 @@ NOTE: The source code has only been tested with a Windows 11 PC, but may work fo
 Requirements:
 - Python 3.11 or later (https://python.org)
 - Latest version of pip installer (You can install pip with the Python Installer)
+- A dump of Zelda: Tears of the Kingdom
 
 ##### Part 1. Installing pip Dependencies:
 Stub
