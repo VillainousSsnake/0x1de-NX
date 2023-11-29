@@ -23,6 +23,14 @@ Requirements:
 - Python 3.11 or later (https://python.org)
 - Latest version of pip installer (You can install pip with the Python Installer)
 - A dump of Zelda: Tears of the Kingdom
+- totkzstdtool (https://github.com/TotkMods/Totk.ZStdTool)
 
-##### Part 1. Installing pip Dependencies:
-Stub
+#### Part 1. Installing pip Dependencies:
+Go to your command prompt and enter the following commands:
+"pip install sarc==2.0.4"
+"pip install zstandard"
+
+#### Part 2. Setting up app and extracting your ZStd.dic files:
+Download the source code as a zip file, then extract it to anywhere on your computer (just put it in a folder anywhere)
+stub
+
