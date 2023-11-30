@@ -9,7 +9,7 @@ Please note that there are currently no releases for this app. 0x1de-NX is still
 ### DESCRIPTION:
 0x1de NX is a modding tool for Zelda: Tears of the Kingdom modders that aims to make modding and playing/managing mods as simple and easy as possible.
 
-### Features:
+### Planned Features:
 - **Mesh editor** for **MeshCodec Packages** (.mc files)
 - **File Format Editor** for **all *Legend of Zelda: Tears of the Kingdom* File Formats**
 - **Mod Merger** so you can **Merge *Any* Mods**
