@@ -37,6 +37,10 @@ Go to your Zelda: Tears of the Kingdom romfs dump and copy the file in `romfs/Pa
 Double click `main.py`. It should be in the folder you extracted 0x1de-NX's source code in. Enjoy using 0x1de-NX! Also you have to repeat this every time you want to update the app.
 
 
+### Please join the discord!
+link: https://discord.gg/GA5qfJ53bK
+
+
 
 
 
