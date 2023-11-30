@@ -22,7 +22,7 @@ Requirements:
 - Latest version of pip installer (You can install pip with the Python Installer)
 - A dump of Zelda: Tears of the Kingdom
 - totkzstdtool (https://github.com/TotkMods/Totk.ZStdTool)
-- SARCEztract (https://github.com/aboood40091/SARCExtract)
+- SARCExtract (https://github.com/aboood40091/SARCExtract)
 
 #### Part 1. Installing pip Dependencies:
 Go to your command prompt and enter `pip install sarc==2.0.4` then press enter, then enter `pip install zstandard` and press enter.
