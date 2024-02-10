@@ -6,8 +6,9 @@
 
 Here are the links to the GitHub Pages to each part.
 - Part 1 - TotkModLauncher (TML): https://github.com/VillainousSsnake/TotkModLauncher
-- Part 2 - p0lyg0n: https://github.com/VillainousSsnake/p0lyg0n
+- Part 2 - TotkMeshCodecEditor: https://github.com/VillainousSsnake/p0lyg0n
 - Part 3 - TotkRomfsFileEditor (TRFE): https://github.com/VillainousSsnake/TotkRomfsFileEditor
+- Part 4 - TotkTerrain(And)MapEditor (TTME): https://github.com/VillainousSsnake/TotkTerrainAndMapEditor
 
 ### LATEST VERSION: 
 None (0.0.1 releasing mid-2024)
@@ -16,6 +17,7 @@ None (0.0.1 releasing mid-2024)
 - **Mesh editor** for **MeshCodec Packages** (.mc files)
 - **File Format Editor** for **all *Legend of Zelda: Tears of the Kingdom* File Formats**
 - **Mod Merger** so you can **Merge *Any* Mods**
+- **Terrain and Map Editor** so you can create **Terrain and Map mods**
 
 ### Please join the discord!
 Joining the discord will help support the project, and you would get anouncements about 0x1de-NX early! Please join the discord! When a new person joins, it shows that people actually care about these types of tools. And who knows, maybe I'll give an early release only to discord members... (\*Forshadowing\*)
