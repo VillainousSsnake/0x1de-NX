@@ -47,6 +47,9 @@ class _func:
 # main_menu function
 def main_menu(app):
 
+    # Verifying if the romfs path is real
+    _func.verify_romfs_path(app)
+
     # Setting theme
     ctk.set_appearance_mode(app.settings["current_theme"])
 
