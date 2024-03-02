@@ -10,7 +10,10 @@ from tkinter import messagebox, filedialog
 # _func class (Contains functions that the menu function uses)
 # noinspection PyPep8Naming
 class _func:
-    pass  # TODO: Stub
+
+    @staticmethod
+    def verify_romfs_path(app):
+        pass  # TODO: Stub
 
 
 # main_menu function
