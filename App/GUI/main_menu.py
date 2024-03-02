@@ -50,10 +50,22 @@ class _func:
                     continue_prompt = True
 
 
+# SegmentedButtonMenu class
+class SegmentedButtonMenu:
+    def __init__(self):
+        pass  # TODO: Stub
+
+    def projects_menu_show(self):
+        pass  # TODO: Stub
+
+    def projects_menu_hide(self):
+        pass  # TODO: Stub
+
+
 # ButtonCommand class (Contains functions for button commands)
 class ButtonCommand:
     @staticmethod
-    def segmented_button_menu(buttons_list, value):
+    def segmented_button_menu(segmented_menu_controller, buttons_list, value):
 
         # ['#36719F', '#144870']
 
@@ -208,6 +220,7 @@ def main_menu(app):
         nav_community_button,
     ]
 
+    # Creating segmented_buttons_values
     segmented_buttons_values = [
         "Projects",
         "Plugins",
@@ -215,12 +228,16 @@ def main_menu(app):
         "Community",
     ]
 
+    # Showing projects menu (Since that is the default open menu)
+    segmented_button_controller = SegmentedButtonMenu()
+
     # Assigning commands to each button in segmented_buttons_list
     for button in segmented_buttons_list:
 
         # Creating the command
         command = partial(
             ButtonCommand.segmented_button_menu,
+            segmented_button_controller,
             segmented_buttons_list,
             segmented_buttons_values[segmented_buttons_list.index(button)]
         )
