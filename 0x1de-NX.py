@@ -6,8 +6,10 @@ from App.AppLib.index import Index
 
 app = App()
 
+# Mainloop
 while app.returnStatement != "exit":
 
+    # Menu System
     match app.returnStatement:
 
         case "main":  # Main Menu
