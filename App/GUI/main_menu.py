@@ -68,8 +68,11 @@ class ButtonCommand:
             case "Plugins":     # Plugins button
                 buttons_list[1].configure(fg_color="#1F6AA5")
 
-            case "Community":   # Community button
+            case "Settings":
                 buttons_list[2].configure(fg_color="#1F6AA5")
+
+            case "Community":   # Community button
+                buttons_list[3].configure(fg_color="#1F6AA5")
 
 
 # main_menu function
@@ -167,6 +170,17 @@ def main_menu(app):
     )
     nav_plugins_button.pack(side=ctk.TOP, fill="x", pady=1)
 
+    # Configuring Settings button
+    nav_settings_button = ctk.CTkButton(
+        master=navigation_frame,
+        text="Settings",
+        font=segmented_button_font,
+        height=segmented_button_height,
+        fg_color="#2B2B2B",
+        anchor="w",
+    )
+    nav_settings_button.pack(side=ctk.TOP, fill="x", pady=1)
+
     # Configuring Community button
     nav_community_button = ctk.CTkButton(
         master=navigation_frame,
@@ -182,12 +196,14 @@ def main_menu(app):
     segmented_buttons_list = [
         nav_projects_button,
         nav_plugins_button,
+        nav_settings_button,
         nav_community_button,
     ]
 
     segmented_buttons_values = [
         "Projects",
         "Plugins",
+        "Settings",
         "Community",
     ]
 
