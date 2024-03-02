@@ -1,4 +1,4 @@
-# Higharchey/app.py
+# /App/AppLib/app.py
 # Contains App class
 
 # Importing Modules

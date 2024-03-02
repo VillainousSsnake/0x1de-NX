@@ -8,4 +8,5 @@ import customtkinter as ctk
 
 # main_menu function
 def main_menu():
+
     pass  # TODO: Stub

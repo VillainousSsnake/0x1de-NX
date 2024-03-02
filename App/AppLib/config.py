@@ -1,4 +1,4 @@
-# Higharchey/config.py
+# /App/AppLib/config.py
 # Contains Config class
 
 # Importing Modules

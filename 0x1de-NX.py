@@ -1,4 +1,4 @@
-# App/main.py
+# /0x1de-NX.py
 # Holds main program code
 
 from App.AppLib.app import App
