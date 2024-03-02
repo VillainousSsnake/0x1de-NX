@@ -64,10 +64,41 @@ class SegmentedButtonMenu:
             "Projects": ProjectHandler.get_projects(),
         }
 
-        # Creating the search bar
-        searchbar = ctk.CTkEntry(master=self.master)
+        # Creating the navigation frame
+        nav_frame = ctk.CTkFrame(master=self.master)
+        nav_frame.pack(side="top", fill="x")
 
-        return 1
+        # Creating a scrollable frame
+        scrollable_frame = ctk.CTkScrollableFrame(master=self.master, fg_color="#242424")
+        scrollable_frame.pack(fill="both", side="right")
+
+        # Creating the search_entry entry
+        search_entry = ctk.CTkEntry(
+            master=nav_frame,
+            placeholder_text="Search Projects"
+        )
+        search_entry.grid(row=0, column=0, padx=20)
+
+        # Creating the new_project button
+        new_project_button = ctk.CTkButton(
+            master=nav_frame,
+            text="New Project"
+        )
+        new_project_button.grid(row=0, column=1)
+
+        # Creating open_project button
+        open_project_button = ctk.CTkButton(
+            master=nav_frame,
+            text="Open Project"
+        )
+        open_project_button.grid(row=0, column=2)
+
+        # Creating install project from tkcl button
+        install_tkcl = ctk.CTkButton(
+            master=nav_frame,
+            text="Install .TKCL"
+        )
+        install_tkcl.grid(row=0, column=3)
 
     def destroy_current_menu(self):
 
@@ -139,6 +170,13 @@ def main_menu(app):
         fg_color="#2B2B2B"
     )
     info_frame.pack(fill="x", side="top")
+
+    # Segmented Button Menu frame
+    menu_frame = ctk.CTkFrame(
+        master=root,
+        fg_color="#242424"
+    )
+    menu_frame.pack(fill="both", side="right")
 
     ####################################
     #  Configuring Logo and Info Menu  #
@@ -242,7 +280,7 @@ def main_menu(app):
     ]
 
     # Showing projects menu (Since that is the default open menu)
-    segmented_button_controller = SegmentedButtonMenu(root)
+    segmented_button_controller = SegmentedButtonMenu(menu_frame)
     segmented_button_controller.projects_menu_show()
 
     # Assigning commands to each button in segmented_buttons_list
