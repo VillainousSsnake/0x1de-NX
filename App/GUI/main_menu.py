@@ -28,7 +28,10 @@ class _func:
             # While continue prompt is no loop
             while continue_prompt is False:
 
-                messagebox.showinfo("0x1de-NX Pop-up", "Please select your romfs folder.")
+                messagebox.showinfo(
+                    "0x1de-NX Pop-up",
+                    "Please select your Zelda: Tears of the Kingdom RomFS dump folder.",
+                )
                 romfs_folder = filedialog.askdirectory(title="Select RomFS Folder Path")
 
                 if romfs_folder == "":
@@ -37,7 +40,7 @@ class _func:
         This will most likely cause a lot of errors in the future."""
 
                     continue_prompt = messagebox.askyesno(
-                        "AINB-Toolbox Pop-up", message
+                        "0x1de-NX Pop-up", message
                     )
 
                 else:
