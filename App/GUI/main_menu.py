@@ -52,14 +52,28 @@ class _func:
 
 # SegmentedButtonMenu class
 class SegmentedButtonMenu:
-    def __init__(self):
-        pass  # TODO: Stub
+    def __init__(self, master):
+        self.object_list = list()
+        self.variables = dict()
+        self.master = master
 
     def projects_menu_show(self):
-        pass  # TODO: Stub
 
-    def projects_menu_hide(self):
-        pass  # TODO: Stub
+        self.variables = {
+            "Projects": None,
+        }
+
+        # Creating the search bar
+        searchbar = ctk.CTkEntry(master=self.master)
+
+        return 1
+
+    def destroy_current_menu(self):
+
+        for obj in self.object_list:
+            obj.destroy()
+
+        self.variables = dict()
 
 
 # ButtonCommand class (Contains functions for button commands)
@@ -227,7 +241,8 @@ def main_menu(app):
     ]
 
     # Showing projects menu (Since that is the default open menu)
-    segmented_button_controller = SegmentedButtonMenu()
+    segmented_button_controller = SegmentedButtonMenu(root)
+    segmented_button_controller.projects_menu_show()
 
     # Assigning commands to each button in segmented_buttons_list
     for button in segmented_buttons_list:
