@@ -67,8 +67,6 @@ class ButtonCommand:
     @staticmethod
     def segmented_button_menu(segmented_menu_controller, buttons_list, value):
 
-        # ['#36719F', '#144870']
-
         # Setting all buttons to the bg color
         for button in buttons_list:
             button.configure(fg_color="#2B2B2B")
