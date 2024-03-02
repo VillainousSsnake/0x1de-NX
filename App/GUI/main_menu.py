@@ -95,13 +95,15 @@ def main_menu(app):
     )
     info_frame.pack(fill="x", side="top")
 
-    # Creating button
+    # Creating icon image
     info_icon_path = os.path.join(os.getcwd(), "App", "Image", "0x1de.ico")
     info_logo_image = ctk.CTkImage(
         light_image=Image.open(info_icon_path),
         dark_image=Image.open(info_icon_path),
         size=(48, 48)
     )
+
+    # Creating button
     info_button = ctk.CTkButton(
         master=info_frame,
         image=info_logo_image,
@@ -110,6 +112,8 @@ def main_menu(app):
         text="0x1de NX          \n",
         hover_color="#2B2B2B",
     )
+
+    # Creating version label
     info_version_label = ctk.CTkLabel(
         master=info_button,
         fg_color="#2B2B2B",
