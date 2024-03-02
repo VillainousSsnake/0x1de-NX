@@ -43,11 +43,11 @@ class Config:
             output = {}
 
             for key in new_data:
-                if new_data[key] == 'true':
+                if new_data[key].lower() == 'true':
                     output[key] = True
-                elif new_data[key] == 'false':
+                elif new_data[key].lower() == 'false':
                     output[key] = False
-                elif new_data[key] == 'none':
+                elif new_data[key].lower() == 'none':
                     output[key] = False
                 else:
                     output[key] = new_data[key]
@@ -91,11 +91,11 @@ class Config:
             new_data[item.split(": ")[0]] = item.split(": ")[1]
 
         output = new_data[entry]
-        if output == 'true':
+        if output.lower() == 'true':
             output = True
-        if output == 'false':
+        if output.lower() == 'false':
             output = False
-        if output == 'none':
+        if output.lower() == 'none':
             output = None
 
         return output
