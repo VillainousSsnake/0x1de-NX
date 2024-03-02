@@ -3,8 +3,9 @@
 
 
 # Importing modules and libraries:
-import customtkinter as ctk
 from tkinter import messagebox, filedialog
+from App.AppLib.config import Config
+import customtkinter as ctk
 
 
 # _func class (Contains functions that the menu function uses)
@@ -13,7 +14,33 @@ class _func:
 
     @staticmethod
     def verify_romfs_path(app):
-        pass  # TODO: Stub
+
+        # Detecting if the romfs_path is None
+        if app.settings["romfs_path"] is None:
+
+            # Asking user to provide romfs path
+            continue_prompt = False
+
+            # While continue prompt is no loop
+            while continue_prompt is False:
+
+                messagebox.showinfo("AINB-Toolbox Pop-up", "Please select your romfs folder.")
+                romfs_folder = filedialog.askdirectory(title="Select RomFS Folder Path")
+
+                if romfs_folder == "":
+
+                    message = """Do you want to continue without a romfs dump?
+        This will most likely cause a lot of errors in the future."""
+
+                    continue_prompt = messagebox.askyesno(
+                        "AINB-Toolbox Pop-up", message
+                    )
+
+                else:
+
+                    app.settings["romfs_path"] = romfs_folder
+                    Config.overwrite_setting("romfs_path", romfs_folder)
+                    continue_prompt = True
 
 
 # main_menu function
