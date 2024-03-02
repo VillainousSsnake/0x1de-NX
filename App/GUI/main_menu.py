@@ -13,6 +13,9 @@ import os
 # noinspection PyPep8Naming
 class _func:
 
+    class ButtonCommand:
+        pass  # TODO: Stub
+
     @staticmethod
     def verify_romfs_path(app):
 
