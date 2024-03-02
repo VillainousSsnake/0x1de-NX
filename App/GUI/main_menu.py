@@ -4,8 +4,11 @@
 
 # Importing modules and libraries:
 from tkinter import messagebox, filedialog
+from App.AppLib.updater import Updater
 from App.AppLib.config import Config
 import customtkinter as ctk
+from PIL import Image
+import os
 
 
 # _func class (Contains functions that the menu function uses)
@@ -73,9 +76,49 @@ def main_menu(app):
     # Assigning the buttons on the tkinter window top bar
     root.protocol("WM_DELETE_WINDOW", on_close)
 
+    #################################
+    #  Configuring Navigation Menu  #
+    #################################
+
     # Navigation frame
     navigation_frame = ctk.CTkFrame(master=root)
     navigation_frame.pack(fill="y", side="left")
+
+    ####################################
+    #  Configuring Logo and Info Menu  #
+    ####################################
+
+    # Logo and Info frame
+    info_frame = ctk.CTkFrame(
+        master=navigation_frame,
+        fg_color="#2B2B2B"
+    )
+    info_frame.pack(fill="x", side="top")
+
+    # Creating button
+    info_icon_path = os.path.join(os.getcwd(), "App", "Image", "0x1de.ico")
+    info_logo_image = ctk.CTkImage(
+        light_image=Image.open(info_icon_path),
+        dark_image=Image.open(info_icon_path),
+        size=(48, 48)
+    )
+    info_button = ctk.CTkButton(
+        master=info_frame,
+        image=info_logo_image,
+        fg_color="#2B2B2B",
+        font=("monospace", 17, "bold"),
+        text="0x1de NX          \n",
+        hover_color="#2B2B2B",
+    )
+    info_version_label = ctk.CTkLabel(
+        master=info_button,
+        fg_color="#2B2B2B",
+        text=Updater.get_current_version(),
+        font=ctk.CTkFont(size=10, family="monospace"),
+        anchor="w",
+    )
+    info_version_label.place(x=65, y=25)
+    info_button.pack(fill="x", side="top")
 
     # Root mainloop
     root.mainloop()
