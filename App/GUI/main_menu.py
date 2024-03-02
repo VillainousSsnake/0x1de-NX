@@ -73,7 +73,9 @@ def main_menu(app):
     # Assigning the buttons on the tkinter window top bar
     root.protocol("WM_DELETE_WINDOW", on_close)
 
-    # TODO: Code goes here
+    # Navigation frame
+    navigation_frame = ctk.CTkFrame(master=root)
+    navigation_frame.pack(fill="y", side="left")
 
     # Root mainloop
     root.mainloop()
