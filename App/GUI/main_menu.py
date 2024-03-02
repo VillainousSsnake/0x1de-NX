@@ -6,6 +6,7 @@
 from tkinter import messagebox, filedialog
 from App.AppLib.updater import Updater
 from App.AppLib.config import Config
+from functools import partial
 import customtkinter as ctk
 from PIL import Image
 import os
@@ -51,7 +52,24 @@ class _func:
 
 # ButtonCommand class (Contains functions for button commands)
 class ButtonCommand:
-    pass  # TODO: Stub
+    @staticmethod
+    def segmented_button_menu(buttons_list, value):
+
+        # Setting all buttons to the bg color
+        for button in buttons_list:
+            button.configure(fg_color="#2B2B2B")
+
+        # Setting the correct button to the "selected" color and showing the menu
+        match value:
+
+            case "Projects":    # Projects button
+                buttons_list[0].configure(fg_color="#1F6AA5")
+
+            case "Plugins":     # Plugins button
+                buttons_list[1].configure(fg_color="#1F6AA5")
+
+            case "Community":   # Community button
+                buttons_list[2].configure(fg_color="#1F6AA5")
 
 
 # main_menu function
@@ -76,17 +94,9 @@ def main_menu(app):
     # Assigning the buttons on the tkinter window top bar
     root.protocol("WM_DELETE_WINDOW", on_close)
 
-    #################################
-    #  Configuring Navigation Menu  #
-    #################################
-
     # Navigation frame
     navigation_frame = ctk.CTkFrame(master=root)
     navigation_frame.pack(fill="y", side="left")
-
-    ####################################
-    #  Configuring Logo and Info Menu  #
-    ####################################
 
     # Logo and Info frame
     info_frame = ctk.CTkFrame(
@@ -95,12 +105,16 @@ def main_menu(app):
     )
     info_frame.pack(fill="x", side="top")
 
+    ####################################
+    #  Configuring Logo and Info Menu  #
+    ####################################
+
     # Creating icon image
     info_icon_path = os.path.join(os.getcwd(), "App", "Image", "0x1de.ico")
     info_logo_image = ctk.CTkImage(
         light_image=Image.open(info_icon_path),
         dark_image=Image.open(info_icon_path),
-        size=(48, 48)
+        size=(64, 64)
     )
 
     # Creating button
@@ -108,7 +122,7 @@ def main_menu(app):
         master=info_frame,
         image=info_logo_image,
         fg_color="#2B2B2B",
-        font=("monospace", 17, "bold"),
+        font=("monospace", 25, "bold"),
         text="0x1de NX          \n",
         hover_color="#2B2B2B",
     )
@@ -118,11 +132,79 @@ def main_menu(app):
         master=info_button,
         fg_color="#2B2B2B",
         text=Updater.get_current_version(),
-        font=ctk.CTkFont(size=10, family="monospace"),
+        font=ctk.CTkFont(size=14),
         anchor="w",
     )
-    info_version_label.place(x=65, y=25)
+    info_version_label.place(x=82, y=37)
     info_button.pack(fill="x", side="top")
+
+    #################################
+    #  Configuring Navigation Menu  #
+    #################################
+
+    # Creating segmented_button variables
+    segmented_button_font = ctk.CTkFont(size=16)
+    segmented_button_height = 40
+
+    # Configuring Projects button
+    nav_projects_button = ctk.CTkButton(
+        master=navigation_frame,
+        text="Projects",
+        command=lambda: ButtonCommand.segmented_button_menu(nav_projects_button, "Projects"),
+        font=segmented_button_font,
+        height=segmented_button_height,
+    )
+    nav_projects_button.pack(side=ctk.TOP, fill="x")
+
+    # Configuring Plugins button
+    nav_plugins_button = ctk.CTkButton(
+        master=navigation_frame,
+        text="Plugins",
+        command=lambda: ButtonCommand.segmented_button_menu(nav_plugins_button, "Plugins"),
+        font=segmented_button_font,
+        height=segmented_button_height,
+        fg_color="#2B2B2B",
+    )
+    nav_plugins_button.pack(side=ctk.TOP, fill="x")
+
+    # Configuring Community button
+    nav_community_button = ctk.CTkButton(
+        master=navigation_frame,
+        text="Community",
+        command=lambda: ButtonCommand.segmented_button_menu(segmented_buttons_list, "Community"),
+        font=segmented_button_font,
+        height=segmented_button_height,
+        fg_color="#2B2B2B",
+    )
+    nav_community_button.pack(side=ctk.TOP, fill="x")
+
+    # Creating segmented_buttons_list
+    segmented_buttons_list = [
+        nav_projects_button,
+        nav_plugins_button,
+        nav_community_button,
+    ]
+
+    segmented_buttons_values = [
+        "Projects",
+        "Plugins",
+        "Community",
+    ]
+
+    # Assigning commands to each button in segmented_buttons_list
+    for button in segmented_buttons_list:
+
+        # Creating the command
+        command = partial(
+            ButtonCommand.segmented_button_menu,
+            segmented_buttons_list,
+            segmented_buttons_values[segmented_buttons_list.index(button)]
+        )
+
+        # Assigning the command
+        button.configure(
+            command=command
+        )
 
     # Root mainloop
     root.mainloop()
