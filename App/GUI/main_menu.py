@@ -150,7 +150,6 @@ def main_menu(app):
     nav_projects_button = ctk.CTkButton(
         master=navigation_frame,
         text="Projects",
-        command=lambda: ButtonCommand.segmented_button_menu(nav_projects_button, "Projects"),
         font=segmented_button_font,
         height=segmented_button_height,
         anchor="w",
@@ -161,7 +160,6 @@ def main_menu(app):
     nav_plugins_button = ctk.CTkButton(
         master=navigation_frame,
         text="Plugins",
-        command=lambda: ButtonCommand.segmented_button_menu(nav_plugins_button, "Plugins"),
         font=segmented_button_font,
         height=segmented_button_height,
         fg_color="#2B2B2B",
@@ -173,7 +171,6 @@ def main_menu(app):
     nav_community_button = ctk.CTkButton(
         master=navigation_frame,
         text="Community",
-        command=lambda: ButtonCommand.segmented_button_menu(segmented_buttons_list, "Community"),
         font=segmented_button_font,
         height=segmented_button_height,
         fg_color="#2B2B2B",
