@@ -10,5 +10,5 @@ while app.returnStatement != "exit":
 
     match app.returnStatement:
 
-        case "main":
+        case "main":  # Main Menu
             Index.main_menu(app)
