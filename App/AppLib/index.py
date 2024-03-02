@@ -12,9 +12,3 @@ class Index:
     def main_menu(app):
 
         main_menu_redirect(app)
-
-
-class TexIndex:
-    @staticmethod
-    def logo_ico():
-        pass  # TODO: Stub
