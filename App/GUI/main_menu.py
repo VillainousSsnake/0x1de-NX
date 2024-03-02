@@ -6,7 +6,6 @@
 from tkinter import messagebox, filedialog
 from App.AppLib.config import Config
 import customtkinter as ctk
-import os
 
 
 # _func class (Contains functions that the menu function uses)
