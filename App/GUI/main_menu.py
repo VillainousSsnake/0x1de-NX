@@ -226,9 +226,7 @@ def main_menu(app):
         )
 
         # Assigning the command
-        button.configure(
-            command=command
-        )
+        button.configure(command=command)
 
     # Root mainloop
     root.mainloop()
