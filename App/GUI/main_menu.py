@@ -12,9 +12,6 @@ import customtkinter as ctk
 # noinspection PyPep8Naming
 class _func:
 
-    class ButtonCommand:
-        pass  # TODO: Stub
-
     @staticmethod
     def verify_romfs_path(app):
 
@@ -47,6 +44,11 @@ class _func:
                     app.settings["romfs_path"] = romfs_folder
                     Config.overwrite_setting("romfs_path", romfs_folder)
                     continue_prompt = True
+
+
+# ButtonCommand class (Contains functions for button commands)
+class ButtonCommand:
+    pass  # TODO: Stub
 
 
 # main_menu function
