@@ -3,6 +3,7 @@
 
 
 # Importing modules and libraries:
+from App.AppLib.plugin_handler import PluginHandler
 from tkinter import messagebox, filedialog
 from App.AppLib.updater import Updater
 from App.AppLib.config import Config
@@ -60,7 +61,7 @@ class SegmentedButtonMenu:
     def projects_menu_show(self):
 
         self.variables = {
-            "Projects": None,
+            "Projects": PluginHandler.get_projects(),
         }
 
         # Creating the search bar
