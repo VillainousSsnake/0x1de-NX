@@ -153,8 +153,9 @@ def main_menu(app):
         command=lambda: ButtonCommand.segmented_button_menu(nav_projects_button, "Projects"),
         font=segmented_button_font,
         height=segmented_button_height,
+        anchor="w",
     )
-    nav_projects_button.pack(side=ctk.TOP, fill="x")
+    nav_projects_button.pack(side=ctk.TOP, fill="x", pady=1)
 
     # Configuring Plugins button
     nav_plugins_button = ctk.CTkButton(
@@ -164,8 +165,9 @@ def main_menu(app):
         font=segmented_button_font,
         height=segmented_button_height,
         fg_color="#2B2B2B",
+        anchor="w",
     )
-    nav_plugins_button.pack(side=ctk.TOP, fill="x")
+    nav_plugins_button.pack(side=ctk.TOP, fill="x", pady=1)
 
     # Configuring Community button
     nav_community_button = ctk.CTkButton(
@@ -175,8 +177,9 @@ def main_menu(app):
         font=segmented_button_font,
         height=segmented_button_height,
         fg_color="#2B2B2B",
+        anchor="w",
     )
-    nav_community_button.pack(side=ctk.TOP, fill="x")
+    nav_community_button.pack(side=ctk.TOP, fill="x", pady=1)
 
     # Creating segmented_buttons_list
     segmented_buttons_list = [
