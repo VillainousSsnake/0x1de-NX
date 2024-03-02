@@ -6,6 +6,7 @@
 from tkinter import messagebox, filedialog
 from App.AppLib.config import Config
 import customtkinter as ctk
+import os
 
 
 # _func class (Contains functions that the menu function uses)
@@ -24,7 +25,7 @@ class _func:
             # While continue prompt is no loop
             while continue_prompt is False:
 
-                messagebox.showinfo("AINB-Toolbox Pop-up", "Please select your romfs folder.")
+                messagebox.showinfo("0x1de-NX Pop-up", "Please select your romfs folder.")
                 romfs_folder = filedialog.askdirectory(title="Select RomFS Folder Path")
 
                 if romfs_folder == "":
@@ -51,7 +52,7 @@ def main_menu(app):
 
     # Creating root window
     root = ctk.CTk()
-    root.title("AINB-Toolbox - VillainousSsnake - " + Updater.get_current_version())
+    root.title("AINB-Toolbox - VillainousSsnake - Alpha v0.0.1")
     root.geometry("850x525+200+200")
 
     # Defining on_close function
