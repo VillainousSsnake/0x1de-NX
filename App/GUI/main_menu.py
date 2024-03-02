@@ -7,6 +7,12 @@ import customtkinter as ctk
 from tkinter import messagebox, filedialog
 
 
+# _func class (Contains functions that the menu function uses)
+# noinspection PyPep8Naming
+class _func:
+    pass  # TODO: Stub
+
+
 # main_menu function
 def main_menu(app):
 
