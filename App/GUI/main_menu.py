@@ -55,24 +55,31 @@ class ButtonCommand:
     @staticmethod
     def segmented_button_menu(buttons_list, value):
 
+        # ['#36719F', '#144870']
+
         # Setting all buttons to the bg color
         for button in buttons_list:
             button.configure(fg_color="#2B2B2B")
+            button.configure(hover_color='#144870')
 
         # Setting the correct button to the "selected" color and showing the menu
         match value:
 
             case "Projects":    # Projects button
                 buttons_list[0].configure(fg_color="#1F6AA5")
+                buttons_list[0].configure(hover_color="#1F6AA5")
 
             case "Plugins":     # Plugins button
                 buttons_list[1].configure(fg_color="#1F6AA5")
+                buttons_list[1].configure(hover_color="#1F6AA5")
 
             case "Settings":
                 buttons_list[2].configure(fg_color="#1F6AA5")
+                buttons_list[2].configure(hover_color="#1F6AA5")
 
             case "Community":   # Community button
                 buttons_list[3].configure(fg_color="#1F6AA5")
+                buttons_list[3].configure(hover_color="#1F6AA5")
 
 
 # main_menu function
@@ -156,6 +163,7 @@ def main_menu(app):
         font=segmented_button_font,
         height=segmented_button_height,
         anchor="w",
+        hover_color="#1F6AA5",
     )
     nav_projects_button.pack(side=ctk.TOP, fill="x", pady=1)
 
