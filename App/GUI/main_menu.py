@@ -65,11 +65,18 @@ class SegmentedButtonMenu:
         }
 
         # Creating the navigation frame
-        nav_frame = ctk.CTkFrame(master=self.master, fg_color="#242424")
+        nav_frame = ctk.CTkFrame(
+            master=self.master,
+            fg_color="#242424"
+        )
         nav_frame.pack(side="top", fill="x")
 
         # Creating a scrollable frame
-        scrollable_frame = ctk.CTkScrollableFrame(master=self.master, fg_color="#242424")
+        scrollable_frame = ctk.CTkScrollableFrame(
+            master=self.master,
+            fg_color="#242424",
+            width=10000
+        )
         scrollable_frame.pack(fill="both", side="right")
 
         # Creating the search_entry entry
@@ -100,6 +107,27 @@ class SegmentedButtonMenu:
             text="Install .TKCL"
         )
         install_tkcl.grid(row=0, column=3)
+
+        # Drawing the projects
+        # Loop for every dictionary in Projects list
+        for item in self.variables["Projects"]:
+
+            # Creating the frame for the mod
+            project_frame = ctk.CTkFrame(
+                master=scrollable_frame,
+                height=100,
+                fg_color="#242424",
+            )
+            project_frame.pack(side="top", fill="x")
+
+            project_button = ctk.CTkButton(
+                master=project_frame,
+                height=project_frame.cget("height"),
+                text=str(item["Name"]) + "\n\n",
+                anchor="w",
+                font=("monospace", 25, "bold"),
+            )
+            project_button.pack(fill="both")
 
     def destroy_current_menu(self):
 
