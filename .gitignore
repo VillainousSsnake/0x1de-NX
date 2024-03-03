@@ -5,6 +5,7 @@ __pycache__/
 .idea
 _Cache_
 output
+0x1de-NX
 
 # C extensions
 *.so
