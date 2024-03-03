@@ -249,15 +249,15 @@ class ButtonCommand:
     class ProjectsMenu:
         @staticmethod
         def new_project(root, app):
-            pass  # TODO: Stub
+            subwin_new_project(root, app)
 
         @staticmethod
         def open_project(root, app):
-            pass  # TODO: Stub
+            subwin_open_project(root, app)
 
         @staticmethod
         def import_tkcl(root, app):
-            pass  # TODO: Stub
+            subwin_import_tkcl(root, app)
 
     @staticmethod
     def segmented_button_menu(segmented_menu_controller, buttons_list, value):
