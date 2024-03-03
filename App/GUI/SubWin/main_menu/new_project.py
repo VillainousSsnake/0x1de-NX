@@ -26,6 +26,13 @@ class ButtonFunc:
 
 def new_project(root, app):
 
+    settings = {
+        "Project Name": None,
+        "IconPath": None,
+        "Create romfs folder": True,
+        "Create README.txt": True,
+    }
+
     # Creating the window
     window = tk.CTkToplevel()
     window.title("0x1de NX | " + Updater.get_current_version() + " | New Project")
@@ -37,10 +44,11 @@ def new_project(root, app):
     window.grab_set()
 
     # Configuring the menu widgets
+    create_command = partial(ButtonFunc.create)
     create_button = tk.CTkButton(
         master=window,
         text="Create",
-
+        command=create_command
     )
     create_button.pack(anchor="se", side="right")
 
@@ -88,6 +96,14 @@ def new_project(root, app):
         master=frame_1,
         text="Create README.txt?",
     )
-    create_readme_checkbox.pack(side="right", padx=35)
+    create_readme_checkbox.pack(side="right", padx=35, pady=30)
+    create_readme_checkbox.toggle()
+
+    create_romfs_folder_checkbox = tk.CTkCheckBox(
+        master=window,
+        text="Create romfs folder?",
+    )
+    create_romfs_folder_checkbox.place(x=276, y=125)
+    create_romfs_folder_checkbox.toggle()
 
 
