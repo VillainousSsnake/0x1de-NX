@@ -43,10 +43,13 @@ class ProjectHandler:
                     with open(os.path.join(project_folder_path, item, "info.json")) as f_in:
                         mod_info = json.load(f_in)
 
+                    mod_info["Filepath"] = os.path.join("~0x1de-NX", "Projects", item)
+
                 else:
 
                     mod_info = {
                         "Name": item,
+                        "Filepath": os.path.join("~0x1de-NX", "Projects", item),
                         "Version": "Unknown",
                         "Author": "Unknown",
                         "Contributors": None,

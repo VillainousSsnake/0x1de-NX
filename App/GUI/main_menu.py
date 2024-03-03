@@ -139,11 +139,9 @@ class SegmentedButtonMenu:
             project_button.pack(fill="both")
             self.object_list.append(project_button)
 
-            # TODO: Do image here
-
             # Creating info_label_text
             info_label1_text = item["Author"] + ", v" + item["Version"]
-            info_label2_text = str(item["Description"])
+            info_label2_text = str(item["Filepath"])
 
             # Creating info label for author and version
             info_label1 = ctk.CTkLabel(
@@ -158,7 +156,7 @@ class SegmentedButtonMenu:
             info_label2 = ctk.CTkLabel(
                 master=project_button,
                 text=info_label2_text,
-                font=("monospace", 12),
+                font=("monospace", 12, 'italic'),
                 anchor="w",
                 wraplength=400,
             )
