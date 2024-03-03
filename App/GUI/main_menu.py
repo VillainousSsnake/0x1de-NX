@@ -137,6 +137,18 @@ class SegmentedButtonMenu:
             project_button.pack(fill="both")
             self.object_list.append(project_button)
 
+        # If there was nothing in the projects list
+        if len(self.variables["Projects"]) == 0:
+
+            nothing_label = ctk.CTkLabel(
+                master=scrollable_frame,
+                text="There is nothing here...\n Select New Project to get started!",
+                height=400,
+                font=("font", 20),
+            )
+            nothing_label.pack(fill="both")
+            self.object_list.append(nothing_label)
+
     def destroy_current_menu(self):
 
         for obj in self.object_list:
