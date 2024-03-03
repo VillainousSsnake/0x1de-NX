@@ -87,6 +87,7 @@ class SegmentedButtonMenu:
         # Creating self.variables
         self.variables = {
             "Projects": ProjectHandler.get_projects(),
+            "Enabled Mods": [],
         }
 
         # Creating the navigation frame
