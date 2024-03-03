@@ -143,7 +143,7 @@ class SegmentedButtonMenu:
 
             # Creating info_label_text
             info_label1_text = item["Author"] + ", v" + item["Version"]
-            info_label2_text = item["Description"]
+            info_label2_text = str(item["Description"])
 
             # Creating info label for author and version
             info_label1 = ctk.CTkLabel(
