@@ -65,7 +65,7 @@ class SegmentedButtonMenu:
         }
 
         # Creating the navigation frame
-        nav_frame = ctk.CTkFrame(master=self.master)
+        nav_frame = ctk.CTkFrame(master=self.master, fg_color="#242424")
         nav_frame.pack(side="top", fill="x")
 
         # Creating a scrollable frame
@@ -75,9 +75,10 @@ class SegmentedButtonMenu:
         # Creating the search_entry entry
         search_entry = ctk.CTkEntry(
             master=nav_frame,
-            placeholder_text="Search Projects"
+            placeholder_text="Search Projects",
+            width=155,
         )
-        search_entry.grid(row=0, column=0, padx=20)
+        search_entry.grid(row=0, column=0)
 
         # Creating the new_project button
         new_project_button = ctk.CTkButton(
