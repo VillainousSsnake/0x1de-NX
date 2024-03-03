@@ -18,15 +18,15 @@ import os
 class _func:
 
     @staticmethod
-    def highlight_labels_on_button_enter(info_label1=None, info_label2=None, button=None):
+    def highlight_labels_on_button_enter(info_label1=None, info_label2=None, button=None, event=None):
         fgc = "#144870"
         info_label1.configure(fg_color=fgc)
         info_label2.configure(fg_color=fgc)
         button.configure(fg_color=fgc)
 
     @staticmethod
-    def highlight_labels_on_button_leave(info_label1=None, info_label2=None, button=None):
-        fgc = "#2B2B2B"
+    def highlight_labels_on_button_leave(info_label1=None, info_label2=None, button=None, event=None):
+        fgc = "#242424"
         info_label1.configure(fg_color=fgc)
         info_label2.configure(fg_color=fgc)
         button.configure(fg_color=fgc)
@@ -202,7 +202,24 @@ class SegmentedButtonMenu:
             info_label2.place(x=190, y=70)
 
             # The label highlight fix
-            # TODO: Stub
+            command_enter = partial(
+                _func.highlight_labels_on_button_enter,
+                info_label1,
+                info_label2,
+                project_button
+            )
+            command_leave = partial(
+                _func.highlight_labels_on_button_leave,
+                info_label1,
+                info_label2,
+                project_button
+            )
+            info_label1.bind("<Enter>", command_enter)
+            info_label1.bind("<Leave>", command_leave)
+            info_label2.bind("<Enter>", command_enter)
+            info_label2.bind("<Leave>", command_leave)
+            project_button.bind("<Enter>", command_enter)
+            project_button.bind("<Leave>", command_leave)
 
         # If there was nothing in the projects list
         if len(self.variables["Projects"]) == 0:
