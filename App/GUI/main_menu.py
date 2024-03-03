@@ -253,7 +253,7 @@ def main_menu(app):
 
     # Creating root window
     root = ctk.CTk()
-    root.title("AINB-Toolbox - VillainousSsnake - Alpha v0.0.1")
+    root.title("0x1de-NX | Alpha v0.0.1")
     root.geometry("850x525+200+200")
 
     # Defining on_close function
