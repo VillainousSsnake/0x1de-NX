@@ -18,8 +18,18 @@ import os
 class _func:
 
     @staticmethod
-    def highlight_labels_on_button(button, info_label1, info_label2):
-        pass  # TODO: Stub
+    def highlight_labels_on_button_enter(info_label1=None, info_label2=None, button=None):
+        fgc = "#144870"
+        info_label1.configure(fg_color=fgc)
+        info_label2.configure(fg_color=fgc)
+        button.configure(fg_color=fgc)
+
+    @staticmethod
+    def highlight_labels_on_button_leave(info_label1=None, info_label2=None, button=None):
+        fgc = "#2B2B2B"
+        info_label1.configure(fg_color=fgc)
+        info_label2.configure(fg_color=fgc)
+        button.configure(fg_color=fgc)
 
     @staticmethod
     def verify_romfs_path(app):
@@ -190,6 +200,9 @@ class SegmentedButtonMenu:
                 anchor="w",
             )
             info_label2.place(x=190, y=70)
+
+            # The label highlight fix
+            # TODO: Stub
 
         # If there was nothing in the projects list
         if len(self.variables["Projects"]) == 0:
