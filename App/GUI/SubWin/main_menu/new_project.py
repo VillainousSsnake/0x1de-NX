@@ -23,6 +23,10 @@ class ButtonFunc:
     def create():
         pass  # TODO: Stub
 
+    @staticmethod
+    def select_icon():
+        pass  # TODO: stub
+
 
 def new_project(root, app):
 
@@ -91,6 +95,8 @@ def new_project(root, app):
         ),
     )
     icon_image.pack(side="left", anchor="n")
+    icon_command = partial(ButtonFunc.select_icon)
+    icon_image.bind("<1>", icon_command)
 
     create_readme_checkbox = tk.CTkCheckBox(
         master=frame_1,
