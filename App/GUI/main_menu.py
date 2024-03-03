@@ -139,6 +139,32 @@ class SegmentedButtonMenu:
             project_button.pack(fill="both")
             self.object_list.append(project_button)
 
+            # Creating the image for the project
+            if item["ThumbnailUri"] is not None:
+
+                image_path = os.path.join(
+                    item["ProjectFolder"],
+                    os.path.basename(item["Filepath"]),
+                    item["ThumbnailUri"],
+                )
+
+                if not os.path.exists(image_path):
+                    image_path = os.path.join(os.getcwd(), "App", "Image", "img_not_found.jpg")
+
+            else:
+
+                image_path = os.path.join(os.getcwd(), "App", "Image", "img_not_found.jpg")
+
+            # Creating the project image
+            project_image = ctk.CTkImage(
+                light_image=Image.open(image_path),
+                dark_image=Image.open(image_path),
+                size=(128, 128)
+            )
+
+            # Assigning the image to the project button
+            project_button.configure(image=project_image)
+
             # Creating info_label_text
             info_label1_text = item["Author"] + ", v" + item["Version"]
             info_label2_text = str(item["Filepath"])
