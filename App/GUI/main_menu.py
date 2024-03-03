@@ -18,6 +18,10 @@ import os
 class _func:
 
     @staticmethod
+    def highlight_labels_on_button(button, info_label1, info_label2):
+        pass  # TODO: Stub
+
+    @staticmethod
     def verify_romfs_path(app):
 
         # Detecting if the romfs_path is None
