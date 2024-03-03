@@ -182,6 +182,7 @@ class SegmentedButtonMenu:
             obj.destroy()
 
         self.variables = dict()
+        self.object_list = []
 
 
 # ButtonCommand class (Contains functions for button commands)
