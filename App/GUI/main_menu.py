@@ -71,13 +71,20 @@ class _func:
 
 # SegmentedButtonMenu class
 class SegmentedButtonMenu:
-    def __init__(self, master):
+    def __init__(self, master, root, app):
         self.object_list = list()
         self.variables = dict()
         self.master = master
+        self.root = root
+        self.app = app
 
     def projects_menu_show(self):
 
+        # Creating variables
+        app = self.app
+        root = self.root
+
+        # Creating self.variables
         self.variables = {
             "Projects": ProjectHandler.get_projects(),
         }
@@ -109,28 +116,34 @@ class SegmentedButtonMenu:
         self.object_list.append(search_entry)
 
         # Creating the new_project button
+        new_project_command = partial(ButtonCommand.ProjectsMenu.new_project, root, app)
         new_project_button = ctk.CTkButton(
             master=nav_frame,
-            text="New Project"
+            text="New Project",
+            command=new_project_command,
         )
         new_project_button.grid(row=0, column=1)
         self.object_list.append(new_project_button)
 
         # Creating open_project button
+        open_project_command = partial(ButtonCommand.ProjectsMenu.open_project, root, app)
         open_project_button = ctk.CTkButton(
             master=nav_frame,
-            text="Open Project"
+            text="Open Project",
+            command=open_project_command,
         )
         open_project_button.grid(row=0, column=2)
         self.object_list.append(open_project_button)
 
         # Creating install project from tkcl button
-        install_tkcl = ctk.CTkButton(
+        import_tkcl_command = partial(ButtonCommand.ProjectsMenu.import_tkcl, root, app)
+        import_tkcl = ctk.CTkButton(
             master=nav_frame,
-            text="Install .TKCL"
+            text="Import .TKCL",
+            command=import_tkcl_command,
         )
-        install_tkcl.grid(row=0, column=3)
-        self.object_list.append(install_tkcl)
+        import_tkcl.grid(row=0, column=3)
+        self.object_list.append(import_tkcl)
 
         # Drawing the projects
         # Loop for every dictionary in Projects list
@@ -438,7 +451,7 @@ def main_menu(app):
     ]
 
     # Showing projects menu (Since that is the default open menu)
-    segmented_button_controller = SegmentedButtonMenu(menu_frame)
+    segmented_button_controller = SegmentedButtonMenu(menu_frame, root, app)
     segmented_button_controller.projects_menu_show()
 
     # Assigning commands to each button in segmented_buttons_list
