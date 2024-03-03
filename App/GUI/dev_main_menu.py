@@ -72,7 +72,7 @@ class SegmentedButtonMenu:
         self.variables = dict()
         self.master = master
 
-    def projects_menu_show(self):
+    def projects_menu(self):
 
         self.variables = {
             "Projects": ProjectHandler.get_projects(),
@@ -215,7 +215,9 @@ class SegmentedButtonMenu:
                 project_button
             )
             info_label1.bind("<Enter>", command_enter)
+            info_label1.bind("<Leave>", command_leave)
             info_label2.bind("<Enter>", command_enter)
+            info_label2.bind("<Leave>", command_leave)
             project_button.bind("<Enter>", command_enter)
             project_button.bind("<Leave>", command_leave)
 
@@ -242,36 +244,74 @@ class SegmentedButtonMenu:
 
 # ButtonCommand class (Contains functions for button commands)
 class ButtonCommand:
-    @staticmethod
-    def segmented_button_menu(segmented_menu_controller, buttons_list, value):
+    class NavFrame:
+        @staticmethod
+        def projects_button(segmented_menu_controller, buttons_list):
 
-        # Setting all buttons to the bg color
-        for button in buttons_list:
-            button.configure(fg_color="#2B2B2B")
-            button.configure(hover_color='#144870')
+            # Setting all buttons to the bg color
+            for button in buttons_list:
+                button.configure(fg_color="#2B2B2B")
+                button.configure(hover_color='#144870')
 
-        # Destroying the menu
-        segmented_menu_controller.destroy_current_menu()
+            # Destroying the menu
+            segmented_menu_controller.destroy_current_menu()
 
-        # Setting the correct button to the "selected" color and showing the menu
-        match value:
+            # Setting the correct button to the "selected" color and showing the menu
+            buttons_list[0].configure(fg_color="#1F6AA5")
+            buttons_list[0].configure(hover_color="#1F6AA5")
 
-            case "Projects":    # Projects button
-                buttons_list[0].configure(fg_color="#1F6AA5")
-                buttons_list[0].configure(hover_color="#1F6AA5")
-                segmented_menu_controller.projects_menu_show()
+            segmented_menu_controller.projects_menu()
 
-            case "Plugins":     # Plugins button
-                buttons_list[1].configure(fg_color="#1F6AA5")
-                buttons_list[1].configure(hover_color="#1F6AA5")
+        @staticmethod
+        def plugins_button(segmented_menu_controller, buttons_list):
 
-            case "Settings":
-                buttons_list[2].configure(fg_color="#1F6AA5")
-                buttons_list[2].configure(hover_color="#1F6AA5")
+            # Setting all buttons to the bg color
+            for button in buttons_list:
+                button.configure(fg_color="#2B2B2B")
+                button.configure(hover_color='#144870')
 
-            case "Community":   # Community button
-                buttons_list[3].configure(fg_color="#1F6AA5")
-                buttons_list[3].configure(hover_color="#1F6AA5")
+            # Destroying the menu
+            segmented_menu_controller.destroy_current_menu()
+
+            # Setting the correct button to the "selected" color and showing the menu
+            buttons_list[1].configure(fg_color="#1F6AA5")
+            buttons_list[1].configure(hover_color="#1F6AA5")
+
+            segmented_menu_controller.plugins_menu()
+
+        @staticmethod
+        def settings_button(segmented_menu_controller, buttons_list):
+
+            # Setting all buttons to the bg color
+            for button in buttons_list:
+                button.configure(fg_color="#2B2B2B")
+                button.configure(hover_color='#144870')
+
+            # Destroying the menu
+            segmented_menu_controller.destroy_current_menu()
+
+            # Setting the correct button to the "selected" color and showing the menu
+            buttons_list[2].configure(fg_color="#1F6AA5")
+            buttons_list[2].configure(hover_color="#1F6AA5")
+
+            segmented_menu_controller.settings_menu()
+
+        @staticmethod
+        def community_button(segmented_menu_controller, buttons_list):
+
+            # Setting all buttons to the bg color
+            for button in buttons_list:
+                button.configure(fg_color="#2B2B2B")
+                button.configure(hover_color='#144870')
+
+            # Destroying the menu
+            segmented_menu_controller.destroy_current_menu()
+
+            # Setting the correct button to the "selected" color and showing the menu
+            buttons_list[3].configure(fg_color="#1F6AA5")
+            buttons_list[3].configure(hover_color="#1F6AA5")
+
+            segmented_menu_controller.community_menu()
 
 
 # main_menu function
@@ -412,31 +452,40 @@ def main_menu(app):
         nav_community_button,
     ]
 
-    # Creating segmented_buttons_values
-    segmented_buttons_values = [
-        "Projects",
-        "Plugins",
-        "Settings",
-        "Community",
-    ]
-
     # Showing projects menu (Since that is the default open menu)
-    segmented_button_controller = SegmentedButtonMenu(menu_frame)
-    segmented_button_controller.projects_menu_show()
+    segmented_buttons_controller = SegmentedButtonMenu(menu_frame)
+    segmented_buttons_controller.projects_menu()
 
-    # Assigning commands to each button in segmented_buttons_list
-    for button in segmented_buttons_list:
+    # Creating all the button commands
+    projects_button_command = partial(
+        ButtonCommand.NavFrame.projects_button,
+        segmented_buttons_controller,
+        segmented_buttons_list
+    )
 
-        # Creating the command
-        command = partial(
-            ButtonCommand.segmented_button_menu,
-            segmented_button_controller,
-            segmented_buttons_list,
-            segmented_buttons_values[segmented_buttons_list.index(button)]
-        )
+    plugins_button_command = partial(
+        ButtonCommand.NavFrame.plugins_button,
+        segmented_buttons_controller,
+        segmented_buttons_list
+    )
 
-        # Assigning the command
-        button.configure(command=command)
+    settings_button_command = partial(
+        ButtonCommand.NavFrame.settings_button,
+        segmented_buttons_controller,
+        segmented_buttons_list
+    )
+
+    community_button_command = partial(
+        ButtonCommand.NavFrame.community_button,
+        segmented_buttons_controller,
+        segmented_buttons_list
+    )
+
+    # Assigning the partials
+    nav_projects_button.configure(command=projects_button_command)
+    nav_plugins_button.configure(command=plugins_button_command)
+    nav_settings_button.configure(command=settings_button_command)
+    nav_community_button.configure(command=community_button_command)
 
     # Root mainloop
     root.mainloop()
