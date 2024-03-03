@@ -139,6 +139,8 @@ class SegmentedButtonMenu:
             project_button.pack(fill="both")
             self.object_list.append(project_button)
 
+            # TODO: Do image here
+
             # Creating info_label_text
             info_label1_text = item["Author"] + ", v" + item["Version"]
             info_label2_text = item["Description"]
