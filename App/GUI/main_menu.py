@@ -2,8 +2,8 @@
 # Contains main menu code
 
 # Importing SubWin modules
-from App.GUI.SubWin.main_menu.new_project import new_project as subwin_new_project
 from App.GUI.SubWin.main_menu.open_project import open_project as subwin_open_project
+from App.GUI.SubWin.main_menu.new_project import new_project as subwin_new_project
 from App.GUI.SubWin.main_menu.import_tkcl import import_tkcl as subwin_import_tkcl
 
 # Importing modules and libraries:
