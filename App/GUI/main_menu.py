@@ -176,7 +176,7 @@ class SegmentedButtonMenu:
                 font=("monospace", 17),
                 anchor="w"
             )
-            info_label1.place(x=30, y=45)
+            info_label1.place(x=175, y=45)
             self.object_list.append(info_label1)
 
             info_label2 = ctk.CTkLabel(
@@ -185,7 +185,7 @@ class SegmentedButtonMenu:
                 font=("monospace", 12, 'italic'),
                 anchor="w",
             )
-            info_label2.place(x=35, y=70)
+            info_label2.place(x=190, y=70)
 
         # If there was nothing in the projects list
         if len(self.variables["Projects"]) == 0:
