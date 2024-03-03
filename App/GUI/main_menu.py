@@ -70,6 +70,7 @@ class SegmentedButtonMenu:
             fg_color="#242424"
         )
         nav_frame.pack(side="top", fill="x")
+        self.object_list.append(nav_frame)
 
         # Creating a scrollable frame
         scrollable_frame = ctk.CTkScrollableFrame(
@@ -78,6 +79,7 @@ class SegmentedButtonMenu:
             width=10000
         )
         scrollable_frame.pack(fill="both", side="right")
+        self.object_list.append(scrollable_frame)
 
         # Creating the search_entry entry
         search_entry = ctk.CTkEntry(
@@ -86,6 +88,7 @@ class SegmentedButtonMenu:
             width=155,
         )
         search_entry.grid(row=0, column=0)
+        self.object_list.append(search_entry)
 
         # Creating the new_project button
         new_project_button = ctk.CTkButton(
@@ -93,6 +96,7 @@ class SegmentedButtonMenu:
             text="New Project"
         )
         new_project_button.grid(row=0, column=1)
+        self.object_list.append(new_project_button)
 
         # Creating open_project button
         open_project_button = ctk.CTkButton(
@@ -100,6 +104,7 @@ class SegmentedButtonMenu:
             text="Open Project"
         )
         open_project_button.grid(row=0, column=2)
+        self.object_list.append(open_project_button)
 
         # Creating install project from tkcl button
         install_tkcl = ctk.CTkButton(
@@ -107,6 +112,7 @@ class SegmentedButtonMenu:
             text="Install .TKCL"
         )
         install_tkcl.grid(row=0, column=3)
+        self.object_list.append(install_tkcl)
 
         # Drawing the projects
         # Loop for every dictionary in Projects list
@@ -119,6 +125,7 @@ class SegmentedButtonMenu:
                 fg_color="#242424",
             )
             project_frame.pack(side="top", fill="x")
+            self.object_list.append(project_frame)
 
             project_button = ctk.CTkButton(
                 master=project_frame,
@@ -128,6 +135,7 @@ class SegmentedButtonMenu:
                 font=("monospace", 25, "bold"),
             )
             project_button.pack(fill="both")
+            self.object_list.append(project_button)
 
     def destroy_current_menu(self):
 
@@ -147,12 +155,16 @@ class ButtonCommand:
             button.configure(fg_color="#2B2B2B")
             button.configure(hover_color='#144870')
 
+        # Destroying the menu
+        segmented_menu_controller.destroy_current_menu()
+
         # Setting the correct button to the "selected" color and showing the menu
         match value:
 
             case "Projects":    # Projects button
                 buttons_list[0].configure(fg_color="#1F6AA5")
                 buttons_list[0].configure(hover_color="#1F6AA5")
+                segmented_menu_controller.projects_menu_show()
 
             case "Plugins":     # Plugins button
                 buttons_list[1].configure(fg_color="#1F6AA5")
