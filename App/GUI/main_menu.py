@@ -147,7 +147,7 @@ class SegmentedButtonMenu:
             info_label1 = ctk.CTkLabel(
                 master=project_button,
                 text=info_label1_text,
-                font=("monospace", 15),
+                font=("monospace", 17),
                 anchor="w"
             )
             info_label1.place(x=30, y=45)
@@ -156,9 +156,9 @@ class SegmentedButtonMenu:
             info_label2 = ctk.CTkLabel(
                 master=project_button,
                 text=info_label2_text,
-                font=("monospace", 13),
+                font=("monospace", 12),
                 anchor="w",
-                wraplength=300,
+                wraplength=400,
             )
             info_label2.place(x=35, y=70)
 
