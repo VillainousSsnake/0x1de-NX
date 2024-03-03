@@ -244,15 +244,15 @@ class SegmentedButtonMenu:
 class ButtonCommand:
     class ProjectsMenu:
         @staticmethod
-        def new_project():
+        def new_project(root, app):
             pass  # TODO: Stub
 
         @staticmethod
-        def open_project():
+        def open_project(root, app):
             pass  # TODO: Stub
 
         @staticmethod
-        def import_tkcl():
+        def import_tkcl(root, app):
             pass  # TODO: Stub
 
     @staticmethod
