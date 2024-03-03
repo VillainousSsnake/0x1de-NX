@@ -158,7 +158,6 @@ class SegmentedButtonMenu:
                 text=info_label2_text,
                 font=("monospace", 12, 'italic'),
                 anchor="w",
-                wraplength=400,
             )
             info_label2.place(x=35, y=70)
 
