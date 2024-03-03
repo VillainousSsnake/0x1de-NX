@@ -121,21 +121,46 @@ class SegmentedButtonMenu:
             # Creating the frame for the mod
             project_frame = ctk.CTkFrame(
                 master=scrollable_frame,
-                height=100,
+                height=150,
                 fg_color="#242424",
             )
             project_frame.pack(side="top", fill="x")
             self.object_list.append(project_frame)
 
+            # Creating the overall project button
             project_button = ctk.CTkButton(
                 master=project_frame,
                 height=project_frame.cget("height"),
-                text=str(item["Name"]) + "\n\n",
+                text=str(item["Name"]) + "\n\n\n",
                 anchor="w",
                 font=("monospace", 25, "bold"),
+                fg_color="#242424"
             )
             project_button.pack(fill="both")
             self.object_list.append(project_button)
+
+            # Creating info_label_text
+            info_label1_text = item["Author"] + ", v" + item["Version"]
+            info_label2_text = item["Description"]
+
+            # Creating info label for author and version
+            info_label1 = ctk.CTkLabel(
+                master=project_button,
+                text=info_label1_text,
+                font=("monospace", 15),
+                anchor="w"
+            )
+            info_label1.place(x=30, y=45)
+            self.object_list.append(info_label1)
+
+            info_label2 = ctk.CTkLabel(
+                master=project_button,
+                text=info_label2_text,
+                font=("monospace", 13),
+                anchor="w",
+                wraplength=300,
+            )
+            info_label2.place(x=35, y=70)
 
         # If there was nothing in the projects list
         if len(self.variables["Projects"]) == 0:
