@@ -9,7 +9,7 @@ from App.AppLib.updater import Updater
 from App.AppLib.config import Config
 from functools import partial
 import customtkinter as ctk
-from PIL import Image
+from PIL import Image, ImageTk
 import os
 
 
@@ -255,6 +255,11 @@ def main_menu(app):
     root = ctk.CTk()
     root.title("0x1de-NX | Alpha v0.0.1")
     root.geometry("850x525+200+200")
+    root.wm_iconbitmap()
+    root.iconphoto(
+        False,
+        ImageTk.PhotoImage(file=r'C:\Users\ecrje\PycharmProjects\0x1de-NX\App\Image\0x1de.ico')
+    )
 
     # Defining on_close function
     def on_close():
