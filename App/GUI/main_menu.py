@@ -14,7 +14,7 @@ import os
 
 
 # _func class (Contains functions that the menu function uses)
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming, PyUnusedLocal
 class _func:
 
     @staticmethod
@@ -242,6 +242,19 @@ class SegmentedButtonMenu:
 
 # ButtonCommand class (Contains functions for button commands)
 class ButtonCommand:
+    class ProjectsMenu:
+        @staticmethod
+        def new_project():
+            pass  # TODO: Stub
+
+        @staticmethod
+        def open_project():
+            pass  # TODO: Stub
+
+        @staticmethod
+        def import_tkcl():
+            pass  # TODO: Stub
+
     @staticmethod
     def segmented_button_menu(segmented_menu_controller, buttons_list, value):
 
