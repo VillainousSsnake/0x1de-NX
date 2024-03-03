@@ -54,6 +54,7 @@ class ProjectHandler:
                         "Author": "Unknown",
                         "Contributors": None,
                         "Description": None,
+                        "ThumbnailUri": None,
                     }
 
                 output_list.append(mod_info)
