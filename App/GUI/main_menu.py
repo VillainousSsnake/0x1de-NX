@@ -242,9 +242,15 @@ class SegmentedButtonMenu:
 
     def create_plugins_menu(self):
 
+        # Navigation frame
         nav_frame = ctk.CTkFrame(master=self.master)
         nav_frame.pack(fill='x', side='top')
         self.object_list.append(nav_frame)
+
+        # Scroll frame
+        scroll_frame = ctk.CTkScrollableFrame(master=self.master)
+        scroll_frame.pack(fill="both", side='left')
+        self.object_list.append(scroll_frame)
 
     def create_settings_menu(self):
         pass  # TODO: Stub
@@ -257,7 +263,8 @@ class SegmentedButtonMenu:
         self.object_list[1].pack(side="left", fill="both")
 
     def show_plugins_menu(self):
-        pass  # TODO: Stub
+        self.object_list[2].pack(fill='x', side='top')
+        self.object_list[3].pack(fill='both', side='left')
 
     def show_settings_menu(self):
         pass  # TODO: Stub
