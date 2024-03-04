@@ -78,7 +78,7 @@ class SegmentedButtonMenu:
         self.root = root
         self.app = app
 
-    def projects_menu_show(self):
+    def create_projects_menu(self):
 
         # Creating variables
         app = self.app
@@ -114,7 +114,6 @@ class SegmentedButtonMenu:
             width=155,
         )
         search_entry.grid(row=0, column=0)
-        self.object_list.append(search_entry)
 
         # Creating the new_project button
         new_project_command = partial(ButtonCommand.ProjectsMenu.new_project, root, app)
@@ -124,7 +123,6 @@ class SegmentedButtonMenu:
             command=new_project_command,
         )
         new_project_button.grid(row=0, column=1)
-        self.object_list.append(new_project_button)
 
         # Creating open_project button
         open_project_command = partial(ButtonCommand.ProjectsMenu.open_project, root, app)
@@ -134,7 +132,6 @@ class SegmentedButtonMenu:
             command=open_project_command,
         )
         open_project_button.grid(row=0, column=2)
-        self.object_list.append(open_project_button)
 
         # Creating install project from tkcl button
         import_tkcl_command = partial(ButtonCommand.ProjectsMenu.import_tkcl, root, app)
@@ -144,7 +141,6 @@ class SegmentedButtonMenu:
             command=import_tkcl_command,
         )
         import_tkcl.grid(row=0, column=3)
-        self.object_list.append(import_tkcl)
 
         # Drawing the projects
         # Loop for every dictionary in Projects list
@@ -157,7 +153,6 @@ class SegmentedButtonMenu:
                 fg_color="#242424",
             )
             project_frame.pack(side="top", fill="x")
-            self.object_list.append(project_frame)
 
             # Creating the overall project button
             project_button = ctk.CTkButton(
@@ -169,7 +164,6 @@ class SegmentedButtonMenu:
                 fg_color="#242424"
             )
             project_button.pack(fill="both")
-            self.object_list.append(project_button)
 
             # Creating the image for the project
             if item["ThumbnailUri"] is not None:
@@ -209,7 +203,6 @@ class SegmentedButtonMenu:
                 anchor="w"
             )
             info_label1.place(x=175, y=45)
-            self.object_list.append(info_label1)
 
             info_label2 = ctk.CTkLabel(
                 master=project_button,
@@ -239,7 +232,6 @@ class SegmentedButtonMenu:
 
         # If there was nothing in the projects list
         if len(self.variables["Projects"]) == 0:
-
             nothing_label = ctk.CTkLabel(
                 master=scrollable_frame,
                 text="There is nothing here...\n Select New Project to get started!",
@@ -247,15 +239,33 @@ class SegmentedButtonMenu:
                 font=("font", 20),
             )
             nothing_label.pack(fill="both")
-            self.object_list.append(nothing_label)
+
+    def create_plugins_menu(self):
+        pass  # TODO: Stub
+
+    def create_settings_menu(self):
+        pass  # TODO: Stub
+
+    def create_community_menu(self):
+        pass  # TODO: Stub
+
+    def show_projects_menu(self):
+        if len(self.object_list) > 0:
+            self.object_list[0].pack(side="top", fill="x")
+            self.object_list[1].pack(side="left", fill="both")
+
+    def show_plugins_menu(self):
+        pass  # TODO: Stub
+
+    def show_settings_menu(self):
+        pass  # TODO: Stub
+
+    def show_community_menu(self):
+        pass  # TODO: Stub
 
     def destroy_current_menu(self):
-
         for obj in self.object_list:
-            obj.destroy()
-
-        self.variables = dict()
-        self.object_list = []
+            obj.pack_forget()
 
 
 # ButtonCommand class (Contains functions for button commands)
@@ -290,19 +300,22 @@ class ButtonCommand:
             case "Projects":    # Projects button
                 buttons_list[0].configure(fg_color="#1F6AA5")
                 buttons_list[0].configure(hover_color="#1F6AA5")
-                segmented_menu_controller.projects_menu_show()
+                segmented_menu_controller.show_projects_menu()
 
             case "Plugins":     # Plugins button
                 buttons_list[1].configure(fg_color="#1F6AA5")
                 buttons_list[1].configure(hover_color="#1F6AA5")
+                segmented_menu_controller.show_plugins_menu()
 
             case "Settings":
                 buttons_list[2].configure(fg_color="#1F6AA5")
                 buttons_list[2].configure(hover_color="#1F6AA5")
+                segmented_menu_controller.show_settings_menu()
 
             case "Community":   # Community button
                 buttons_list[3].configure(fg_color="#1F6AA5")
                 buttons_list[3].configure(hover_color="#1F6AA5")
+                segmented_menu_controller.show_community_menu()
 
 
 # main_menu function
@@ -451,9 +464,17 @@ def main_menu(app):
         "Community",
     ]
 
-    # Showing projects menu (Since that is the default open menu)
+    # Creating the segmented
     segmented_button_controller = SegmentedButtonMenu(menu_frame, root, app)
-    segmented_button_controller.projects_menu_show()
+
+    # Creating all of the menus
+    segmented_button_controller.create_projects_menu()
+    segmented_button_controller.create_plugins_menu()
+    segmented_button_controller.create_settings_menu()
+    segmented_button_controller.create_community_menu()
+
+    # Showing the project menu (Since it's the default)
+    segmented_button_controller.show_projects_menu()
 
     # Assigning commands to each button in segmented_buttons_list
     for button in segmented_buttons_list:
