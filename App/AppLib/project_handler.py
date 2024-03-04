@@ -9,14 +9,19 @@ import os
 # ProjectHandler class
 class ProjectHandler:
     @staticmethod
+    def get_project_directory():
+        # TODO: Replace os.getcwd() with os.getenv('LOCALAPPDATA')
+        output = os.path.join(
+            os.getcwd(), "0x1de-NX", "Projects",
+        )
+        return output
+
+    @staticmethod
     def get_projects():
         """Returns list of all projects and project information"""
 
-        # TODO: Replace os.getcwd() with os.getenv('LOCALAPPDATA')
         # Creating project_folder_path
-        project_folder_path = os.path.join(
-            os.getcwd(), "0x1de-NX", "Projects",
-        )
+        project_folder_path = ProjectHandler.get_project_directory()
 
         project_config_file_path = os.path.join(
             project_folder_path, "project.config"
@@ -37,7 +42,7 @@ class ProjectHandler:
             # For every folder in folder_list
             for item in folder_list:
 
-                # Detecting if the mod has a info.json
+                # Detecting if the mod has info.json
                 if os.path.exists(os.path.join(project_folder_path, item, "info.json")):
 
                     with open(os.path.join(project_folder_path, item, "info.json")) as f_in:
