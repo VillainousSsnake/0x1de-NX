@@ -24,8 +24,18 @@ class ButtonFunc:
         pass  # TODO: Stub
 
     @staticmethod
-    def select_icon():
-        pass  # TODO: stub
+    def select_icon(icon_image, event=None):
+        image_fp = filedialog.askopenfile(title="Select Project Image...")
+
+        icon_image.configure(
+            image=tk.CTkImage(
+                light_image=Image.open(image_fp),
+                dark_image=Image.open(image_fp),
+                size=(96, 96),
+            ),
+        )
+
+        # TODO: Fix bugs
 
 
 def new_project(root, app):
@@ -95,8 +105,8 @@ def new_project(root, app):
         ),
     )
     icon_image.pack(side="left", anchor="n")
-    icon_command = partial(ButtonFunc.select_icon)
-    icon_image.bind("<1>", icon_command)
+    icon_command = partial(ButtonFunc.select_icon, icon_image)
+    icon_image.bind("<Button-1>", icon_command)
 
     create_readme_checkbox = tk.CTkCheckBox(
         master=frame_1,
