@@ -241,7 +241,10 @@ class SegmentedButtonMenu:
             nothing_label.pack(fill="both")
 
     def create_plugins_menu(self):
-        pass  # TODO: Stub
+
+        nav_frame = ctk.CTkFrame(master=self.master)
+        nav_frame.pack(fill='x', side='top')
+        self.object_list.append(nav_frame)
 
     def create_settings_menu(self):
         pass  # TODO: Stub
@@ -250,9 +253,8 @@ class SegmentedButtonMenu:
         pass  # TODO: Stub
 
     def show_projects_menu(self):
-        if len(self.object_list) > 0:
-            self.object_list[0].pack(side="top", fill="x")
-            self.object_list[1].pack(side="left", fill="both")
+        self.object_list[0].pack(side="top", fill="x")
+        self.object_list[1].pack(side="left", fill="both")
 
     def show_plugins_menu(self):
         pass  # TODO: Stub
