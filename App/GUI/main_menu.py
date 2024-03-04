@@ -252,6 +252,8 @@ class SegmentedButtonMenu:
         scroll_frame.pack(fill="both", side='left')
         self.object_list.append(scroll_frame)
 
+        # TODO: Finish this function
+
     def create_settings_menu(self):
         pass  # TODO: Stub
 
