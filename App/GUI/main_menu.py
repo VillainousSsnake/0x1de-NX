@@ -413,14 +413,65 @@ class SegmentedButtonMenu:
     def create_plugins_menu(self):
 
         # Navigation frame
-        nav_frame = ctk.CTkFrame(master=self.master)
+        nav_frame = ctk.CTkFrame(
+            master=self.master,
+            fg_color='#242424',
+            width=10000,
+        )
         nav_frame.pack(fill='x', side='top')
         self.object_list.append(nav_frame)
 
         # Scroll frame
-        scroll_frame = ctk.CTkScrollableFrame(master=self.master)
+        scroll_frame = ctk.CTkScrollableFrame(
+            master=self.master,
+            width=10000,
+            fg_color='#242424',
+        )
         scroll_frame.pack(fill="both", side='left')
         self.object_list.append(scroll_frame)
+
+        # Navigation frame configuration
+        import_plugin = ctk.CTkButton(
+            master=nav_frame,
+            text="Import Plugin",
+        )
+        import_plugin.pack(side="left")
+
+        apply_plugins = ctk.CTkButton(
+            master=nav_frame,
+            text="Apply Plugins"
+        )
+        apply_plugins.pack(side='left')
+
+        # Scroll frame configuration
+        plugins_dict = PluginHandler.get_plugins()
+
+        for key in plugins_dict:
+
+            plugin_frame = ctk.CTkFrame(
+                master=scroll_frame,
+                height=100,
+                fg_color="#242424"
+            )
+            plugin_frame.pack(side='top')
+
+            plugin_button = ctk.CTkButton(
+                master=plugin_frame,
+                width=100000,
+                fg_color='#2B2B2B',
+                height=100,
+                font=('monospace', 25, 'bold'),
+                anchor='w',
+                text=key,
+            )
+            plugin_button.pack(side='top', fill='both')
+
+            plugin_checkbox = ctk.CTkCheckBox(
+                master=plugin_button, text="", width=-10
+            )
+            if plugins_dict[key]:
+                plugin_checkbox.select()
+            plugin_checkbox.grid(row=2, column=1)
 
     def create_settings_menu(self):
         pass  # TODO: Stub
