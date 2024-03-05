@@ -14,7 +14,10 @@ import os
 class _func:
     @staticmethod
     def update_project_name_entry(project_name_entry, settings, event=None):
-        pass  # TODO: Stub
+        text = project_name_entry.get()
+        if text == "":
+            return 1
+        settings["Project Name"] = text + event.char
 
     @staticmethod
     def update_image(self):
