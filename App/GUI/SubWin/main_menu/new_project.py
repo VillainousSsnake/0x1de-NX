@@ -125,7 +125,6 @@ def new_project(root, app):
     window = tk.CTkToplevel()
     window.title("0x1de NX | " + Updater.get_current_version() + " | New Project")
     window.geometry("600x300")
-    window.attributes("-topmost", True)
     window.resizable(False, False)
 
     window.focus_set()
