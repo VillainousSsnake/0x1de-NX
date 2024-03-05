@@ -8,7 +8,8 @@ import os
 default_settings = '''current_theme: Dark
 romfs_path: None
 ainb_code_format: JSON
-font_size: 15'''  # Default settings variable
+font_size: 15
+author_name: None'''  # Default settings variable
 
 
 class Config:

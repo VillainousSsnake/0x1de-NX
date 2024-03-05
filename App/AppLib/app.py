@@ -14,4 +14,5 @@ class App:
             "romfs_path": Config.get_setting("romfs_path"),
             "ainb_code_format": Config.get_setting("ainb_code_format"),
             "font_size": Config.get_setting("font_size"),
+            "author_name": Config.get_setting("author_name"),
         }
