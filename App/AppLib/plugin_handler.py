@@ -30,8 +30,9 @@ class PluginHandler:
 
         # Creating the plugin config file if it doesn't exist
         if (
-                not os.path.exists(os.path.join(plugins_folder, 'plugins.json'))
-                or json.load(open(os.path.join(plugins_folder, 'plugins.json'), 'r')) == {}):
+            not os.path.exists(os.path.join(plugins_folder, 'plugins.json'))
+            or json.load(open(os.path.join(plugins_folder, 'plugins.json'), 'r')) == {}
+        ):
 
             json_contents = {}
 
