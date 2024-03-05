@@ -31,7 +31,7 @@ class ButtonFunc:
         window.destroy()
 
     @staticmethod
-    def create(settings):
+    def create(settings, window):
         """
             settings = {
                 "Project Name": None,
@@ -87,19 +87,31 @@ class ButtonFunc:
             with open(os.path.join(new_project_dir, image_file_name), 'wb') as f_out:
                 f_out.write(image_bin_data)
 
+        # Destroying the window
+        window.destroy()
+
     @staticmethod
     def select_icon(icon_image, settings, event=None):
         image_fp = filedialog.askopenfile(title="Select Project Image...")
+
+        if image_fp is None:    # Safety
+            return 0
+
+        image_fp = image_fp.name
+
+        if not os.path.exists(image_fp):
+            messagebox.showinfo("Invalid path", "The image path does not exist!")
+            return 0
+
+        settings["ImagePath"] = image_fp
 
         icon_image.configure(
             image=tk.CTkImage(
                 light_image=Image.open(image_fp),
                 dark_image=Image.open(image_fp),
                 size=(96, 96),
-            ),
+            )
         )
-
-        # TODO: Fix bugs
 
 
 def new_project(root, app):
@@ -122,7 +134,7 @@ def new_project(root, app):
     window.grab_set()
 
     # Configuring the menu widgets
-    create_command = partial(ButtonFunc.create, settings)
+    create_command = partial(ButtonFunc.create, settings, window)
     create_button = tk.CTkButton(
         master=window,
         text="Create",
