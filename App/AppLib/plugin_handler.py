@@ -9,7 +9,7 @@ import os
 # PluginHandler class
 class PluginHandler:
     @staticmethod
-    def get_plugin_folder():
+    def get_plugin_folder() -> os.path:
         # TODO: Replace os.getcwd() with os.getenv('LOCALAPPDATA')
         plugins_folder = os.path.join(
             os.getcwd(), "0x1de-NX", "Plugins",
@@ -20,13 +20,12 @@ class PluginHandler:
         return plugins_folder
 
     @staticmethod
-    def get_plugins():
+    def get_plugins() -> dict:
 
         plugins_folder = PluginHandler.get_plugin_folder()
 
         # Creating the folder list
         folder_list = os.listdir(plugins_folder)
-        print(folder_list)
 
         # Creating the plugin config file if it doesn't exist
         if (
@@ -46,4 +45,3 @@ class PluginHandler:
         # Returning the contents
         with open(os.path.join(plugins_folder, 'plugins.json'), 'r') as f_in:
             return json.load(f_in)
-
