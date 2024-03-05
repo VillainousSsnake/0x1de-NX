@@ -192,7 +192,7 @@ class SegmentedButtonMenu:
             project_button.configure(image=project_image)
 
             # Creating info_label_text
-            info_label1_text = item["Author"] + ", v" + item["Version"]
+            info_label1_text = str(item["Author"]) + ", v" + str(item["Version"])
             info_label2_text = str(item["Filepath"])
 
             # Creating info label for author and version
