@@ -85,7 +85,7 @@ class SegmentedButtonMenu:
         app = self.app
         root = self.root
 
-        # Creating SegmentedButtonMenuController.variables
+        # Creating segmented_button_menu_controller.variables
         self.variables = {
             "Projects": ProjectHandler.get_projects(),
             "Enabled Mods": [],
@@ -250,7 +250,7 @@ class SegmentedButtonMenu:
         app = self.app
         root = self.root
 
-        # Creating SegmentedButtonMenuController.variables
+        # Creating segmented_button_menu_controller.variables
         self.variables = {
             "Projects": ProjectHandler.get_projects(),
             "Enabled Mods": [],

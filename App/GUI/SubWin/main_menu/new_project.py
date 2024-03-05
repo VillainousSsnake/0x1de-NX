@@ -120,7 +120,7 @@ class ButtonFunc:
         # Destroying the window
         window.destroy()
 
-        # Updating SegmentedButtonMenuController
+        # Updating segmented_button_menu_controller
         SegmentedButtonMenuController.hide_current_menu()
         SegmentedButtonMenuController.update_projects_menu()
 
@@ -148,7 +148,7 @@ class ButtonFunc:
         )
 
 
-def new_project(root, app, SegmentedButtonMenuController):
+def new_project(root, app, segmented_button_menu_controller):
 
     settings = {
         "Project Name": None,
@@ -167,7 +167,7 @@ def new_project(root, app, SegmentedButtonMenuController):
     window.grab_set()
 
     # Configuring the menu widgets
-    create_command = partial(ButtonFunc.create, settings, window, app, SegmentedButtonMenuController)
+    create_command = partial(ButtonFunc.create, settings, window, app, segmented_button_menu_controller)
     create_button = tk.CTkButton(
         master=window,
         text="Create",
