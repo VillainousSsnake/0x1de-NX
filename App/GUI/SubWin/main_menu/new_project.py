@@ -233,4 +233,19 @@ def new_project(root, app, SegmentedButtonMenuController):
     create_romfs_folder_checkbox.place(x=276, y=125)
     create_romfs_folder_checkbox.toggle()
 
+    # Assigning the checkbox commands
+    create_readme_checkbox_command = partial(
+        _func.update_create_readme_checkbox,
+        create_readme_checkbox,
+        settings,
+    )
+    create_readme_checkbox.configure(command=create_readme_checkbox_command)
+
+    create_romfs_folder_checkbox_command = partial(
+        _func.update_create_romfs_checkbox,
+        create_romfs_folder_checkbox,
+        settings,
+    )
+    create_romfs_folder_checkbox.configure(command=create_romfs_folder_checkbox_command)
+
 
