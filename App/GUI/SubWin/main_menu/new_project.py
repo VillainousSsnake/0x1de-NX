@@ -1,15 +1,22 @@
 # /App/GUI/SubWin/new_project.py
 
 # Importing modules and/or libraries
+from App.AppLib.project_handler import ProjectHandler
+from tkinter import filedialog, messagebox
 from App.AppLib.updater import Updater
-from tkinter import filedialog
 from functools import partial
 import customtkinter as tk
 from PIL import Image
 import os
 
 
+# noinspection PyPep8Naming
 class _func:
+    @staticmethod
+    def update_project_name_entry(project_name_entry, settings, event=None):
+        pass  # TODO: Stub
+
+    @staticmethod
     def update_image(self):
         pass  # TODO: Stub
 
@@ -20,8 +27,24 @@ class ButtonFunc:
         window.destroy()
 
     @staticmethod
-    def create():
-        pass  # TODO: Stub
+    def create(settings):
+        """
+            settings = {
+                "Project Name": None,
+                "IconPath": None,
+                "Create romfs folder": True,
+                "Create README.txt": True,
+            }
+        """
+
+        if settings["Project Name"] is None:
+            messagebox.showinfo("Invalid Project Name", "Please fill out the Project name!")
+            return 1
+
+        project_dir = ProjectHandler.get_project_directory()
+
+        new_project_dir = os.path.join(project_dir, settings["Project Name"])
+        print(new_project_dir)
 
     @staticmethod
     def select_icon(icon_image, event=None):
@@ -58,7 +81,7 @@ def new_project(root, app):
     window.grab_set()
 
     # Configuring the menu widgets
-    create_command = partial(ButtonFunc.create)
+    create_command = partial(ButtonFunc.create, settings)
     create_button = tk.CTkButton(
         master=window,
         text="Create",
@@ -85,6 +108,8 @@ def new_project(root, app):
         placeholder_text="Enter project name here..."
     )
     project_name_entry.pack(side="top", fill='x')
+    update_method = partial(_func.update_project_name_entry, project_name_entry, settings)
+    project_name_entry.bind("<Key>", update_method)
 
     frame_1 = tk.CTkFrame(master=window, fg_color="#242424", width=10000)
     frame_1.pack(side="top", pady=30)
