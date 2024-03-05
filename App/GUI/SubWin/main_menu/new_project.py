@@ -21,8 +21,6 @@ class _func:
         if text == "":
             return 1
 
-        print(event)
-
         is_str = True
         match event.keycode:
             case 8:
@@ -42,7 +40,11 @@ class _func:
             settings["Project Name"] = text
 
     @staticmethod
-    def update_image(self):
+    def update_create_romfs_checkbox():
+        pass  # TODO: Stub
+
+    @staticmethod
+    def update_create_readme_checkbox():
         pass  # TODO: Stub
 
 
