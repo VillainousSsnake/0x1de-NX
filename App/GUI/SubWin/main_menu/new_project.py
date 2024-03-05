@@ -80,12 +80,9 @@ class ButtonFunc:
 
             image_path = settings["IconPath"]
             image_file_name = os.path.basename(image_path)
+            print(image_file_name)
 
-            with open(image_path, 'rb') as f_in:
-                image_bin_data = f_in.read()
-
-            with open(os.path.join(new_project_dir, image_file_name), 'wb') as f_out:
-                f_out.write(image_bin_data)
+            shutil.copyfile(image_path, os.path.join(project_dir, image_file_name))
 
         # Destroying the window
         window.destroy()
@@ -103,7 +100,7 @@ class ButtonFunc:
             messagebox.showinfo("Invalid path", "The image path does not exist!")
             return 0
 
-        settings["ImagePath"] = image_fp
+        settings["IconPath"] = image_fp
 
         icon_image.configure(
             image=tk.CTkImage(
