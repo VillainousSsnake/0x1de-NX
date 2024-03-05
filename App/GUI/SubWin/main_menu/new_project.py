@@ -1,5 +1,4 @@
 # /App/GUI/SubWin/new_project.py
-import json
 
 # Importing modules and/or libraries
 from App.AppLib.project_handler import ProjectHandler
@@ -9,6 +8,7 @@ from functools import partial
 import customtkinter as tk
 from PIL import Image
 import shutil
+import json
 import os
 
 
