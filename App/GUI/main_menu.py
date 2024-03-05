@@ -72,6 +72,7 @@ class _func:
 # SegmentedButtonMenu class
 class SegmentedButtonMenu:
     def __init__(self, master, root, app):
+        self.segmented_buttons_controller = self
         self.object_list = list()
         self.variables = dict()
         self.master = master
@@ -84,7 +85,7 @@ class SegmentedButtonMenu:
         app = self.app
         root = self.root
 
-        # Creating self.variables
+        # Creating SegmentedButtonMenuController.variables
         self.variables = {
             "Projects": ProjectHandler.get_projects(),
             "Enabled Mods": [],
@@ -116,7 +117,175 @@ class SegmentedButtonMenu:
         search_entry.grid(row=0, column=0)
 
         # Creating the new_project button
-        new_project_command = partial(ButtonCommand.ProjectsMenu.new_project, root, app)
+        new_project_command = partial(
+            ButtonCommand.ProjectsMenu.new_project,
+            root, app, self,
+        )
+        new_project_button = ctk.CTkButton(
+            master=nav_frame,
+            text="New Project",
+            command=new_project_command,
+        )
+        new_project_button.grid(row=0, column=1)
+
+        # Creating open_project button
+        open_project_command = partial(ButtonCommand.ProjectsMenu.open_project, root, app)
+        open_project_button = ctk.CTkButton(
+            master=nav_frame,
+            text="Open Project",
+            command=open_project_command,
+        )
+        open_project_button.grid(row=0, column=2)
+
+        # Creating install project from tkcl button
+        import_tkcl_command = partial(ButtonCommand.ProjectsMenu.import_tkcl, root, app)
+        import_tkcl = ctk.CTkButton(
+            master=nav_frame,
+            text="Import .TKCL",
+            command=import_tkcl_command,
+        )
+        import_tkcl.grid(row=0, column=3)
+
+        # Drawing the projects
+        # Loop for every dictionary in Projects list
+        for item in self.variables["Projects"]:
+
+            # Creating the frame for the mod
+            project_frame = ctk.CTkFrame(
+                master=scrollable_frame,
+                height=150,
+                fg_color="#242424",
+            )
+            project_frame.pack(side="top", fill="x")
+
+            # Creating the overall project button
+            project_button = ctk.CTkButton(
+                master=project_frame,
+                height=project_frame.cget("height"),
+                text=str(item["Name"]) + "\n\n\n",
+                anchor="w",
+                font=("monospace", 25, "bold"),
+                fg_color="#242424"
+            )
+            project_button.pack(fill="both")
+
+            # Creating the image for the project
+            if item["ThumbnailUri"] is not None:
+
+                image_path = os.path.join(
+                    item["ProjectFolder"],
+                    os.path.basename(item["Filepath"]),
+                    item["ThumbnailUri"],
+                )
+
+                if not os.path.exists(image_path):
+                    image_path = os.path.join(os.getcwd(), "App", "Image", "img_not_found.jpg")
+
+            else:
+
+                image_path = os.path.join(os.getcwd(), "App", "Image", "img_not_found.jpg")
+
+            # Creating the project image
+            project_image = ctk.CTkImage(
+                light_image=Image.open(image_path),
+                dark_image=Image.open(image_path),
+                size=(128, 128)
+            )
+
+            # Assigning the image to the project button
+            project_button.configure(image=project_image)
+
+            # Creating info_label_text
+            info_label1_text = str(item["Author"]) + ", v" + str(item["Version"])
+            info_label2_text = str(item["Filepath"])
+
+            # Creating info label for author and version
+            info_label1 = ctk.CTkLabel(
+                master=project_button,
+                text=info_label1_text,
+                font=("monospace", 17),
+                anchor="w"
+            )
+            info_label1.place(x=175, y=45)
+
+            info_label2 = ctk.CTkLabel(
+                master=project_button,
+                text=info_label2_text,
+                font=("monospace", 12, 'italic'),
+                anchor="w",
+            )
+            info_label2.place(x=190, y=70)
+
+            # The label highlight fix
+            command_enter = partial(
+                _func.highlight_labels_on_button_enter,
+                info_label1,
+                info_label2,
+                project_button
+            )
+            command_leave = partial(
+                _func.highlight_labels_on_button_leave,
+                info_label1,
+                info_label2,
+                project_button
+            )
+            info_label1.bind("<Enter>", command_enter)
+            info_label2.bind("<Enter>", command_enter)
+            project_button.bind("<Enter>", command_enter)
+            project_button.bind("<Leave>", command_leave)
+
+        # If there was nothing in the projects list
+        if len(self.variables["Projects"]) == 0:
+            nothing_label = ctk.CTkLabel(
+                master=scrollable_frame,
+                text="There is nothing here...\n Select New Project to get started!",
+                height=400,
+                font=("font", 20),
+            )
+            nothing_label.pack(fill="both")
+
+    def update_projects_menu(self):
+
+        # Creating variables
+        app = self.app
+        root = self.root
+
+        # Creating SegmentedButtonMenuController.variables
+        self.variables = {
+            "Projects": ProjectHandler.get_projects(),
+            "Enabled Mods": [],
+        }
+
+        # Creating the navigation frame
+        nav_frame = ctk.CTkFrame(
+            master=self.master,
+            fg_color="#242424"
+        )
+        nav_frame.pack(side="top", fill="x")
+        self.object_list[0] = nav_frame
+
+        # Creating a scrollable frame
+        scrollable_frame = ctk.CTkScrollableFrame(
+            master=self.master,
+            fg_color="#242424",
+            width=10000
+        )
+        scrollable_frame.pack(fill="both", side="right")
+        self.object_list[1] = scrollable_frame
+
+        # Creating the search_entry entry
+        search_entry = ctk.CTkEntry(
+            master=nav_frame,
+            placeholder_text="Search Projects",
+            width=155,
+        )
+        search_entry.grid(row=0, column=0)
+
+        # Creating the new_project button
+        new_project_command = partial(
+            ButtonCommand.ProjectsMenu.new_project,
+            root, app, self,
+        )
         new_project_button = ctk.CTkButton(
             master=nav_frame,
             text="New Project",
@@ -274,17 +443,21 @@ class SegmentedButtonMenu:
     def show_community_menu(self):
         pass  # TODO: Stub
 
-    def destroy_current_menu(self):
+    def hide_current_menu(self):
         for obj in self.object_list:
             obj.pack_forget()
+
+    def destroy_current_menu(self):
+        for obj in self.object_list:
+            obj.destroy()
 
 
 # ButtonCommand class (Contains functions for button commands)
 class ButtonCommand:
     class ProjectsMenu:
         @staticmethod
-        def new_project(root, app):
-            subwin_new_project(root, app)
+        def new_project(root, app, self):
+            subwin_new_project(root, app, self)
 
         @staticmethod
         def open_project(root, app):
@@ -303,7 +476,7 @@ class ButtonCommand:
             button.configure(hover_color='#144870')
 
         # Destroying the menu
-        segmented_menu_controller.destroy_current_menu()
+        segmented_menu_controller.hide_current_menu()
 
         # Setting the correct button to the "selected" color and showing the menu
         match value:

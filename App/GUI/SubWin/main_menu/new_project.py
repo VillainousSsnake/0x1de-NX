@@ -32,7 +32,7 @@ class ButtonFunc:
         window.destroy()
 
     @staticmethod
-    def create(settings, window, app):
+    def create(settings, window, app, SegmentedButtonMenuController):
         """
             settings = {
                 "Project Name": None,
@@ -98,6 +98,10 @@ class ButtonFunc:
         # Destroying the window
         window.destroy()
 
+        # Updating SegmentedButtonMenuController
+        SegmentedButtonMenuController.hide_current_menu()
+        SegmentedButtonMenuController.update_projects_menu()
+
     @staticmethod
     def select_icon(icon_image, settings, event=None):
         image_fp = filedialog.askopenfile(title="Select Project Image...")
@@ -122,7 +126,7 @@ class ButtonFunc:
         )
 
 
-def new_project(root, app):
+def new_project(root, app, SegmentedButtonMenuController):
 
     settings = {
         "Project Name": None,
@@ -141,7 +145,7 @@ def new_project(root, app):
     window.grab_set()
 
     # Configuring the menu widgets
-    create_command = partial(ButtonFunc.create, settings, window, app)
+    create_command = partial(ButtonFunc.create, settings, window, app, SegmentedButtonMenuController)
     create_button = tk.CTkButton(
         master=window,
         text="Create",
