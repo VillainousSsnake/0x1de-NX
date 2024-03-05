@@ -41,11 +41,21 @@ class _func:
 
     @staticmethod
     def update_create_romfs_checkbox(checkbox, settings):
-        pass  # TODO: Stub
+        value = checkbox.get()
+        if value == 1:
+            value = True
+        else:
+            value = False
+        settings["Create romfs folder"] = value
 
     @staticmethod
     def update_create_readme_checkbox(checkbox, settings):
-        pass  # TODO: Stub
+        value = checkbox.get()
+        if value == 1:
+            value = True
+        else:
+            value = False
+        settings["Create README.txt"] = value
 
 
 class ButtonFunc:
