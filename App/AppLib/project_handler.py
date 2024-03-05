@@ -11,10 +11,13 @@ class ProjectHandler:
     @staticmethod
     def get_project_directory():
         # TODO: Replace os.getcwd() with os.getenv('LOCALAPPDATA')
-        output = os.path.join(
+        project_folder_path = os.path.join(
             os.getcwd(), "0x1de-NX", "Projects",
         )
-        return output
+        # Creating the directories if they don't exist
+        if not os.path.exists(project_folder_path):
+            os.makedirs(project_folder_path)
+        return project_folder_path
 
     @staticmethod
     def get_projects():
@@ -30,7 +33,9 @@ class ProjectHandler:
         # Creating the directories if they don't exist
         if not os.path.exists(project_folder_path):
             os.makedirs(project_folder_path)
-            folder_list = os.listdir(project_folder_path)
+
+        # creating the folder list
+        folder_list = os.listdir(project_folder_path)
 
         # Creating the project config file if it doesn't exist
         if not os.path.exists(project_config_file_path):
