@@ -29,12 +29,15 @@ class PluginHandler:
         print(folder_list)
 
         # Creating the plugin config file if it doesn't exist
-        if not os.path.join(plugins_folder, 'plugins.json'):
+        if (
+                not os.path.exists(os.path.join(plugins_folder, 'plugins.json'))
+                or json.load(open(os.path.join(plugins_folder, 'plugins.json'), 'r')) == {}):
 
             json_contents = {}
 
             for item in folder_list:
-                json_contents[item] = False
+                if item != 'plugins.json':
+                    json_contents[item] = False
 
             with open(os.path.join(plugins_folder, 'plugins.json'), 'w') as f_out:
                 json.dump(json_contents, f_out)
