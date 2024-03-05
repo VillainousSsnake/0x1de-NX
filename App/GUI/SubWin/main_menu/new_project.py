@@ -40,11 +40,11 @@ class _func:
             settings["Project Name"] = text
 
     @staticmethod
-    def update_create_romfs_checkbox():
+    def update_create_romfs_checkbox(checkbox, settings):
         pass  # TODO: Stub
 
     @staticmethod
-    def update_create_readme_checkbox():
+    def update_create_readme_checkbox(checkbox, settings):
         pass  # TODO: Stub
 
 
