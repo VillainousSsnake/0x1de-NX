@@ -17,9 +17,29 @@ class _func:
     @staticmethod
     def update_project_name_entry(project_name_entry, settings, event=None):
         text = project_name_entry.get()
+
         if text == "":
             return 1
-        settings["Project Name"] = text + event.char
+
+        print(event)
+
+        is_str = True
+        match event.keycode:
+            case 8:
+                is_str = False
+            case 9:
+                is_str = False
+            case 13:
+                is_str = False
+            case 16:
+                is_str = False
+            case 17:
+                is_str = False
+
+        if is_str:
+            settings["Project Name"] = text + event.char
+        else:
+            settings["Project Name"] = text
 
     @staticmethod
     def update_image(self):
