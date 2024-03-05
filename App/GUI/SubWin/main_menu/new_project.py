@@ -80,9 +80,7 @@ class ButtonFunc:
 
             image_path = settings["IconPath"]
             image_file_name = os.path.basename(image_path)
-            print(image_file_name)
-
-            shutil.copyfile(image_path, os.path.join(project_dir, image_file_name))
+            shutil.copyfile(image_path, os.path.join(new_project_dir, image_file_name))
 
         # Destroying the window
         window.destroy()
