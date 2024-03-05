@@ -7,6 +7,7 @@ from App.AppLib.updater import Updater
 from functools import partial
 import customtkinter as tk
 from PIL import Image
+import shutil
 import os
 
 
@@ -46,11 +47,48 @@ class ButtonFunc:
 
         project_dir = ProjectHandler.get_project_directory()
 
-        new_project_dir = os.path.join(project_dir, settings["Project Name"])
-        print(new_project_dir)
+        new_project_dir = str(os.path.join(project_dir, settings["Project Name"]))
+        info_json_path = os.path.join(new_project_dir, 'info.json')
+
+        # Detecting if the project dir exists
+        if os.path.exists(new_project_dir):
+            ask_yes_no_popup = messagebox.askyesno(
+                 "Project already exists",
+                 "Do you want to overwrite a pre-existing project?",
+                )
+            if not ask_yes_no_popup:
+                return 0
+            else:
+                shutil.rmtree(path=new_project_dir)
+
+        # Creating the project dir
+        if new_project_dir != "":   # Safety feature
+            os.mkdir(new_project_dir)
+
+        # Creating the romfs dir
+        if settings["Create romfs folder"]:
+            os.mkdir(os.path.join(new_project_dir, 'romfs'))
+
+        # Creating the README.txt file
+        readme_contents = settings["Project Name"] + ":\n\n" + "PLACEHOLDER"
+        if settings["Create README.txt"]:
+            with open(os.path.join(new_project_dir, "README.txt"), "w") as f_out:
+                f_out.write(readme_contents)
+
+        # Copying the image to the folder
+        if settings["IconPath"] is not None:
+
+            image_path = settings["IconPath"]
+            image_file_name = os.path.basename(image_path)
+
+            with open(image_path, 'rb') as f_in:
+                image_bin_data = f_in.read()
+
+            with open(os.path.join(new_project_dir, image_file_name), 'wb') as f_out:
+                f_out.write(image_bin_data)
 
     @staticmethod
-    def select_icon(icon_image, event=None):
+    def select_icon(icon_image, settings, event=None):
         image_fp = filedialog.askopenfile(title="Select Project Image...")
 
         icon_image.configure(
@@ -133,7 +171,7 @@ def new_project(root, app):
         ),
     )
     icon_image.pack(side="left", anchor="n")
-    icon_command = partial(ButtonFunc.select_icon, icon_image)
+    icon_command = partial(ButtonFunc.select_icon, icon_image, settings)
     icon_image.bind("<Button-1>", icon_command)
 
     create_readme_checkbox = tk.CTkCheckBox(
