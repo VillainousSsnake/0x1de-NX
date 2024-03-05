@@ -8,6 +8,7 @@ from App.GUI.SubWin.main_menu.import_tkcl import import_tkcl as subwin_import_tk
 
 # Importing modules and libraries:
 from App.AppLib.project_handler import ProjectHandler
+from App.AppLib.plugin_handler import PluginHandler
 from tkinter import messagebox, filedialog
 from App.AppLib.updater import Updater
 from App.AppLib.config import Config
@@ -421,8 +422,6 @@ class SegmentedButtonMenu:
         scroll_frame.pack(fill="both", side='left')
         self.object_list.append(scroll_frame)
 
-        # TODO: Finish this function
-
     def create_settings_menu(self):
         pass  # TODO: Stub
 
@@ -651,7 +650,7 @@ def main_menu(app):
     # Creating the segmented
     segmented_button_controller = SegmentedButtonMenu(menu_frame, root, app)
 
-    # Creating all of the menus
+    # Creating all the menus
     segmented_button_controller.create_projects_menu()
     segmented_button_controller.create_plugins_menu()
     segmented_button_controller.create_settings_menu()
