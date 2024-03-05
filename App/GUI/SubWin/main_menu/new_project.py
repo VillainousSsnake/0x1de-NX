@@ -82,6 +82,9 @@ class ButtonFunc:
             image_file_name = os.path.basename(image_path)
             shutil.copyfile(image_path, os.path.join(new_project_dir, image_file_name))
 
+        # Creating the info.json
+        # TODO: Stub
+
         # Destroying the window
         window.destroy()
 
