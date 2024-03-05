@@ -15,3 +15,7 @@ class PluginHandler:
         )
         return output
 
+    @staticmethod
+    def get_plugins():
+        pass  # TODO: Stub
+
