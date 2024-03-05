@@ -1,4 +1,5 @@
 # /App/GUI/SubWin/new_project.py
+import json
 
 # Importing modules and/or libraries
 from App.AppLib.project_handler import ProjectHandler
@@ -31,7 +32,7 @@ class ButtonFunc:
         window.destroy()
 
     @staticmethod
-    def create(settings, window):
+    def create(settings, window, app):
         """
             settings = {
                 "Project Name": None,
@@ -48,7 +49,6 @@ class ButtonFunc:
         project_dir = ProjectHandler.get_project_directory()
 
         new_project_dir = str(os.path.join(project_dir, settings["Project Name"]))
-        info_json_path = os.path.join(new_project_dir, 'info.json')
 
         # Detecting if the project dir exists
         if os.path.exists(new_project_dir):
@@ -76,6 +76,7 @@ class ButtonFunc:
                 f_out.write(readme_contents)
 
         # Copying the image to the folder
+        image_file_name = None
         if settings["IconPath"] is not None:
 
             image_path = settings["IconPath"]
@@ -83,7 +84,16 @@ class ButtonFunc:
             shutil.copyfile(image_path, os.path.join(new_project_dir, image_file_name))
 
         # Creating the info.json
-        # TODO: Stub
+        info_json_contents = {
+            "Name": settings["Project Name"],
+            "Version": "1.0.0",
+            "Author": app.settings["author_name"],
+            "Contributors": [],
+            "Description": "Made with 0x1de-NX",
+            "ThumbnailUri": image_file_name,
+        }
+        with open(os.path.join(new_project_dir, "info.json"), "w") as f_out:
+            json.dump(info_json_contents, f_out)
 
         # Destroying the window
         window.destroy()
@@ -131,7 +141,7 @@ def new_project(root, app):
     window.grab_set()
 
     # Configuring the menu widgets
-    create_command = partial(ButtonFunc.create, settings, window)
+    create_command = partial(ButtonFunc.create, settings, window, app)
     create_button = tk.CTkButton(
         master=window,
         text="Create",
