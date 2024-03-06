@@ -239,7 +239,7 @@ class SegmentedButtonMenu:
         if len(self.variables["Projects"]) == 0:
             nothing_label = ctk.CTkLabel(
                 master=scrollable_frame,
-                text="There is nothing here...\n Select New Project to get started!",
+                text="There is nothing here...",
                 height=400,
                 font=("font", 20),
             )
@@ -404,7 +404,7 @@ class SegmentedButtonMenu:
         if len(self.variables["Projects"]) == 0:
             nothing_label = ctk.CTkLabel(
                 master=scrollable_frame,
-                text="There is nothing here...\n Select New Project to get started!",
+                text="There is nothing here...",
                 height=400,
                 font=("font", 20),
             )
@@ -472,6 +472,16 @@ class SegmentedButtonMenu:
             if plugins_dict[key]:
                 plugin_checkbox.select()
             plugin_checkbox.grid(row=2, column=1)
+
+        if not plugins_dict:
+            nothing_here_label = ctk.CTkLabel(
+                master=scroll_frame,
+                text="There is nothing here...",
+                fg_color='#242424',
+                font=("font", 20),
+                height=400,
+            )
+            nothing_here_label.pack(fill='both')
 
     def create_settings_menu(self):
         pass  # TODO: Stub
