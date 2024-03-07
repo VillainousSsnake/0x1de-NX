@@ -9,7 +9,7 @@ import os
 # ProjectHandler class
 class ProjectHandler:
     @staticmethod
-    def get_project_directory():
+    def get_project_directory() -> str:
         # TODO: Replace os.getcwd() with os.getenv('LOCALAPPDATA')
         project_folder_path = os.path.join(
             os.getcwd(), "0x1de-NX", "Projects",
@@ -20,7 +20,7 @@ class ProjectHandler:
         return project_folder_path
 
     @staticmethod
-    def get_projects():
+    def get_projects() -> list:
         """Returns list of all projects and project information"""
 
         # Creating project_folder_path
