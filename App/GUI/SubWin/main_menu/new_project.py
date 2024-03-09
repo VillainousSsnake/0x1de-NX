@@ -132,7 +132,7 @@ class ButtonFunc:
 
         # Updating segmented_button_menu_controller
         SegmentedButtonMenuController.hide_current_menu()
-        SegmentedButtonMenuController.update_projects_menu()
+        SegmentedButtonMenuController.update_projects_menu(SegmentedButtonMenuController)
 
     @staticmethod
     def select_icon(icon_image, settings, event=None):

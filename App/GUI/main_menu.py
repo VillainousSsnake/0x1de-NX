@@ -21,6 +21,39 @@ import os
 # _func class (Contains functions that the menu function uses)
 # noinspection PyPep8Naming, PyUnusedLocal
 class _func:
+    @staticmethod
+    def update_search_bar_projects_menu(self, segmented_button_controller, event=None):
+        # Updating segmented_button_menu_controller
+        segmented_button_controller.hide_current_menu()
+
+        added_char = ""
+        is_str = True
+
+        match event.keycode:
+            case 8:
+                is_str = False
+
+            case 9:
+                is_str = False
+            case 13:
+                is_str = False
+            case 16:
+                is_str = False
+            case 17:
+                is_str = False
+
+        if is_str:
+            added_char = event.char
+
+        search_query = self.get() + added_char
+
+        if event.keycode == 8:
+            search_query = self.get()[:len(self.get())-1]
+
+        segmented_button_controller.update_projects_menu(
+            segmented_button_controller,
+            search_query=search_query
+        )
 
     @staticmethod
     def highlight_labels_on_button_enter(info_label1=None, info_label2=None, button=None, event=None):
@@ -80,7 +113,7 @@ class SegmentedButtonMenu:
         self.root = root
         self.app = app
 
-    def create_projects_menu(self):
+    def create_projects_menu(self, segmented_button_controller):
 
         # Creating variables
         app = self.app
@@ -116,6 +149,12 @@ class SegmentedButtonMenu:
             width=155,
         )
         search_entry.grid(row=0, column=0)
+        search_entry_command = partial(
+            _func.update_search_bar_projects_menu,
+            search_entry,
+            segmented_button_controller
+        )
+        search_entry.bind("<Key>", search_entry_command)
 
         # Creating the new_project button
         new_project_command = partial(
@@ -245,7 +284,7 @@ class SegmentedButtonMenu:
             )
             nothing_label.pack(fill="both")
 
-    def update_projects_menu(self, search_query=None):
+    def update_projects_menu(self, segmented_button_controller, search_query=None):
 
         # Creating variables
         app = self.app
@@ -256,6 +295,19 @@ class SegmentedButtonMenu:
             "Projects": ProjectHandler.get_projects(),
             "Enabled Mods": [],
         }
+
+        # Changing the 'Projects' entry based on the search query variable
+        new_projects_list = []
+
+        if search_query is not None:
+
+            for item in self.variables["Projects"]:
+                if search_query in item["Name"]:
+                    new_projects_list.append(item)
+
+            self.variables["Projects"] = new_projects_list
+
+
 
         # Creating the navigation frame
         nav_frame = ctk.CTkFrame(
@@ -281,6 +333,16 @@ class SegmentedButtonMenu:
             width=155,
         )
         search_entry.grid(row=0, column=0)
+
+        search_entry_command = partial(
+            _func.update_search_bar_projects_menu,
+            search_entry,
+            segmented_button_controller
+        )
+        search_entry.bind("<Key>", search_entry_command)
+
+        if search_query is not None:
+            search_entry.insert('0', search_query)
 
         # Creating the new_project button
         new_project_command = partial(
@@ -712,7 +774,7 @@ def main_menu(app):
     segmented_button_controller = SegmentedButtonMenu(menu_frame, root, app)
 
     # Creating all the menus
-    segmented_button_controller.create_projects_menu()
+    segmented_button_controller.create_projects_menu(segmented_button_controller)
     segmented_button_controller.create_plugins_menu()
     segmented_button_controller.create_settings_menu()
     segmented_button_controller.create_community_menu()
