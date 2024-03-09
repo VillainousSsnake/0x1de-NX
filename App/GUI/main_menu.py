@@ -245,7 +245,7 @@ class SegmentedButtonMenu:
             )
             nothing_label.pack(fill="both")
 
-    def update_projects_menu(self):
+    def update_projects_menu(self, search_query=None):
 
         # Creating variables
         app = self.app
