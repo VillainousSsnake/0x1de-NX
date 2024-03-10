@@ -260,10 +260,18 @@ class SegmentedButtonMenu:
             project_frame.pack(side="top", fill="x")
 
             # Creating the overall project button
+            project_button_command = partial(
+                ButtonCommand.ProjectsMenu.open_project,
+                root, app,
+                os.path.join(
+                    ProjectHandler.get_project_directory(), item["Name"]
+                )
+            )
             project_button = ctk.CTkButton(
                 height=project_frame.cget("height"),
                 text=str(item["Name"]) + "\n\n\n",
                 font=("monospace", 25, "bold"),
+                command=project_button_command,
                 master=project_frame,
                 fg_color="#242424",
                 anchor="w",
@@ -446,11 +454,18 @@ class SegmentedButtonMenu:
             project_frame.pack(side="top", fill="x")
 
             # Creating the overall project button
-            project_button_command = partial(ButtonCommand.ProjectsMenu.open_project, root, app, "a")
+            project_button_command = partial(
+                ButtonCommand.ProjectsMenu.open_project,
+                root, app,
+                os.path.join(
+                    ProjectHandler.get_project_directory(), item["Name"]
+                )
+            )
             project_button = ctk.CTkButton(
                 height=project_frame.cget("height"),
                 text=str(item["Name"]) + "\n\n\n",
                 font=("monospace", 25, "bold"),
+                command=project_button_command,
                 master=project_frame,
                 fg_color="#242424",
                 anchor="w",
