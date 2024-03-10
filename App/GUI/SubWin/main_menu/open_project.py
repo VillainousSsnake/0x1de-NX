@@ -1,4 +1,18 @@
 # /App/GUI/SubWin/open_project.py
 
+
+# Importing modules and libraries\
+from App.AppLib.project_handler import ProjectHandler
+from tkinter import filedialog
+
+
+# Defining open_project function
 def open_project(root, app):
-    pass  # TODO: Stub
+
+    folder_select = filedialog.askdirectory(
+        initialdir=ProjectHandler.get_project_directory(),
+        title="Open Folder...",
+        mustexist=True,
+    )
+
+    app.variables["open_project_fp"] = folder_select
