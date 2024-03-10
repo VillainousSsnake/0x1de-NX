@@ -446,6 +446,7 @@ class SegmentedButtonMenu:
             project_frame.pack(side="top", fill="x")
 
             # Creating the overall project button
+            project_button_command = partial(ButtonCommand.ProjectsMenu.open_project, root, app, "a")
             project_button = ctk.CTkButton(
                 height=project_frame.cget("height"),
                 text=str(item["Name"]) + "\n\n\n",
@@ -704,8 +705,8 @@ class ButtonCommand:
             subwin_new_project(root, app, self)
 
         @staticmethod
-        def open_project(root, app):
-            subwin_open_project(root, app)
+        def open_project(root, app, project_path=None):
+            subwin_open_project(root, app, project_path)
 
         @staticmethod
         def import_tkcl(root, app):
