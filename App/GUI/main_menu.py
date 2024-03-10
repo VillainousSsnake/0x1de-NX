@@ -343,6 +343,10 @@ class SegmentedButtonMenu:
             project_button.bind("<Enter>", command_enter)
             project_button.bind("<Leave>", command_leave)
 
+            # Making the info labels open the project when clicked
+            info_label1.bind("<1>", project_button_command)
+            info_label2.bind("<1>", project_button_command)
+
         # If there was nothing in the projects list
         if len(self.variables["Projects"]) == 0:
             nothing_label = ctk.CTkLabel(
@@ -537,6 +541,10 @@ class SegmentedButtonMenu:
             project_button.bind("<Enter>", command_enter)
             project_button.bind("<Leave>", command_leave)
 
+            # Making the info labels open the project when clicked
+            info_label1.bind("<1>", project_button_command)
+            info_label2.bind("<1>", project_button_command)
+
         # If there was nothing in the projects list
         if len(self.variables["Projects"]) == 0:
             nothing_label = ctk.CTkLabel(
@@ -720,7 +728,7 @@ class ButtonCommand:
             subwin_new_project(root, app, self)
 
         @staticmethod
-        def open_project(root, app, project_path=None):
+        def open_project(root, app, project_path=None, event=None):
             subwin_open_project(root, app, project_path)
 
         @staticmethod
