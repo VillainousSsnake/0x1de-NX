@@ -16,3 +16,7 @@ def open_project(root, app):
     )
 
     app.variables["open_project_fp"] = folder_select
+
+    # Exiting the current menu and summoning the next one
+    root.destroy()
+    app.returnStatement = "project_editor"
