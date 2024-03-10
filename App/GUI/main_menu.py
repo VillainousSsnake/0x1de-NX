@@ -230,7 +230,7 @@ class SegmentedButtonMenu:
         new_project_button.grid(row=0, column=1)
 
         # Creating open_project button
-        open_project_command = partial(ButtonCommand.ProjectsMenu.open_project, root, app)
+        open_project_command = partial(ButtonCommand.ProjectsMenu.open_project, app)
         open_project_button = ctk.CTkButton(
             master=nav_frame,
             text="Open Project",
@@ -416,7 +416,7 @@ class SegmentedButtonMenu:
         new_project_button.grid(row=0, column=1)
 
         # Creating open_project button
-        open_project_command = partial(ButtonCommand.ProjectsMenu.open_project, root, app)
+        open_project_command = partial(ButtonCommand.ProjectsMenu.open_project, app)
         open_project_button = ctk.CTkButton(
             master=nav_frame,
             text="Open Project",
@@ -704,8 +704,8 @@ class ButtonCommand:
             subwin_new_project(root, app, self)
 
         @staticmethod
-        def open_project(root, app):
-            subwin_open_project(root, app)
+        def open_project(app):
+            subwin_open_project(app)
 
         @staticmethod
         def import_tkcl(root, app):
