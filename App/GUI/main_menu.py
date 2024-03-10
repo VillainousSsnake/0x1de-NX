@@ -205,8 +205,8 @@ class SegmentedButtonMenu:
 
         # Creating the search_entry entry
         search_entry = ctk.CTkEntry(
-            master=nav_frame,
             placeholder_text="Search Projects",
+            master=nav_frame,
             width=155,
         )
         search_entry.grid(row=0, column=0)
@@ -254,19 +254,19 @@ class SegmentedButtonMenu:
             # Creating the frame for the mod
             project_frame = ctk.CTkFrame(
                 master=scrollable_frame,
-                height=150,
                 fg_color="#242424",
+                height=150,
             )
             project_frame.pack(side="top", fill="x")
 
             # Creating the overall project button
             project_button = ctk.CTkButton(
-                master=project_frame,
                 height=project_frame.cget("height"),
                 text=str(item["Name"]) + "\n\n\n",
-                anchor="w",
                 font=("monospace", 25, "bold"),
-                fg_color="#242424"
+                master=project_frame,
+                fg_color="#242424",
+                anchor="w",
             )
             project_button.pack(fill="both")
 
@@ -302,17 +302,17 @@ class SegmentedButtonMenu:
 
             # Creating info label for author and version
             info_label1 = ctk.CTkLabel(
+                font=("monospace", 17),
                 master=project_button,
                 text=info_label1_text,
-                font=("monospace", 17),
                 anchor="w"
             )
             info_label1.place(x=175, y=45)
 
             info_label2 = ctk.CTkLabel(
+                font=("monospace", 12, 'italic'),
                 master=project_button,
                 text=info_label2_text,
-                font=("monospace", 12, 'italic'),
                 anchor="w",
             )
             info_label2.place(x=190, y=70)
@@ -338,10 +338,10 @@ class SegmentedButtonMenu:
         # If there was nothing in the projects list
         if len(self.variables["Projects"]) == 0:
             nothing_label = ctk.CTkLabel(
-                master=scrollable_frame,
-                text="There is nothing here...",
                 height=400,
                 font=("font", 20),
+                master=scrollable_frame,
+                text="There is nothing here...",
             )
             nothing_label.pack(fill="both")
 
@@ -387,8 +387,8 @@ class SegmentedButtonMenu:
 
         # Creating the search_entry entry
         search_entry = ctk.CTkEntry(
-            master=nav_frame,
             placeholder_text="Search Projects",
+            master=nav_frame,
             width=155,
         )
         search_entry.grid(row=0, column=0)
@@ -439,20 +439,20 @@ class SegmentedButtonMenu:
 
             # Creating the frame for the mod
             project_frame = ctk.CTkFrame(
-                master=scrollable_frame,
                 height=150,
                 fg_color="#242424",
+                master=scrollable_frame,
             )
             project_frame.pack(side="top", fill="x")
 
             # Creating the overall project button
             project_button = ctk.CTkButton(
-                master=project_frame,
                 height=project_frame.cget("height"),
                 text=str(item["Name"]) + "\n\n\n",
-                anchor="w",
                 font=("monospace", 25, "bold"),
-                fg_color="#242424"
+                master=project_frame,
+                fg_color="#242424",
+                anchor="w",
             )
             project_button.pack(fill="both")
 
@@ -488,17 +488,17 @@ class SegmentedButtonMenu:
 
             # Creating info label for author and version
             info_label1 = ctk.CTkLabel(
+                font=("monospace", 17),
                 master=project_button,
                 text=info_label1_text,
-                font=("monospace", 17),
                 anchor="w"
             )
             info_label1.place(x=175, y=45)
 
             info_label2 = ctk.CTkLabel(
+                font=("monospace", 12, 'italic'),
                 master=project_button,
                 text=info_label2_text,
-                font=("monospace", 12, 'italic'),
                 anchor="w",
             )
             info_label2.place(x=190, y=70)
@@ -524,10 +524,10 @@ class SegmentedButtonMenu:
         # If there was nothing in the projects list
         if len(self.variables["Projects"]) == 0:
             nothing_label = ctk.CTkLabel(
-                master=scrollable_frame,
-                text="There is nothing here...",
                 height=400,
                 font=("font", 20),
+                master=scrollable_frame,
+                text="There is nothing here...",
             )
             nothing_label.pack(fill="both")
 
