@@ -699,6 +699,7 @@ class SegmentedButtonMenu:
         # Creating frames
         social_frame = ctk.CTkFrame(
             master=self.master,
+            fg_color="#242424"
         )
         social_frame.pack(fill='x', side='top', anchor='w')
         self.object_list.append(social_frame)
@@ -717,9 +718,10 @@ class SegmentedButtonMenu:
             image=ctk.CTkImage(
                 light_image=Image.open(os.path.join(os.getcwd(), "App", "Image", "discord_icon.png")),
                 dark_image=Image.open(os.path.join(os.getcwd(), "App", "Image", "discord_icon.png")),
-                size=(100, 100),
+                size=(64, 64),
             ),
-            text="",
+            text="Join the Discord!",
+            font=("monospace", 25),
             width=-10,
             fg_color="#242424"
         )
