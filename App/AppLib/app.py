@@ -17,5 +17,5 @@ class App:
             "author_name": Config.get_setting("author_name"),
         }
         self.variables = {
-            "open_project": None,
+            "open_project_fp": None,
         }
