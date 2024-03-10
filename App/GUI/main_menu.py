@@ -24,8 +24,6 @@ class ButtonFunc:
     @staticmethod
     def ainb_to_code_option_menu_button_command(app, event=None):
 
-        print(event)
-
         match event:
 
             case "JSON":
