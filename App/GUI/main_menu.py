@@ -695,7 +695,22 @@ class SegmentedButtonMenu:
         font_size_entry.bind("<Return>", font_size_entry_return_command)
 
     def create_community_menu(self):
-        pass  # TODO: Stub
+
+        social_frame = ctk.CTkFrame(
+            master=self.master,
+        )
+        social_frame.pack(fill='x', side='top', anchor='w')
+        self.object_list.append(social_frame)
+
+        scroll_frame = ctk.CTkScrollableFrame(
+            master=self.master,
+            width=99999,
+            fg_color="#242424"
+        )
+        scroll_frame.pack(fill="both", side="left")
+        self.object_list.append(scroll_frame)
+
+        # TODO: Finish
 
     def show_projects_menu(self):
         self.object_list[0].pack(side="top", fill="x")
@@ -709,7 +724,8 @@ class SegmentedButtonMenu:
         self.object_list[4].pack(fill='both', side='left')
 
     def show_community_menu(self):
-        pass  # TODO: Stub
+        self.object_list[5].pack(fill='x', side='top', anchor='w')
+        self.object_list[6].pack(fill='both', side='left')
 
     def hide_current_menu(self):
         for obj in self.object_list:
