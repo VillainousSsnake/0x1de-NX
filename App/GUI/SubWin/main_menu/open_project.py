@@ -7,7 +7,7 @@ from tkinter import filedialog
 
 
 # Defining open_project function
-def open_project(app):
+def open_project(root, app):
 
     folder_select = filedialog.askdirectory(
         initialdir=ProjectHandler.get_project_directory(),
