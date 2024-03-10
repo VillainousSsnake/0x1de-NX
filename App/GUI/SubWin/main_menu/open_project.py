@@ -15,6 +15,10 @@ def open_project(root, app):
         mustexist=True,
     )
 
+    # Detecting if the user canceled
+    if folder_select == "":
+        return 0
+
     app.variables["open_project_fp"] = folder_select
 
     # Exiting the current menu and summoning the next one
