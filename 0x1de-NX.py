@@ -16,3 +16,6 @@ while app.returnStatement != "exit":
 
         case "main":  # Main Menu
             Index.main_menu(app)
+
+        case "project_editor":  # Project Editor Menu
+            Index.project_editor(app)
