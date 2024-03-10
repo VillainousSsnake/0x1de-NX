@@ -606,7 +606,7 @@ class SegmentedButtonMenu:
 
     def create_settings_menu(self, app):
 
-        scroll_frame = ctk.CTkScrollableFrame(master=self.master, width=1000, fg_color="#242424")
+        scroll_frame = ctk.CTkScrollableFrame(master=self.master, width=10000000, fg_color="#242424")
         scroll_frame.pack(fill='both', side='left')
         self.object_list.append(scroll_frame)
 
