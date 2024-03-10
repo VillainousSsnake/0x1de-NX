@@ -7,19 +7,26 @@ from tkinter import filedialog
 
 
 # Defining open_project function
-def open_project(root, app):
+def open_project(root, app, project_path=None):
 
-    folder_select = filedialog.askdirectory(
-        initialdir=ProjectHandler.get_project_directory(),
-        title="Open Folder...",
-        mustexist=True,
-    )
+    if project_path is None:
 
-    # Detecting if the user canceled
-    if folder_select == "":
-        return 0
+        # Asking user for the project folder
+        folder_select = filedialog.askdirectory(
+            initialdir=ProjectHandler.get_project_directory(),
+            title="Open Folder...",
+            mustexist=True,
+        )
 
-    app.variables["open_project_fp"] = folder_select
+        # Detecting if the user canceled
+        if folder_select == "":
+            return 0
+
+        # Setting project_path to the given directory path
+        project_path = folder_select
+
+    # Setting the open project variable to the project path
+    app.variables["open_project_fp"] = project_path
 
     # Exiting the current menu and summoning the next one
     root.destroy()
