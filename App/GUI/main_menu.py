@@ -696,6 +696,7 @@ class SegmentedButtonMenu:
 
     def create_community_menu(self):
 
+        # Creating frames
         social_frame = ctk.CTkFrame(
             master=self.master,
         )
@@ -709,6 +710,20 @@ class SegmentedButtonMenu:
         )
         scroll_frame.pack(fill="both", side="left")
         self.object_list.append(scroll_frame)
+
+        # Creating and configuring children of social_frame
+        discord_button = ctk.CTkButton(
+            master=social_frame,
+            image=ctk.CTkImage(
+                light_image=Image.open(os.path.join(os.getcwd(), "App", "Image", "discord_icon.png")),
+                dark_image=Image.open(os.path.join(os.getcwd(), "App", "Image", "discord_icon.png")),
+                size=(100, 100),
+            ),
+            text="",
+            width=-10,
+            fg_color="#242424"
+        )
+        discord_button.pack(anchor="w")
 
         # TODO: Finish
 
