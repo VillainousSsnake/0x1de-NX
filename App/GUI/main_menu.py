@@ -12,9 +12,9 @@ from App.AppLib.plugin_handler import PluginHandler
 from tkinter import messagebox, filedialog
 from App.AppLib.updater import Updater
 from App.AppLib.config import Config
+from PIL import Image, ImageTk
 from functools import partial
 import customtkinter as ctk
-from PIL import Image, ImageTk
 import os
 
 
@@ -786,7 +786,7 @@ def main_menu(app):
     root.wm_iconbitmap()
     root.iconphoto(
         False,
-        ImageTk.PhotoImage(file=r'C:\Users\ecrje\PycharmProjects\0x1de-NX\App\Image\0x1de.ico')
+        ImageTk.PhotoImage(file=os.path.join(os.getcwd(), "App", "Image", "0x1de.ico"))
     )
 
     # Defining on_close function
