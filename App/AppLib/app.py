@@ -16,3 +16,6 @@ class App:
             "font_size": Config.get_setting("font_size"),
             "author_name": Config.get_setting("author_name"),
         }
+        self.variables = {
+            "open_project": None,
+        }
