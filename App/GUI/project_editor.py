@@ -16,7 +16,7 @@ def project_editor(app):
     # Creating root window
     root = ctk.CTk()
     root.title("0x1de-NX | Alpha v0.0.1")
-    root.geometry("850x525+200+200")
+    root.geometry("1250x700")
     root.wm_iconbitmap()
     root.iconphoto(
         False,
@@ -31,7 +31,52 @@ def project_editor(app):
     # Assigning the buttons on the tkinter window top bar
     root.protocol("WM_DELETE_WINDOW", on_close)
 
-    # TODO: Add code here
+    # Creating navigation frame
+    navigation_frame = ctk.CTkFrame(
+        master=root,
+        width=40,
+        fg_color="white",    # TODO: Replace with real color
+    )
+    navigation_frame.pack(
+        side="left",
+        fill='y',
+    )
+
+    # Creating project tree frame
+    project_tree_frame = ctk.CTkFrame(
+        master=root,
+        width=400,
+        height=9999999,
+        fg_color="green",    # TODO: Replace with real color
+    )
+    project_tree_frame.pack(
+        side='left',
+        anchor="nw",
+        fill='y',
+        padx=1,
+    )
+
+    # Creating top navigation frame
+    top_nav_frame = ctk.CTkFrame(
+        master=root,
+        fg_color="blue",    # TODO: Replace with real color
+        height=40,
+    )
+    top_nav_frame.pack(
+        side="top",
+        anchor="e",
+        fill='x'
+    )
+
+    # Creating editor view frame
+    editor_frame = ctk.CTkFrame(
+        master=root,
+        fg_color="orange",  # TODO: Replace with real color
+        width=9999999,
+    )
+    editor_frame.pack(fill='both', side='right')
+
+    # TODO: Configure and create children for each frame
 
     # Root mainloop (End of function)
     root.mainloop()
