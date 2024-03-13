@@ -64,7 +64,7 @@ class ButtonFunc:
         window.destroy()
 
     @staticmethod
-    def create(settings, window, app, SegmentedButtonMenuController):
+    def create(settings, window, app, segmented_button_menu_controller):
         """
             settings = {
                 "Project Name": None,
@@ -131,8 +131,8 @@ class ButtonFunc:
         window.destroy()
 
         # Updating segmented_button_menu_controller
-        SegmentedButtonMenuController.hide_current_menu()
-        SegmentedButtonMenuController.update_projects_menu(SegmentedButtonMenuController)
+        segmented_button_menu_controller.hide_current_menu()
+        segmented_button_menu_controller.update_projects_menu(segmented_button_menu_controller)
 
     @staticmethod
     def select_icon(icon_image, settings, event=None):
@@ -158,7 +158,7 @@ class ButtonFunc:
         )
 
 
-def new_project(root, app, segmented_button_menu_controller):
+def new_project(app, segmented_button_menu_controller):
 
     settings = {
         "Project Name": None,
@@ -257,5 +257,3 @@ def new_project(root, app, segmented_button_menu_controller):
         settings,
     )
     create_romfs_folder_checkbox.configure(command=create_romfs_folder_checkbox_command)
-
-

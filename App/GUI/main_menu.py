@@ -220,7 +220,7 @@ class SegmentedButtonMenu:
         # Creating the new_project button
         new_project_command = partial(
             ButtonCommand.ProjectsMenu.new_project,
-            root, app, self,
+            app, self,
         )
         new_project_button = ctk.CTkButton(
             master=nav_frame,
@@ -418,7 +418,7 @@ class SegmentedButtonMenu:
         # Creating the new_project button
         new_project_command = partial(
             ButtonCommand.ProjectsMenu.new_project,
-            root, app, self,
+            app, self,
         )
         new_project_button = ctk.CTkButton(
             master=nav_frame,
@@ -757,8 +757,8 @@ class SegmentedButtonMenu:
 class ButtonCommand:
     class ProjectsMenu:
         @staticmethod
-        def new_project(root, app, self):
-            subwin_new_project(root, app, self)
+        def new_project(app, self):
+            subwin_new_project(app, self)
 
         @staticmethod
         def open_project(root, app, project_path=None, event=None):
