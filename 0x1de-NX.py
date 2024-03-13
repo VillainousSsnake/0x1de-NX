@@ -5,6 +5,12 @@
 from App.AppLib.app import App
 from App.AppLib.index import Index
 
+# Removing the splash screen
+import sys
+if getattr(sys, 'frozen', False):
+    import pyi_splash
+    pyi_splash.close()
+
 # Creating App variable
 app = App()
 
