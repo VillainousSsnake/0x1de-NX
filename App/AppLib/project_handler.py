@@ -34,9 +34,6 @@ class ProjectHandler:
         if not os.path.exists(project_folder_path):
             os.makedirs(project_folder_path)
 
-        # creating the folder list
-        folder_list = os.listdir(project_folder_path)
-
         # Creating the project config file if it doesn't exist
         if not os.path.exists(project_config_file_path):
 
