@@ -35,7 +35,6 @@ def project_editor(app):
     navigation_frame = ctk.CTkFrame(
         master=root,
         width=40,
-        fg_color="white",    # TODO: Replace with real color
     )
     navigation_frame.pack(
         side="left",
@@ -47,7 +46,6 @@ def project_editor(app):
         master=root,
         width=400,
         height=9999999,
-        fg_color="green",    # TODO: Replace with real color
     )
     project_tree_frame.pack(
         side='left',
@@ -59,7 +57,6 @@ def project_editor(app):
     # Creating top navigation frame
     top_nav_frame = ctk.CTkFrame(
         master=root,
-        fg_color="blue",    # TODO: Replace with real color
         height=40,
     )
     top_nav_frame.pack(
@@ -71,7 +68,7 @@ def project_editor(app):
     # Creating editor view frame
     editor_frame = ctk.CTkFrame(
         master=root,
-        fg_color="orange",  # TODO: Replace with real color
+        fg_color="#242424",
         width=9999999,
     )
     editor_frame.pack(fill='both', side='right')
