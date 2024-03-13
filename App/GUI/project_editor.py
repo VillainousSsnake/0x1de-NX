@@ -15,7 +15,10 @@ def project_editor(app):
 
     # Creating root window
     root = ctk.CTk()
-    root.title("0x1de-NX | Alpha v0.0.1")
+    root.title(
+        '0x1de-NX | Alpha v0.0.1 | Editing "'
+        + os.path.basename(app.variables["open_project_fp"]) + '"'
+    )
     root.geometry("1250x700")
     root.wm_iconbitmap()
     root.iconphoto(
