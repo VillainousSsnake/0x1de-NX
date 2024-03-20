@@ -2,8 +2,9 @@
 # Contains code for project editor
 
 # Importing libraries and modules
-from PIL import ImageTk
+from App.AppLib.texture_handler import TextureHandle
 import customtkinter as ctk
+from PIL import ImageTk
 import os
 
 
@@ -78,7 +79,9 @@ def project_editor(app):
 
     # Getting the textures and loading them into a list
     button_texture_list = []
-    # TODO: Finish getting the textures and loading them into button_texture_list
+
+    for texture_path in TextureHandle.get_texture_directory():
+        print(texture_path)     # TODO: Get rid of print statement and add code
 
     # Creating and configuring children for navigation frame
     # (the frame for the vertical bar on the left)
