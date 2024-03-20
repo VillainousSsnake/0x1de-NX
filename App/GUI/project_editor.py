@@ -97,7 +97,33 @@ def project_editor(app):
         corner_radius=5,
         hover_color="#4E5157",
     )
-    file_btn_title_bar.place_configure(x=20)
+
+    settings_btn_title_bar = title_menu.add_cascade("Settings")
+    settings_btn_title_bar.configure(
+        text="Settings",
+        width=0,
+        fg_color="#1B2125",
+        corner_radius=5,
+        hover_color="#4E5157",
+    )
+
+    projects_btn_title_bar = title_menu.add_cascade("Projects")
+    projects_btn_title_bar.configure(
+        text="Projects",
+        width=0,
+        fg_color="#1B2125",
+        corner_radius=5,
+        hover_color="#4E5157",
+    )
+
+    plugins_btn_title_bar = title_menu.add_cascade("Plugins")
+    plugins_btn_title_bar.configure(
+        text="Plugins",
+        width=0,
+        fg_color="#1B2125",
+        corner_radius=5,
+        hover_color="#4E5157",
+    )
 
     # TODO: Configure and create children for each frame
 
