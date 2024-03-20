@@ -97,6 +97,7 @@ def project_editor(app):
         corner_radius=5,
         hover_color="#4E5157",
     )
+    file_btn_title_bar.grid_configure(padx=10)
 
     view_btn_title_bar = title_menu.add_cascade("View")
     view_btn_title_bar.configure(
