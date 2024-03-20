@@ -85,7 +85,7 @@ def project_editor(app):
     # Creating title menu
     title_menu = CTkTitleMenu(
         master=root,
-        title_bar_color="#1B2125"
+        title_bar_color="#1B2125",
     )
 
     # Creating and configuring the title menu's children
@@ -96,7 +96,7 @@ def project_editor(app):
         image=ctk.CTkImage(
             light_image=button_texture_dict["btn_001"],
             dark_image=button_texture_dict["btn_001"],
-            size=(17, 17),
+            size=(16, 16),
         ),
         fg_color="#1B2125",
         corner_radius=5,
