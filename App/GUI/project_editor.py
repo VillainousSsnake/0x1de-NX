@@ -3,8 +3,8 @@
 
 # Importing libraries and modules
 from App.AppLib.texture_handler import TextureHandle
+from PIL import ImageTk, Image
 import customtkinter as ctk
-from PIL import ImageTk
 import os
 
 
@@ -78,20 +78,29 @@ def project_editor(app):
     editor_frame.pack(fill='both', side='right')
 
     # Getting the textures and loading them into a list
-    button_texture_list = []
+    button_texture_dict = {}
 
-    for texture_path in TextureHandle.get_texture_directory():
-        print(texture_path)     # TODO: Get rid of print statement and add code
+    for tex_name in os.listdir(TextureHandle.get_texture_directory()):
+        tex_path = os.path.join(TextureHandle.get_texture_directory(), tex_name)
+        button_texture_dict[tex_name.replace(".png", "")] = Image.open(tex_path)
 
-    # Creating and configuring children for navigation frame
-    # (the frame for the vertical bar on the left)
+    # Creating and configuring children for top navigation frame
+    # (the frame for the horizontal bar on the top right)
 
     menu_option_btn_001 = ctk.CTkButton(
-        master=navigation_frame,
+        master=top_nav_frame,
         text="",
         width=0,
+        image=ctk.CTkImage(
+            light_image=button_texture_dict["btn_001"],
+            dark_image=button_texture_dict["btn_001"],
+            size=(25, 25),
+        ),
+        fg_color="#2B2B2B",
+        corner_radius=0,
+        hover_color="#4E5157",
     )
-    menu_option_btn_001.pack(side='top', fill='x')
+    menu_option_btn_001.pack(side='left', fill='y')
 
     # TODO: Configure and create children for each frame
 
