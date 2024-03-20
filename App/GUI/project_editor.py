@@ -89,20 +89,15 @@ def project_editor(app):
     )
 
     # Creating and configuring the title menu's children
-    menu_options_btn = title_menu.add_cascade("Menu")
-    menu_options_btn.configure(
-        text="",
+    file_btn_title_bar = title_menu.add_cascade("File")
+    file_btn_title_bar.configure(
+        text="File",
         width=0,
-        image=ctk.CTkImage(
-            light_image=button_texture_dict["btn_001"],
-            dark_image=button_texture_dict["btn_001"],
-            size=(16, 16),
-        ),
         fg_color="#1B2125",
         corner_radius=5,
         hover_color="#4E5157",
     )
-    menu_options_btn.place_configure(x=20)
+    file_btn_title_bar.place_configure(x=20)
 
     # TODO: Configure and create children for each frame
 
