@@ -1,5 +1,5 @@
 # /App/AppLib/project_handler.py
-# This is a plugin handler library
+# This is a plugin handler module
 
 # Importing libraries
 import json
