@@ -98,9 +98,9 @@ def project_editor(app):
         hover_color="#4E5157",
     )
 
-    settings_btn_title_bar = title_menu.add_cascade("Settings")
-    settings_btn_title_bar.configure(
-        text="Settings",
+    view_btn_title_bar = title_menu.add_cascade("View")
+    view_btn_title_bar.configure(
+        text="View",
         width=0,
         fg_color="#1B2125",
         corner_radius=5,
