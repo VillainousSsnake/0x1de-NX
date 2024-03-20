@@ -5,6 +5,7 @@
 from App.AppLib.texture_handler import TextureHandle
 from PIL import ImageTk, Image
 import customtkinter as ctk
+from CTkMenuBar import *
 import os
 
 
@@ -16,15 +17,12 @@ def project_editor(app):
 
     # Creating root window
     root = ctk.CTk()
-    root.title(
-        '0x1de-NX | Alpha v0.0.1 | Editing "'
-        + os.path.basename(app.variables["open_project_fp"]) + '"'
-    )
+    root.title("")
     root.geometry("1250x700")
     root.wm_iconbitmap()
     root.iconphoto(
         False,
-        ImageTk.PhotoImage(file=os.path.join(os.getcwd(), "App", "Image", "0x1de.ico"))
+        ImageTk.PhotoImage(file=os.path.join(os.getcwd(), "App", "Image", "0x1de.png"))
     )
 
     # Defining on_close function
@@ -84,23 +82,27 @@ def project_editor(app):
         tex_path = os.path.join(TextureHandle.get_texture_directory(), tex_name)
         button_texture_dict[tex_name.replace(".png", "")] = Image.open(tex_path)
 
-    # Creating and configuring children for top navigation frame
-    # (the frame for the horizontal bar on the top right)
+    # Creating title menu
+    title_menu = CTkTitleMenu(
+        master=root,
+        title_bar_color="#1B2125"
+    )
 
-    menu_option_btn_001 = ctk.CTkButton(
-        master=top_nav_frame,
+    # Creating and configuring the title menu's children
+    menu_options_btn = title_menu.add_cascade("Menu")
+    menu_options_btn.configure(
         text="",
         width=0,
         image=ctk.CTkImage(
             light_image=button_texture_dict["btn_001"],
             dark_image=button_texture_dict["btn_001"],
-            size=(25, 25),
+            size=(17, 17),
         ),
-        fg_color="#2B2B2B",
-        corner_radius=0,
+        fg_color="#1B2125",
+        corner_radius=5,
         hover_color="#4E5157",
     )
-    menu_option_btn_001.pack(side='left', fill='y')
+    menu_options_btn.place_configure(x=20)
 
     # TODO: Configure and create children for each frame
 
