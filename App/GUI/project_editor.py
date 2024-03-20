@@ -76,6 +76,20 @@ def project_editor(app):
     )
     editor_frame.pack(fill='both', side='right')
 
+    # Getting the textures and loading them into a list
+    button_texture_list = []
+    # TODO: Finish getting the textures and loading them into button_texture_list
+
+    # Creating and configuring children for navigation frame
+    # (the frame for the vertical bar on the left)
+
+    menu_option_btn_001 = ctk.CTkButton(
+        master=navigation_frame,
+        text="",
+        width=0,
+    )
+    menu_option_btn_001.pack(side='top', fill='x')
+
     # TODO: Configure and create children for each frame
 
     # Root mainloop (End of function)
