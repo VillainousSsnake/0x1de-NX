@@ -853,7 +853,7 @@ def main_menu(app):
     ####################################
 
     # Creating icon image
-    info_icon_path = os.path.join(os.getcwd(), "App", "Image", "0x1de.ico")
+    info_icon_path = os.path.join(os.getcwd(), "App", "Image", "0x1de.png")
     info_logo_image = ctk.CTkImage(
         light_image=Image.open(info_icon_path),
         dark_image=Image.open(info_icon_path),
