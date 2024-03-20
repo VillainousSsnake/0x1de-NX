@@ -819,7 +819,7 @@ def main_menu(app):
     root.wm_iconbitmap()
     root.iconphoto(
         False,
-        ImageTk.PhotoImage(file=os.path.join(os.getcwd(), "App", "Image", "0x1de.ico"))
+        ImageTk.PhotoImage(file=os.path.join(os.getcwd(), "App", "Image", "0x1de.png"))
     )
 
     # Defining on_close function
