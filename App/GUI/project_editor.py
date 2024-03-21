@@ -207,7 +207,9 @@ def project_editor(app):
     file_btn_dropdown = CustomDropdownMenu(
         master=title_menu,
         widget=file_btn_title_bar,
+        pady=0
     )
+    file_btn_dropdown.corner_radius = -5
 
     # Creating options for each dropdown
     for item in file_dropdown_option_list:  # File btn dropdown
@@ -218,12 +220,13 @@ def project_editor(app):
                 getattr(
                     ProgFunc.FileButtonDropdown,
                     item[0].replace(" ", "_").lower() + "_command"
-                )
+                ),
             )
 
         elif item[1] == "submenu":  # Sub-Menu
 
             submenu = file_btn_dropdown.add_submenu(item[0])
+            submenu.configure(corner_radius=10)
 
             for option in item[2]:
                 submenu.add_option(
