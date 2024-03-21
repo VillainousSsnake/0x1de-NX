@@ -203,7 +203,7 @@ def project_editor(app):
     # Creating options for each dropdown
     for item in file_dropdown_option_list:  # File btn dropdown
 
-        if item[1] == "option":
+        if item[1] == "option": # Option
             file_btn_dropdown.add_option(
                 item[0],
                 getattr(
@@ -212,11 +212,24 @@ def project_editor(app):
                 )
             )
 
-        elif item[1] == "submenu":
-            pass    # TODO: Stub
+        elif item[1] == "submenu":  # Sub-Menu
+
+            submenu = file_btn_dropdown.add_submenu(item[0])
+
+            for option in item[2]:
+                submenu.add_option(
+                    option,
+                    command=getattr(
+                        getattr(ProgFunc.FileButtonDropdown, item[0].replace(" ", "_").lower()),    # The class
+                        option.replace(" ", "_").lower() + "_command"                               # The command name
+                    )
+                )
+
+        elif item[0] == "sep":
+            file_btn_dropdown.add_separator()
 
         else:
-            raise ValueError("The second option can only be 'option' or 'submenu', not " + item[1])
+            raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
 
     # TODO: Configure and create children for each frame
 
