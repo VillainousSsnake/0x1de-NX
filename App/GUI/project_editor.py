@@ -29,9 +29,18 @@ class ProgFunc:
         def open_command():
             pass    # TODO: Stub
 
-        @staticmethod
-        def save_as_command():
-            pass    # TODO: Stub
+        class save_as:
+            @staticmethod
+            def tkcl_package_command():
+                pass    # TODO: Stub
+
+            @staticmethod
+            def nx_package_command():
+                pass    # TODO: Stub
+
+            @staticmethod
+            def zip_file_command():
+                pass    # TODO: Stub
 
         @staticmethod
         def recent_projects_command():
@@ -184,7 +193,7 @@ def project_editor(app):
         ["New Project", "option"],
         ["New", "option"],
         ["Open", "option"],
-        ["Save As", "submenu", ["TKCL Package", "0x1de NX Package", "Zip File"]],
+        ["Save As", "submenu", ["TKCL Package", "NX Package", "Zip File"]],
         ["Recent Projects", "option"],
         ["Close Project", "option"],
         ["Rename Project", "option"],
