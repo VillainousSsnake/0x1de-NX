@@ -9,6 +9,11 @@ from CTkMenuBar import *
 import os
 
 
+# ProgFunc class
+class ProgFunc:
+    pass    # TODO: Stub
+
+
 # Defining project_editor
 def project_editor(app):
 
@@ -125,6 +130,10 @@ def project_editor(app):
         corner_radius=5,
         hover_color="#4E5157",
     )
+
+    # Creating the title bars children's menus
+    file_btn_menu = CustomDropdownMenu(master=title_menu, widget=file_btn_title_bar)
+    file_btn_menu.add_option()
 
     # TODO: Configure and create children for each frame
 
