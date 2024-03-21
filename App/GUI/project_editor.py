@@ -11,7 +11,55 @@ import os
 
 # ProgFunc class
 class ProgFunc:
-    pass    # TODO: Stub
+    class FileButtonDropdown:
+        """
+        Holds commands for buttons in the file button dropdown
+        (the file button as in the one on the title bar)
+        """
+
+        @staticmethod
+        def new_project_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def new_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def open_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def save_as_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def recent_projects_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def close_project_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def rename_project_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def save_all_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def check_for_updates_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def export_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def exit_command():
+            pass    # TODO: Stub
 
 
 # Defining project_editor
@@ -133,7 +181,6 @@ def project_editor(app):
 
     # Creating the title bars children's menus
     file_btn_menu = CustomDropdownMenu(master=title_menu, widget=file_btn_title_bar)
-    file_btn_menu.add_option()
 
     # TODO: Configure and create children for each frame
 
