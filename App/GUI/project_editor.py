@@ -184,7 +184,7 @@ def project_editor(app):
         ["New Project", "option"],
         ["New", "option"],
         ["Open", "option"],
-        ["Save As", "submenu"],
+        ["Save As", "submenu", ["TKCL Package", "0x1de NX Package", "Zip File"]],
         ["Recent Projects", "option"],
         ["Close Project", "option"],
         ["Rename Project", "option"],
