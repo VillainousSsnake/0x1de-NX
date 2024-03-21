@@ -180,7 +180,7 @@ def project_editor(app):
     )
 
     # Creating the menu's option lists
-    file_menu_option_list = [
+    file_dropdown_option_list = [
         ["New Project", "option"],
         ["New", "option"],
         ["Open", "option"],
@@ -194,12 +194,23 @@ def project_editor(app):
         ["Exit", "option"],
     ]
 
-    # Creating the title bars children's menus
-    file_btn_menu = CustomDropdownMenu(master=title_menu, widget=file_btn_title_bar)
-    for item in file_menu_option_list:
+    # Creating the title bars children's dropdowns
+    file_btn_dropdown = CustomDropdownMenu(
+        master=title_menu,
+        widget=file_btn_title_bar,
+    )
+
+    # Creating options for each dropdown
+    for item in file_dropdown_option_list:  # File btn dropdown
 
         if item[1] == "option":
-            pass    # TODO: Stub
+            file_btn_dropdown.add_option(
+                item[0],
+                getattr(
+                    ProgFunc.FileButtonDropdown,
+                    item[0].replace(" ", "_").lower() + "_command"
+                )
+            )
 
         elif item[1] == "submenu":
             pass    # TODO: Stub
