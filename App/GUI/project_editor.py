@@ -197,10 +197,13 @@ def project_editor(app):
     # Creating the title bars children's menus
     file_btn_menu = CustomDropdownMenu(master=title_menu, widget=file_btn_title_bar)
     for item in file_menu_option_list:
+
         if item[1] == "option":
             pass    # TODO: Stub
+
         elif item[1] == "submenu":
             pass    # TODO: Stub
+
         else:
             raise ValueError("The second option can only be 'option' or 'submenu', not " + item[1])
 
