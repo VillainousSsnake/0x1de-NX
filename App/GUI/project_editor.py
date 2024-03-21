@@ -179,8 +179,30 @@ def project_editor(app):
         hover_color="#4E5157",
     )
 
+    # Creating the menu's option lists
+    file_menu_option_list = [
+        ["New Project", "option"],
+        ["New", "option"],
+        ["Open", "option"],
+        ["Save As", "submenu"],
+        ["Recent Projects", "option"],
+        ["Close Project", "option"],
+        ["Rename Project", "option"],
+        ["Save All", "option"],
+        ["Check For Updates", "option"],
+        ["Export", "option"],
+        ["Exit", "option"],
+    ]
+
     # Creating the title bars children's menus
     file_btn_menu = CustomDropdownMenu(master=title_menu, widget=file_btn_title_bar)
+    for item in file_menu_option_list:
+        if item[1] == "option":
+            pass    # TODO: Stub
+        elif item[1] == "submenu":
+            pass    # TODO: Stub
+        else:
+            raise ValueError("The second option can only be 'option' or 'submenu', not " + item[1])
 
     # TODO: Configure and create children for each frame
 
