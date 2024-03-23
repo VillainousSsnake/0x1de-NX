@@ -29,7 +29,7 @@ class ProgFunc:
         def open_command():
             pass    # TODO: Stub
 
-        class save_as:
+        class export_project_as:
             @staticmethod
             def tkcl_package_command():
                 pass    # TODO: Stub
@@ -60,10 +60,6 @@ class ProgFunc:
 
         @staticmethod
         def check_for_updates_command():
-            pass    # TODO: Stub
-
-        @staticmethod
-        def export_command():
             pass    # TODO: Stub
 
         @staticmethod
@@ -190,20 +186,22 @@ def project_editor(app):
 
     # Creating the menu's option lists
     file_dropdown_option_list = [
-        ["New Project", "option"],
         ["New", "option"],
         ["Open", "option"],
-        ["Save As", "submenu", ["TKCL Package", "NX Package", "Zip File"]],
+        ["Save All", "option"],
+        ["sep"],  # Seperator
+        ["New Project", "option"],
         ["Recent Projects", "option"],
         ["Close Project", "option"],
         ["Rename Project", "option"],
-        ["Save All", "option"],
+        ["Export Project As", "submenu", ["TKCL Package", "NX Package", "Zip File"], 'arrow'],
+        ["sep"],    # Seperator
         ["Check For Updates", "option"],
-        ["Export", "option"],
+        ["sep"],    # Seperator
         ["Exit", "option"],
     ]
 
-    # Creating the title bars children's dropdowns
+    # Creating the file btn dropdown
     file_btn_dropdown = CustomDropdownMenu(
         master=title_menu,
         widget=file_btn_title_bar,
@@ -214,9 +212,20 @@ def project_editor(app):
     # Creating options for each dropdown
     for item in file_dropdown_option_list:  # File btn dropdown
 
-        if item[1] == "option": # Option
+        if item[0] == "sep":    # Seperator
+            file_btn_dropdown.add_separator()
+
+        elif item[1] == "option":  # Option
+            # Creating the text var
+            btn_text = item[0]
+
+            # Button Cosmetics
+            if "arrow" in item:
+                btn_text += "           >"
+
+            # Creating the option
             file_btn_dropdown.add_option(
-                item[0],
+                btn_text,
                 getattr(
                     ProgFunc.FileButtonDropdown,
                     item[0].replace(" ", "_").lower() + "_command"
@@ -224,8 +233,15 @@ def project_editor(app):
             )
 
         elif item[1] == "submenu":  # Sub-Menu
+            # Creating the text var
+            btn_text = item[0]
 
-            submenu = file_btn_dropdown.add_submenu(item[0])
+            # Button Cosmetics
+            if "arrow" in item:
+                btn_text += "           >"
+
+            # Creating the submenu
+            submenu = file_btn_dropdown.add_submenu(btn_text)
             submenu.configure(corner_radius=10)
 
             for option in item[2]:
@@ -236,9 +252,6 @@ def project_editor(app):
                         option.replace(" ", "_").lower() + "_command"                               # The command name
                     )
                 )
-
-        elif item[0] == "sep":
-            file_btn_dropdown.add_separator()
 
         else:
             raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
