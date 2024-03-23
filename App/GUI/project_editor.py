@@ -2,7 +2,6 @@
 # Contains code for project editor
 
 # Importing libraries and modules
-from App.AppLib.project_handler import ProjectHandler
 from App.AppLib.texture_handler import TextureHandler
 from PIL import ImageTk, Image
 import customtkinter as ctk
@@ -12,6 +11,54 @@ import os
 
 # ProgFunc class
 class ProgFunc:
+    @staticmethod
+    def create_dropdown_from_list(dropdown_btn: CustomDropdownMenu, dropdown_option_list: list):
+        for item in dropdown_option_list:  # File btn dropdown
+
+            if item[0] == "sep":  # Seperator
+                dropdown_btn.add_separator()
+
+            elif item[1] == "option":  # Option
+                # Creating the text var
+                btn_text = item[0]
+
+                # Button Cosmetics
+                if "arrow" in item:
+                    btn_text += "           >"
+
+                # Creating the option
+                dropdown_btn.add_option(
+                    btn_text,
+                    getattr(
+                        ProgFunc.FileButtonDropdown,
+                        item[0].replace(" ", "_").lower() + "_command"
+                    ),
+                )
+
+            elif item[1] == "submenu":  # Sub-Menu
+                # Creating the text var
+                btn_text = item[0]
+
+                # Button Cosmetics
+                if "arrow" in item:
+                    btn_text += "           >"
+
+                # Creating the submenu
+                submenu = dropdown_btn.add_submenu(btn_text)
+                submenu.configure(corner_radius=10)
+
+                for option in item[2]:
+                    submenu.add_option(
+                        option,
+                        command=getattr(
+                            getattr(ProgFunc.FileButtonDropdown, item[0].replace(" ", "_").lower()),  # The class
+                            option.replace(" ", "_").lower() + "_command"  # The command name
+                        )
+                    )
+
+            else:
+                raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
+
     class FileButtonDropdown:
         """
         Holds commands for buttons in the file button dropdown
@@ -205,52 +252,8 @@ def project_editor(app):
     )
     file_btn_dropdown.corner_radius = -5
 
-    # Creating options for each dropdown
-    for item in file_dropdown_option_list:  # File btn dropdown
-
-        if item[0] == "sep":    # Seperator
-            file_btn_dropdown.add_separator()
-
-        elif item[1] == "option":  # Option
-            # Creating the text var
-            btn_text = item[0]
-
-            # Button Cosmetics
-            if "arrow" in item:
-                btn_text += "           >"
-
-            # Creating the option
-            file_btn_dropdown.add_option(
-                btn_text,
-                getattr(
-                    ProgFunc.FileButtonDropdown,
-                    item[0].replace(" ", "_").lower() + "_command"
-                ),
-            )
-
-        elif item[1] == "submenu":  # Sub-Menu
-            # Creating the text var
-            btn_text = item[0]
-
-            # Button Cosmetics
-            if "arrow" in item:
-                btn_text += "           >"
-
-            # Creating the submenu
-            submenu = file_btn_dropdown.add_submenu(btn_text)
-            submenu.configure(corner_radius=10)
-
-            for option in item[2]:
-                submenu.add_option(
-                    option,
-                    command=getattr(
-                        getattr(ProgFunc.FileButtonDropdown, item[0].replace(" ", "_").lower()),    # The class
-                        option.replace(" ", "_").lower() + "_command"                               # The command name
-                    )
-                )
-
-        else:
-            raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
+    # Creating the dropdowns for the title bar buttons
+    ProgFunc.create_dropdown_from_list(file_btn_dropdown, file_dropdown_option_list)
 
     # TODO: Configure and create children for each frame
 
