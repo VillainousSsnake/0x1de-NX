@@ -313,7 +313,7 @@ class SegmentedButtonMenu:
                 font=("monospace", 17),
                 master=project_button,
                 text=info_label1_text,
-                anchor="w"
+                anchor="w",
             )
             info_label1.place(x=175, y=45)
 
