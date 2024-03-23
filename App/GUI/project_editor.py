@@ -2,7 +2,8 @@
 # Contains code for project editor
 
 # Importing libraries and modules
-from App.AppLib.texture_handler import TextureHandle
+from App.AppLib.project_handler import ProjectHandler
+from App.AppLib.texture_handler import TextureHandler
 from PIL import ImageTk, Image
 import customtkinter as ctk
 from CTkMenuBar import *
@@ -41,10 +42,6 @@ class ProgFunc:
             @staticmethod
             def zip_file_command():
                 pass    # TODO: Stub
-
-        @staticmethod
-        def recent_projects_command():
-            pass    # TODO: Stub
 
         @staticmethod
         def close_project_command():
@@ -136,8 +133,8 @@ def project_editor(app):
     # Getting the textures and loading them into a list
     button_texture_dict = {}
 
-    for tex_name in os.listdir(TextureHandle.get_texture_directory()):
-        tex_path = os.path.join(TextureHandle.get_texture_directory(), tex_name)
+    for tex_name in os.listdir(TextureHandler.get_texture_directory()):
+        tex_path = os.path.join(TextureHandler.get_texture_directory(), tex_name)
         button_texture_dict[tex_name.replace(".png", "")] = Image.open(tex_path)
 
     # Creating title menu
@@ -191,7 +188,6 @@ def project_editor(app):
         ["Save All", "option"],
         ["sep"],  # Seperator
         ["New Project", "option"],
-        ["Recent Projects", "option"],
         ["Close Project", "option"],
         ["Rename Project", "option"],
         ["Export Project As", "submenu", ["TKCL Package", "NX Package", "Zip File"], 'arrow'],
