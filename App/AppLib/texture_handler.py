@@ -6,7 +6,7 @@ import os
 
 
 # The texture handler class
-class TextureHandle:
+class TextureHandler:
 
     @staticmethod
     def get_texture_directory() -> str:
