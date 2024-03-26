@@ -4,6 +4,8 @@
 # Importing libraries and modules
 from App.AppLib.texture_handler import TextureHandler
 from PIL import ImageTk, Image
+from tkinter import messagebox
+from functools import partial
 import customtkinter as ctk
 from CTkMenuBar import *
 import os
@@ -19,6 +21,28 @@ class ProgFunc:
                 dropdown_btn.add_separator()
 
             elif item[1] == "option":  # Option
+
+                # Creating OptionCommand
+                OptionCommand = partial(
+                    messagebox.showinfo,
+                    "Error",
+                    "mode for ProgFunc.create_dropdown_from_list is invalid. Mode givin: " + mode
+                )
+
+                # Fixing the option command based on the mode
+                match mode:
+                    case "file":
+                        OptionCommand = getattr(
+                            ProgFunc.FileButtonDropdown,
+                            item[0].replace(" ", "_").lower() + "_command"
+                        ),
+                    case "view":
+                        OptionCommand = getattr(
+                            ProgFunc.ViewButtonDropdown,
+                            item[0].replace(" ", "_").lower() + "_command"
+                        ),
+                    # TODO: Add more modes later
+
                 # Creating the text var
                 btn_text = item[0]
 
@@ -29,10 +53,7 @@ class ProgFunc:
                 # Creating the option
                 dropdown_btn.add_option(
                     btn_text,
-                    getattr(
-                        ProgFunc.FileButtonDropdown,
-                        item[0].replace(" ", "_").lower() + "_command"
-                    ),
+                    OptionCommand
                 )
 
             elif item[1] == "submenu":  # Sub-Menu
@@ -48,12 +69,32 @@ class ProgFunc:
                 submenu.configure(corner_radius=10)
 
                 for option in item[2]:
+
+                    # Creating OptionCommand
+                    OptionCommand = partial(
+                        messagebox.showinfo,
+                        "Error",
+                        "mode for ProgFunc.create_dropdown_from_list is invalid. Mode givin: " + mode
+                    )
+
+                    # Fixing the option command based on the mode
+                    match mode:
+                        case "file":
+                            OptionCommand = getattr(
+                                getattr(ProgFunc.FileButtonDropdown, item[0].replace(" ", "_").lower()),  # The class
+                                option.replace(" ", "_").lower() + "_command"  # The command name
+                            )
+                        case "view":
+                            OptionCommand = getattr(
+                                getattr(ProgFunc.ViewButtonDropdown, item[0].replace(" ", "_").lower()),  # The class
+                                option.replace(" ", "_").lower() + "_command"  # The command name
+                            )
+                        # TODO: Add more modes later
+
+                    # Adding the command
                     submenu.add_option(
                         option,
-                        command=getattr(
-                            getattr(ProgFunc.FileButtonDropdown, item[0].replace(" ", "_").lower()),  # The class
-                            option.replace(" ", "_").lower() + "_command"  # The command name
-                        )
+                        command=OptionCommand
                     )
 
             else:
@@ -108,6 +149,16 @@ class ProgFunc:
 
         @staticmethod
         def exit_command():
+            pass    # TODO: Stub
+
+    class ViewButtonDropdown:
+
+        @staticmethod
+        def settings_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def toggle_console_command():
             pass    # TODO: Stub
 
 
@@ -265,8 +316,8 @@ def project_editor(app):
     view_btn_dropdown.corner_radius = -5
 
     # Creating the dropdowns for the title bar buttons
-    ProgFunc.create_dropdown_from_list(file_btn_dropdown, file_dropdown_option_list)
-    ProgFunc.create_dropdown_from_list(view_btn_dropdown, view_dropdown_option_list)
+    ProgFunc.create_dropdown_from_list(file_btn_dropdown, file_dropdown_option_list, "file")
+    ProgFunc.create_dropdown_from_list(view_btn_dropdown, view_dropdown_option_list, "view")
 
     # TODO: Configure and create children for each frame
 
