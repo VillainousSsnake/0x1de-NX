@@ -26,7 +26,7 @@ class ProgFunc:
                 OptionCommand = partial(
                     messagebox.showinfo,
                     "Error",
-                    "mode for ProgFunc.create_dropdown_from_list is invalid. Mode givin: " + mode
+                    "mode for ProgFunc.create_dropdown_from_list is invalid. Mode given: " + mode
                 )
 
                 # Fixing the option command based on the mode
