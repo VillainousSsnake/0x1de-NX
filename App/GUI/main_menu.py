@@ -874,7 +874,7 @@ def main_menu(app):
     info_version_label = ctk.CTkLabel(
         master=info_button,
         fg_color="#2B2B2B",
-        text=Updater.get_current_version(),
+        text=Updater.get_app_version(),
         font=ctk.CTkFont(size=14),
         anchor="w",
     )

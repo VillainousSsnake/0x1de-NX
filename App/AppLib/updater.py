@@ -8,6 +8,6 @@ CurrentVersionGlobal = "Alpha 0.0.1"
 # Updater class
 class Updater:
     @staticmethod
-    def get_current_version():
+    def get_app_version():
 
         return CurrentVersionGlobal

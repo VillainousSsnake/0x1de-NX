@@ -169,7 +169,7 @@ def new_project(app, segmented_button_menu_controller):
 
     # Creating the window
     window = tk.CTkToplevel()
-    window.title("0x1de NX | " + Updater.get_current_version() + " | New Project")
+    window.title("0x1de NX | " + Updater.get_app_version() + " | New Project")
     window.geometry("600x300")
     window.resizable(False, False)
 
