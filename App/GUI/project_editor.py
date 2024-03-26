@@ -5,6 +5,7 @@
 from App.AppLib.project_handler import ProjectHandler
 from App.AppLib.texture_handler import TextureHandler
 from PIL import ImageTk, Image
+from functools import partial
 import customtkinter as ctk
 from CTkMenuBar import *
 import os
@@ -15,6 +16,15 @@ class ProgFunc:
     @staticmethod
     def save_project():
         pass    # TODO: Stub
+
+    class NavigationFrame:
+
+        @staticmethod
+        def project_tree_toggle_btn_command(
+                self: ctk.CTkButton,
+                project_tree_frame: ctk.CTkFrame
+        ):
+            pass    # TODO: Stub
 
     class FileButtonDropdown:
         """
@@ -343,6 +353,12 @@ def project_editor(app):
         ),
         fg_color="#2B2B2B",
         hover_color="#393B40",
+    )
+    project_tree_toggle_nav_btn.configure(
+        command=partial(
+            ProgFunc.NavigationFrame.project_tree_toggle_btn_command,
+            project_tree_toggle_nav_btn, project_tree_frame
+        )
     )
     project_tree_toggle_nav_btn.pack()
 
