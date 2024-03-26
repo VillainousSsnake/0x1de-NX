@@ -15,7 +15,7 @@ class ProgFunc:
     class FileButtonDropdown:
         """
         Holds commands for buttons in the file button dropdown
-        (the file button as in the one on the title bar)
+        (the "File" button as in the one on the title bar)
         """
 
         @staticmethod
@@ -61,6 +61,20 @@ class ProgFunc:
 
         @staticmethod
         def exit_command():
+            pass    # TODO: Stub
+
+    class ViewButtonDropdown:
+        """
+        Holds commands for buttons in the view button dropdown
+        (the "View" button as in the one on the title bar)
+        """
+
+        @staticmethod
+        def settings_command():
+            pass    # TODO: Stub
+
+        @staticmethod
+        def toggle_console_command():
             pass    # TODO: Stub
 
 
@@ -186,7 +200,7 @@ def project_editor(app):
         ["New", "option"],
         ["Open", "option"],
         ["Save All", "option"],
-        ["sep"],  # Seperator
+        ["sep"],    # Seperator
         ["New Project", "option"],
         ["Close Project", "option"],
         ["Rename Project", "option"],
@@ -196,8 +210,13 @@ def project_editor(app):
         ["sep"],    # Seperator
         ["Exit", "option"],
     ]
+    view_dropdown_option_list = [
+        ["Settings", "option"],
+        ["sep"],    # Seperator
+        ["Toggle Console", "option"]
+    ]
 
-    # Creating the file btn dropdown
+    # Creating the file button dropdown
     file_btn_dropdown = CustomDropdownMenu(
         master=title_menu,
         widget=file_btn_title_bar,
@@ -205,10 +224,18 @@ def project_editor(app):
     )
     file_btn_dropdown.corner_radius = -5
 
+    # Creating the view button dropdown
+    view_btn_dropdown = CustomDropdownMenu(
+        master=title_menu,
+        widget=view_btn_title_bar,
+        pady=0
+    )
+    view_btn_dropdown.corner_radius = -5
+
     # Creating options for each dropdown
     for item in file_dropdown_option_list:  # File btn dropdown
 
-        if item[0] == "sep":    # Seperator
+        if item[0] == "sep":  # Seperator
             file_btn_dropdown.add_separator()
 
         elif item[1] == "option":  # Option
@@ -244,8 +271,55 @@ def project_editor(app):
                 submenu.add_option(
                     option,
                     command=getattr(
-                        getattr(ProgFunc.FileButtonDropdown, item[0].replace(" ", "_").lower()),    # The class
-                        option.replace(" ", "_").lower() + "_command"                               # The command name
+                        getattr(ProgFunc.FileButtonDropdown, item[0].replace(" ", "_").lower()),  # The class
+                        option.replace(" ", "_").lower() + "_command"  # The command name
+                    )
+                )
+
+        else:
+            raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
+
+    # Creating options for each dropdown
+    for item in view_dropdown_option_list:  # File btn dropdown
+
+        if item[0] == "sep":  # Seperator
+            view_btn_dropdown.add_separator()
+
+        elif item[1] == "option":  # Option
+            # Creating the text var
+            btn_text = item[0]
+
+            # Button Cosmetics
+            if "arrow" in item:
+                btn_text += "           >"
+
+            # Creating the option
+            view_btn_dropdown.add_option(
+                btn_text,
+                getattr(
+                    ProgFunc.ViewButtonDropdown,
+                    item[0].replace(" ", "_").lower() + "_command"
+                ),
+            )
+
+        elif item[1] == "submenu":  # Sub-Menu
+            # Creating the text var
+            btn_text = item[0]
+
+            # Button Cosmetics
+            if "arrow" in item:
+                btn_text += "           >"
+
+            # Creating the submenu
+            submenu = view_btn_dropdown.add_submenu(btn_text)
+            submenu.configure(corner_radius=10)
+
+            for option in item[2]:
+                submenu.add_option(
+                    option,
+                    command=getattr(
+                        getattr(ProgFunc.ViewButtonDropdown, item[0].replace(" ", "_").lower()),  # The class
+                        option.replace(" ", "_").lower() + "_command"  # The command name
                     )
                 )
 
