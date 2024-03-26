@@ -24,7 +24,23 @@ class ProgFunc:
                 self: ctk.CTkButton,
                 project_tree_frame: ctk.CTkFrame
         ):
-            pass    # TODO: Stub
+            button_color = self.cget("fg_color")
+
+            if button_color == "#2B2B2B":   # The Project tree frame isn't expanded
+
+                # Changing button color
+                self.configure(fg_color="#4E5157", hover_color="#4E5157")
+
+                # Expanding project tree frame
+                project_tree_frame.configure(width=400)
+
+            elif button_color == "#4E5157":     # The Project tree frame is expanded
+
+                # Changing button color
+                self.configure(fg_color="#2B2B2B", hover_color="#393B40")
+
+                # Minimizing project tree frame
+                project_tree_frame.configure(width=0)
 
     class FileButtonDropdown:
         """
