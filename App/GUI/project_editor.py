@@ -12,6 +12,10 @@ import os
 
 # ProgFunc class
 class ProgFunc:
+    @staticmethod
+    def save_project():
+        pass    # TODO: Stub
+
     class FileButtonDropdown:
         """
         Holds commands for buttons in the file button dropdown
@@ -61,7 +65,8 @@ class ProgFunc:
 
         @staticmethod
         def exit_command():
-            pass    # TODO: Stub
+            ProgFunc.save_project()
+            exit()
 
     class ViewButtonDropdown:
         """
