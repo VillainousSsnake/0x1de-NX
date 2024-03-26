@@ -336,7 +336,13 @@ def project_editor(app):
         master=navigation_frame,
         text="",
         width=0,
-        image=None,  # TODO: Add image
+        image=ctk.CTkImage(
+            light_image=button_texture_dict["btn_003"],
+            dark_image=button_texture_dict["btn_003"],
+            size=(22, 19),
+        ),
+        fg_color="#2B2B2B",
+        hover_color="#393B40",
     )
     project_tree_toggle_nav_btn.pack()
 

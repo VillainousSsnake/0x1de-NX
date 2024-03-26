@@ -1,0 +1,2 @@
+hover_nav: #393B40
+selected_nav: #4E5157
