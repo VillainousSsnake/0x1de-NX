@@ -12,7 +12,7 @@ import os
 # ProgFunc class
 class ProgFunc:
     @staticmethod
-    def create_dropdown_from_list(dropdown_btn: CustomDropdownMenu, dropdown_option_list: list):
+    def create_dropdown_from_list(dropdown_btn: CustomDropdownMenu, dropdown_option_list: list, mode=None):
         for item in dropdown_option_list:  # File btn dropdown
 
             if item[0] == "sep":  # Seperator
@@ -243,8 +243,12 @@ def project_editor(app):
         ["sep"],    # Seperator
         ["Exit", "option"],
     ]
+    view_dropdown_option_list = [
+        ["Settings", "option"],
+        ["Toggle Console", "option"]
+    ]
 
-    # Creating the file btn dropdown
+    # Creating the file button dropdown
     file_btn_dropdown = CustomDropdownMenu(
         master=title_menu,
         widget=file_btn_title_bar,
@@ -252,8 +256,17 @@ def project_editor(app):
     )
     file_btn_dropdown.corner_radius = -5
 
+    # Creating the view button dropdown
+    view_btn_dropdown = CustomDropdownMenu(
+        master=title_menu,
+        widget=view_btn_title_bar,
+        pady=0
+    )
+    view_btn_dropdown.corner_radius = -5
+
     # Creating the dropdowns for the title bar buttons
     ProgFunc.create_dropdown_from_list(file_btn_dropdown, file_dropdown_option_list)
+    ProgFunc.create_dropdown_from_list(view_btn_dropdown, view_dropdown_option_list)
 
     # TODO: Configure and create children for each frame
 
