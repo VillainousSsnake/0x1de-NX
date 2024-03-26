@@ -331,6 +331,15 @@ def project_editor(app):
         else:
             raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
 
+    # Creating children for navigation_frame
+    project_tree_toggle_nav_btn = ctk.CTkButton(
+        master=navigation_frame,
+        text="",
+        width=0,
+        image=None,  # TODO: Add image
+    )
+    project_tree_toggle_nav_btn.pack()
+
     # TODO: Configure and create children for each frame
 
     # Root mainloop (End of function)
