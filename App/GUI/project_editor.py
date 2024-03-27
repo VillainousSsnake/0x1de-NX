@@ -35,6 +35,10 @@ class ProgFunc:
                 # Expanding project tree frame
                 project_tree_frame.configure(width=400)
 
+                # Showing the widgets
+                project_tree_frame.winfo_children()[0].pack(fill="x", side="top")
+                project_tree_frame.winfo_children()[1].pack(padx=10, fill="both", anchor="n")
+
             elif button_color == "#4E5157":     # The Project tree frame is expanded
 
                 # Changing button color
@@ -396,9 +400,10 @@ def project_editor(app):
 
     project_treeview = ttk.Treeview(    # Project treeview
         project_tree_frame,
-        show="tree"
+        show="tree",
+        height=99999999
     )
-    project_treeview.pack(padx=10, fill="both")
+    project_treeview.pack(padx=10, fill="both", anchor="n")
 
     # Inserting all the files and folders into tree view
     sub_directories = [x[0] for x in os.walk(app.variables["open_project_fp"])]
