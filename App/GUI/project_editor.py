@@ -8,6 +8,7 @@ from PIL import ImageTk, Image
 from functools import partial
 import customtkinter as ctk
 from CTkMenuBar import *
+from tkinter import ttk
 import os
 
 
@@ -41,6 +42,8 @@ class ProgFunc:
 
                 # Minimizing project tree frame
                 project_tree_frame.configure(width=0)
+                for widget in project_tree_frame.winfo_children():
+                    widget.pack_forget()
 
     class FileButtonDropdown:
         """
@@ -358,7 +361,7 @@ def project_editor(app):
             raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
 
     # Creating children for navigation_frame
-    project_tree_toggle_nav_btn = ctk.CTkButton(
+    project_tree_toggle_nav_btn = ctk.CTkButton(    # Creating the project tree frame toggle button
         master=navigation_frame,
         text="",
         width=0,
@@ -367,8 +370,8 @@ def project_editor(app):
             dark_image=button_texture_dict["btn_003"],
             size=(22, 19),
         ),
-        fg_color="#2B2B2B",
-        hover_color="#393B40",
+        fg_color="#4E5157",
+        hover_color="#4E5157",
     )
     project_tree_toggle_nav_btn.configure(
         command=partial(
@@ -377,6 +380,46 @@ def project_editor(app):
         )
     )
     project_tree_toggle_nav_btn.pack()
+
+    project_tree_top_bar_frame = ctk.CTkFrame(
+        project_tree_frame,
+        height=75,
+        width=400,
+        fg_color="#2B2B2B"
+    )
+    project_tree_top_bar_frame.pack(fill="x", side="top")
+
+    treestyle = ttk.Style()
+    treestyle.theme_use('default')
+    treestyle.configure("Treeview", background="242424", foreground="white", fieldbackground="#242424", borderwidth=0)
+    treestyle.map('Treeview', background=[('selected', "#2E436E")], foreground=[('selected', "white")])
+
+    project_treeview = ttk.Treeview(    # Project treeview
+        project_tree_frame,
+        show="tree"
+    )
+    project_treeview.pack(padx=10, fill="both")
+
+    # Inserting all the files and folders into tree view
+    sub_directories = [x[0] for x in os.walk(app.variables["open_project_fp"])]
+    print(sub_directories)
+    for folder_path in sub_directories:
+        # Inserting the folder
+        print(os.path.basename(os.path.split(folder_path)[len(os.path.split(folder_path))-2]))
+        if os.path.basename(os.path.split(folder_path)[len(os.path.split(folder_path))-2]) != "Projects":
+            item = project_treeview.insert(
+                os.path.basename(os.path.split(folder_path)[len(os.path.split(folder_path))-2]),
+                0,
+                iid=os.path.basename(os.path.split(folder_path)[len(os.path.split(folder_path))-1]),
+                text=os.path.basename(folder_path),
+            )
+        else:
+            item = project_treeview.insert(
+                "",
+                0,
+                iid=folder_path,
+                text=os.path.basename(folder_path),
+            )
 
     # TODO: Configure and create children for each frame
 
