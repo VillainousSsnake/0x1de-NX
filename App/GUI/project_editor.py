@@ -428,8 +428,11 @@ def project_editor(app):
 
         # Creating all the files in the folder and inserting them into the tree
         for file_name in os.listdir(folder_path):
-            file_path = folder_path + "\\" + file_name
-            print(file_name)
+
+            # Creating the file path
+            file_path = os.path.join(folder_path, file_name)
+
+            # Detecting if the file path is read
             if os.path.isfile(file_path):
 
                 # Creating the item parameter variables
@@ -437,19 +440,13 @@ def project_editor(app):
                 file_iid = file_path
                 file_text = os.path.basename(file_path)
 
-                # Making the parent an empty string if it is the first folder
-                if counter == 0:
-                    file_parent = ""
-
-                # Creating the folder
+                # Creating the file
                 file = project_treeview.insert(
                     parent=file_parent,
                     index="end",
                     iid=file_iid,
                     text=file_text,
                 )
-
-        counter += 1
 
     # TODO: Configure and create children for each frame
 
