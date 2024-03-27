@@ -402,24 +402,31 @@ def project_editor(app):
 
     # Inserting all the files and folders into tree view
     sub_directories = [x[0] for x in os.walk(app.variables["open_project_fp"])]
-    print(sub_directories)
+    counter = 0
     for folder_path in sub_directories:
-        # Inserting the folder
-        print(os.path.basename(os.path.split(folder_path)[len(os.path.split(folder_path))-2]))
-        if os.path.basename(os.path.split(folder_path)[len(os.path.split(folder_path))-2]) != "Projects":
-            item = project_treeview.insert(
-                os.path.basename(os.path.split(folder_path)[len(os.path.split(folder_path))-2]),
-                0,
-                iid=os.path.basename(os.path.split(folder_path)[len(os.path.split(folder_path))-1]),
-                text=os.path.basename(folder_path),
-            )
-        else:
-            item = project_treeview.insert(
-                "",
-                0,
-                iid=folder_path,
-                text=os.path.basename(folder_path),
-            )
+
+        # Creating the item parameter variables
+        item_parent = folder_path.replace(
+            os.path.basename(folder_path), ""
+        )[:len(
+            folder_path.replace(os.path.basename(folder_path), "")
+        )-1]
+        item_iid = folder_path
+        item_text = os.path.basename(folder_path)
+
+        # Making the parent an empty string if it is the first folder
+        if counter == 0:
+            item_parent = ""
+
+        # Creating the item
+        item = project_treeview.insert(
+            parent=item_parent,
+            index=0,
+            iid=item_iid,
+            text=item_text,
+        )
+
+        counter += 1
 
     # TODO: Configure and create children for each frame
 
