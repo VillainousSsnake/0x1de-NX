@@ -406,25 +406,48 @@ def project_editor(app):
     for folder_path in sub_directories:
 
         # Creating the item parameter variables
-        item_parent = folder_path.replace(
+        folder_parent = folder_path.replace(
             os.path.basename(folder_path), ""
         )[:len(
             folder_path.replace(os.path.basename(folder_path), "")
         )-1]
-        item_iid = folder_path
-        item_text = os.path.basename(folder_path)
+        folder_iid = folder_path
+        folder_text = os.path.basename(folder_path)
 
         # Making the parent an empty string if it is the first folder
         if counter == 0:
-            item_parent = ""
+            folder_parent = ""
 
-        # Creating the item
-        item = project_treeview.insert(
-            parent=item_parent,
+        # Creating the folder
+        folder = project_treeview.insert(
+            parent=folder_parent,
             index=0,
-            iid=item_iid,
-            text=item_text,
+            iid=folder_iid,
+            text=folder_text,
         )
+
+        # Creating all the files in the folder and inserting them into the tree
+        for file_name in os.listdir(folder_path):
+            file_path = folder_path + "\\" + file_name
+            print(file_name)
+            if os.path.isfile(file_path):
+
+                # Creating the item parameter variables
+                file_parent = folder_path
+                file_iid = file_path
+                file_text = os.path.basename(file_path)
+
+                # Making the parent an empty string if it is the first folder
+                if counter == 0:
+                    file_parent = ""
+
+                # Creating the folder
+                file = project_treeview.insert(
+                    parent=file_parent,
+                    index="end",
+                    iid=file_iid,
+                    text=file_text,
+                )
 
         counter += 1
 
