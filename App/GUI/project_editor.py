@@ -393,17 +393,25 @@ def project_editor(app):
     )
     project_tree_top_bar_frame.pack(fill="x", side="top")
 
+    project_tree_treeview_frame = ctk.CTkFrame(
+        project_tree_frame,
+        height=99999999999,
+        width=400,
+        fg_color="#2B2B2B",
+    )
+    project_tree_treeview_frame.pack(fill="both", side="top")
+
     treestyle = ttk.Style()
     treestyle.theme_use('default')
-    treestyle.configure("Treeview", background="242424", foreground="white", fieldbackground="#242424", borderwidth=0)
+    treestyle.configure("Treeview", background="#2B2B2B", foreground="white", fieldbackground="#2B2B2B", borderwidth=0)
     treestyle.map('Treeview', background=[('selected', "#2E436E")], foreground=[('selected', "white")])
 
     project_treeview = ttk.Treeview(    # Project treeview
-        project_tree_frame,
+        project_tree_treeview_frame,
         show="tree",
-        height=99999999
+        height=99999999,
     )
-    project_treeview.pack(padx=10, fill="both", anchor="n")
+    project_treeview.pack(fill="both", side="top")
 
     # Inserting all the files and folders into tree view
     sub_directories = [x[0] for x in os.walk(app.variables["open_project_fp"])]
