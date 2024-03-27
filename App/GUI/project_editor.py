@@ -18,6 +18,16 @@ class ProgFunc:
     def save_project():
         pass    # TODO: Stub
 
+    class ProjectTreeView:
+        @staticmethod
+        def on_click(self, event=None):
+            print(event)    # TODO: Stub
+
+        @staticmethod
+        def on_key(self, event=None):
+            if event.keysym == "Delete":
+                pass    # TODO: Add code
+
     class NavigationFrame:
 
         @staticmethod
@@ -401,6 +411,17 @@ def project_editor(app):
     )
     project_tree_treeview_frame.pack(fill="both", side="top")
 
+    # Configuring children of project_tree_top_bar_frame
+    title_label = ctk.CTkLabel(
+        master=project_tree_top_bar_frame,
+        text="Project Tree",
+        font=("monospace", 20),
+        anchor="w",
+        width=400,
+    )
+    title_label.pack(anchor="w")
+
+    # Configuring children of project_tree_treeview_frame
     treestyle = ttk.Style()
     treestyle.theme_use('default')
     treestyle.configure("Treeview", background="#2B2B2B", foreground="white", fieldbackground="#2B2B2B", borderwidth=0)
@@ -412,6 +433,13 @@ def project_editor(app):
         height=99999999,
     )
     project_treeview.pack(fill="both", side="top")
+    project_treeview.bind("<1>", partial(ProgFunc.ProjectTreeView.on_click, project_treeview))
+    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_click, project_treeview))
+
+    vsb = ttk.Scrollbar(project_tree_treeview_frame, orient="vertical", command=project_treeview.yview)
+    vsb.pack(side="right")
+
+    project_treeview.configure(yscrollcommand=vsb.set)
 
     # Inserting all the files and folders into tree view
     sub_directories = [x[0] for x in os.walk(app.variables["open_project_fp"])]
@@ -432,12 +460,14 @@ def project_editor(app):
             folder_parent = ""
 
         # Creating the folder
-        folder = project_treeview.insert(
+        project_treeview.insert(
             parent=folder_parent,
             index=0,
             iid=folder_iid,
             text=folder_text,
+            image=ImageTk.PhotoImage(button_texture_dict["btn_004"]),
         )
+
 
         # Creating all the files in the folder and inserting them into the tree
         for file_name in os.listdir(folder_path):
