@@ -37,7 +37,7 @@ class ProgFunc:
 
                 # Showing the widgets
                 project_tree_frame.winfo_children()[0].pack(fill="x", side="top")
-                project_tree_frame.winfo_children()[1].pack(padx=10, fill="both", anchor="n")
+                project_tree_frame.winfo_children()[1].pack(fill="both", side="top")
 
             elif button_color == "#4E5157":     # The Project tree frame is expanded
 
