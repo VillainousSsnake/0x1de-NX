@@ -5,6 +5,23 @@
 import os
 
 
+# The types of files that this class can detect and handle
+ValidFileFormats = {
+    "ZStandardFile": {
+        ".zs": "",
+    },
+    "SarcArchive": {
+        ".bfarc": "",
+        ".bkres": "",
+        ".blarc": "",
+        ".genvb": "",
+        ".pack": "",
+        ".sarc": "",
+        ".ta": "",
+    },
+}
+
+
 # The file handler class
 class FileHandler:
 
