@@ -7,6 +7,10 @@ import os
 
 # The types of files that this class can detect and handle
 ValidFileFormats = {
+        # Standard File Formats
+        ".json": "JavaScriptObjectNotation",
+        ".yaml": "YetAnotherMarkupLanguage",
+        ".yml": "YetAnotherMarkupLanguage",
         # Sarc Archives
         ".bfarc": "SarcArchive",
         ".bkres": "SarcArchive",
@@ -20,9 +24,11 @@ ValidFileFormats = {
 }
 
 FileFormatIcons = {
-    "SarcArchive": "\uF3BF",
-    "ZStandard": "\uf15b",
-    None: "\uf15b",
+    "JavaScriptObjectNotation": chr(0x1F5CF),
+    "YetAnotherMarkupLanguage": chr(0x1F5CF),
+    "SarcArchive": chr(0x1F5C4),
+    "ZStandard": chr(0xf15b),
+    None: chr(0x1F5CB),
 }
 
 
@@ -49,10 +55,6 @@ class FileHandler:
 
         # Returning the output dictionary
         return {"format": file_format, "icon": file_icon}
-
-
-
-
 
     @staticmethod
     def get_file_info_from_data(file_data):
