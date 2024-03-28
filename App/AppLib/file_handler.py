@@ -22,6 +22,7 @@ ValidFileFormats = {
 FileFormatIcons = {
     "SarcArchive": "\uF3BF",
     "ZStandard": "\uf15b",
+    None: "\uf15b",
 }
 
 
@@ -31,22 +32,23 @@ class FileHandler:
     @staticmethod
     def get_file_info_from_name(file_name) -> dict:
 
-        # Creating the empty output dictionary
-        output = dict()
+        # Creating empty variables
+        file_format = None
+        file_icon = None
 
         # Getting the file format
         for key in ValidFileFormats:
             if key in file_name:
-                output["FileFormat"] = ValidFileFormats[key]
+                file_format = ValidFileFormats[key]
                 break
 
         # Getting the file icon
         for key in FileFormatIcons:
-            if key == output["FileFormat"]:
-                output["Icon"] = FileFormatIcons[key]
+            if key == file_format:
+                file_icon = FileFormatIcons[key]
 
         # Returning the output dictionary
-        return output
+        return {"format": file_format, "icon": file_icon}
 
 
 
