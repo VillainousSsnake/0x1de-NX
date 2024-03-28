@@ -694,7 +694,7 @@ class SegmentedButtonMenu:
         font_size_entry.bind("<Key>", font_size_entry_keys_command)
         font_size_entry.bind("<Return>", font_size_entry_return_command)
 
-    def create_community_menu(self):
+    def create_info_menu(self):
 
         # Creating frames
         social_frame = ctk.CTkFrame(
@@ -725,7 +725,7 @@ class SegmentedButtonMenu:
             width=-10,
             fg_color="#242424"
         )
-        discord_button.pack(anchor="w")
+        discord_button.pack(side="top", anchor="w")
 
         # TODO: Finish
 
@@ -740,7 +740,7 @@ class SegmentedButtonMenu:
     def show_settings_menu(self):
         self.object_list[4].pack(fill='both', side='left')
 
-    def show_community_menu(self):
+    def show_info_menu(self):
         self.object_list[5].pack(fill='x', side='top', anchor='w')
         self.object_list[6].pack(fill='both', side='left')
 
@@ -797,10 +797,10 @@ class ButtonCommand:
                 buttons_list[2].configure(hover_color="#1F6AA5")
                 segmented_menu_controller.show_settings_menu()
 
-            case "Community":   # Community button
+            case "Info":   # Info button
                 buttons_list[3].configure(fg_color="#1F6AA5")
                 buttons_list[3].configure(hover_color="#1F6AA5")
-                segmented_menu_controller.show_community_menu()
+                segmented_menu_controller.show_info_menu()
 
 
 # main_menu function
@@ -922,23 +922,23 @@ def main_menu(app):
     )
     nav_settings_button.pack(side=ctk.TOP, fill="x", pady=1)
 
-    # Configuring Community button
-    nav_community_button = ctk.CTkButton(
+    # Configuring Info button
+    nav_info_button = ctk.CTkButton(
         master=navigation_frame,
-        text="Community",
+        text="Info",
         font=segmented_button_font,
         height=segmented_button_height,
         fg_color="#2B2B2B",
         anchor="w",
     )
-    nav_community_button.pack(side=ctk.TOP, fill="x", pady=1)
+    nav_info_button.pack(side=ctk.TOP, fill="x", pady=1)
 
     # Creating segmented_buttons_list
     segmented_buttons_list = [
         nav_projects_button,
         nav_plugins_button,
         nav_settings_button,
-        nav_community_button,
+        nav_info_button,
     ]
 
     # Creating segmented_buttons_values
@@ -946,7 +946,7 @@ def main_menu(app):
         "Projects",
         "Plugins",
         "Settings",
-        "Community",
+        "Info",
     ]
 
     # Creating the segmented
@@ -956,7 +956,7 @@ def main_menu(app):
     segmented_button_controller.create_projects_menu(segmented_button_controller)
     segmented_button_controller.create_plugins_menu()
     segmented_button_controller.create_settings_menu(app)
-    segmented_button_controller.create_community_menu()
+    segmented_button_controller.create_info_menu()
 
     # Showing the project menu (Since it's the default)
     segmented_button_controller.show_projects_menu()
