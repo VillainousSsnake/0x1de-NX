@@ -4,6 +4,7 @@
 # Importing libraries and modules
 from App.AppLib.project_handler import ProjectHandler
 from App.AppLib.texture_handler import TextureHandler
+from App.AppLib.file_handler import FileHandler
 from PIL import ImageTk, Image
 from functools import partial
 import customtkinter as ctk
@@ -467,8 +468,8 @@ def project_editor(app):
             index=0,
             iid=folder_iid,
             text=folder_text,
+            tags=["Directory"],
         )
-
 
         # Creating all the files in the folder and inserting them into the tree
         for file_name in os.listdir(folder_path):
@@ -479,17 +480,19 @@ def project_editor(app):
                 file_parent = folder_path
                 file_iid = file_path
                 file_text = os.path.basename(file_path)
+                file_type = FileHandler.get_file_info_from_path(file_path)
 
                 # Making the parent an empty string if it is the first folder
                 if counter == 0:
                     file_parent = ""
 
                 # Creating the file
-                file = project_treeview.insert(
+                project_treeview.insert(
                     parent=file_parent,
                     index="end",
                     iid=file_iid,
                     text=file_text,
+                    tags=["File", file_type],
                 )
 
         counter += 1
