@@ -20,8 +20,10 @@ class ProgFunc:
 
     class ProjectTreeView:
         @staticmethod
-        def on_click(self, event=None):
-            print(event)    # TODO: Stub
+        def on_double_click(self, event=None):
+            curItem = self.focus()
+            item_info = self.item(curItem)
+            print(item_info)    # TODO: Finish func
 
         @staticmethod
         def on_key(self, event=None):
@@ -433,8 +435,8 @@ def project_editor(app):
         height=99999999,
     )
     project_treeview.pack(fill="both", side="top")
-    project_treeview.bind("<1>", partial(ProgFunc.ProjectTreeView.on_click, project_treeview))
-    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_click, project_treeview))
+    project_treeview.bind("<Double-Button-1>", partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview))
+    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview))
 
     vsb = ttk.Scrollbar(project_tree_treeview_frame, orient="vertical", command=project_treeview.yview)
     vsb.pack(side="right")
@@ -453,7 +455,7 @@ def project_editor(app):
             folder_path.replace(os.path.basename(folder_path), "")
         )-1]
         folder_iid = folder_path
-        folder_text = os.path.basename(folder_path)
+        folder_text = chr(0x0001F4C1) + " " + os.path.basename(folder_path)
 
         # Making the parent an empty string if it is the first folder
         if counter == 0:
@@ -465,7 +467,6 @@ def project_editor(app):
             index=0,
             iid=folder_iid,
             text=folder_text,
-            image=ImageTk.PhotoImage(button_texture_dict["btn_004"]),
         )
 
 
