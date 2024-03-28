@@ -16,7 +16,12 @@ ValidFileFormats = {
         ".sarc": "SarcArchive",
         ".ta": "SarcArchive",
         # ZStandard
-        ".zs": "ZStandardCompressedFile"
+        ".zs": "ZStandard"
+}
+
+FileFormatIcons = {
+    "SarcArchive": "\uF3BF",
+    "ZStandard": "\uf15b",
 }
 
 
@@ -24,10 +29,28 @@ ValidFileFormats = {
 class FileHandler:
 
     @staticmethod
-    def get_file_info_from_name(file_name):
+    def get_file_info_from_name(file_name) -> dict:
+
+        # Creating the empty output dictionary
+        output = dict()
+
+        # Getting the file format
         for key in ValidFileFormats:
             if key in file_name:
-                return ValidFileFormats[key]
+                output["FileFormat"] = ValidFileFormats[key]
+                break
+
+        # Getting the file icon
+        for key in FileFormatIcons:
+            if key == output["FileFormat"]:
+                output["Icon"] = FileFormatIcons[key]
+
+        # Returning the output dictionary
+        return output
+
+
+
+
 
     @staticmethod
     def get_file_info_from_data(file_data):
