@@ -479,8 +479,9 @@ def project_editor(app):
                 # Creating the item parameter variables
                 file_parent = folder_path
                 file_iid = file_path
-                file_text = os.path.basename(file_path)
                 file_type = FileHandler.get_file_info_from_name(file_name)
+                file_icon = ""
+                file_text = file_icon + os.path.basename(file_path)
 
                 # Making the parent an empty string if it is the first folder
                 if counter == 0:
