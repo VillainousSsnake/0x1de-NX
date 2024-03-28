@@ -481,7 +481,7 @@ def project_editor(app):
                 file_iid = file_path
                 file_format = FileHandler.get_file_info_from_name(file_name)["format"]
                 file_icon = FileHandler.get_file_info_from_name(file_name)["icon"]
-                file_text = file_icon + os.path.basename(file_path)
+                file_text = file_icon + " " + os.path.basename(file_path)
 
                 # Making the parent an empty string if it is the first folder
                 if counter == 0:
