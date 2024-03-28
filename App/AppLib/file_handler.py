@@ -8,16 +8,16 @@ import os
 # The types of files that this class can detect and handle
 ValidFileFormats = {
     "ZStandardFile": {
-        ".zs": "",
+        ".zs": b"\x37\xA4\x30\xEC",
     },
     "SarcArchive": {
-        ".bfarc": "",
-        ".bkres": "",
-        ".blarc": "",
-        ".genvb": "",
-        ".pack": "",
-        ".sarc": "",
-        ".ta": "",
+        ".bfarc": b"\x53\x41\x52\x43",
+        ".bkres": b"\x53\x41\x52\x43",
+        ".blarc": b"\x53\x41\x52\x43",
+        ".genvb": b"\x53\x41\x52\x43",
+        ".pack": b"\x53\x41\x52\x43",
+        ".sarc": b"\x53\x41\x52\x43",
+        ".ta": b"\x53\x41\x52\x43",
     },
 }
 
