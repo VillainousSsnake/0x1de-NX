@@ -427,8 +427,14 @@ def project_editor(app):
     # Configuring children of project_tree_treeview_frame
     treestyle = ttk.Style()
     treestyle.theme_use('default')
-    treestyle.configure("Treeview", background="#2B2B2B", foreground="white", fieldbackground="#2B2B2B", borderwidth=0)
-    treestyle.map('Treeview', background=[('selected', "#2E436E")], foreground=[('selected', "white")])
+    treestyle.configure("Treeview",
+                        background="#2B2B2B",
+                        foreground="white",
+                        fieldbackground="#2B2B2B",
+                        borderwidth=0,
+                        font=("monospace", int(app.settings["font_size"])-2),
+                        rowheight=int(int(app.settings["font_size"]) * 2.5)
+                        )
 
     project_treeview = ttk.Treeview(    # Project treeview
         project_tree_treeview_frame,
@@ -440,7 +446,7 @@ def project_editor(app):
     project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview))
 
     vsb = ttk.Scrollbar(project_tree_treeview_frame, orient="vertical", command=project_treeview.yview)
-    vsb.pack(side="right")
+    vsb.pack(side="right", fill="y")
 
     project_treeview.configure(yscrollcommand=vsb.set)
 
