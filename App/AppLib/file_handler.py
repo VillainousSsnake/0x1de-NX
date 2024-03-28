@@ -8,5 +8,14 @@ import os
 # The file handler class
 class FileHandler:
 
-    def __init__(self):
+    @staticmethod
+    def get_file_info_from_name(file_name):
+        pass    # TODO: Stub
+
+    @staticmethod
+    def get_file_info_from_data(file_data):
+        pass    # TODO: Stub
+
+    @staticmethod
+    def get_file_info_from_path(file_path):
         pass    # TODO: Stub
