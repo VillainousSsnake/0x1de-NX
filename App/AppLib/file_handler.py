@@ -7,18 +7,16 @@ import os
 
 # The types of files that this class can detect and handle
 ValidFileFormats = {
-    "ZStandardFile": {
-        ".zs": b"\x37\xA4\x30\xEC",
-    },
-    "SarcArchive": {
-        ".bfarc": b"\x53\x41\x52\x43",
-        ".bkres": b"\x53\x41\x52\x43",
-        ".blarc": b"\x53\x41\x52\x43",
-        ".genvb": b"\x53\x41\x52\x43",
-        ".pack": b"\x53\x41\x52\x43",
-        ".sarc": b"\x53\x41\x52\x43",
-        ".ta": b"\x53\x41\x52\x43",
-    },
+        # Sarc Archives
+        ".bfarc": "SarcArchive",
+        ".bkres": "SarcArchive",
+        ".blarc": "SarcArchive",
+        ".genvb": "SarcArchive",
+        ".pack": "SarcArchive",
+        ".sarc": "SarcArchive",
+        ".ta": "SarcArchive",
+        # ZStandard
+        ".zs": "ZStandardCompressedFile"
 }
 
 
@@ -27,7 +25,9 @@ class FileHandler:
 
     @staticmethod
     def get_file_info_from_name(file_name):
-        pass    # TODO: Stub
+        for key in ValidFileFormats:
+            if key in file_name:
+                return ValidFileFormats[key]
 
     @staticmethod
     def get_file_info_from_data(file_data):
