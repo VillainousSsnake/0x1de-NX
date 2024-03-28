@@ -479,8 +479,8 @@ def project_editor(app):
                 # Creating the item parameter variables
                 file_parent = folder_path
                 file_iid = file_path
-                file_type = FileHandler.get_file_info_from_name(file_name)
-                file_icon = ""
+                file_format = FileHandler.get_file_info_from_name(file_name)["format"]
+                file_icon = FileHandler.get_file_info_from_name(file_name)["icon"]
                 file_text = file_icon + os.path.basename(file_path)
 
                 # Making the parent an empty string if it is the first folder
@@ -493,7 +493,7 @@ def project_editor(app):
                     index="end",
                     iid=file_iid,
                     text=file_text,
-                    tags=["File", file_type],
+                    tags=["File", file_format],
                 )
 
         counter += 1
