@@ -480,7 +480,7 @@ def project_editor(app):
                 file_parent = folder_path
                 file_iid = file_path
                 file_text = os.path.basename(file_path)
-                file_type = FileHandler.get_file_info_from_path(file_path)
+                file_type = FileHandler.get_file_info_from_name(file_name)
 
                 # Making the parent an empty string if it is the first folder
                 if counter == 0:
