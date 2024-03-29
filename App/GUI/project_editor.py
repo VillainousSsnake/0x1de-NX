@@ -31,6 +31,10 @@ class ProgFunc:
             if event.keysym == "Delete":
                 pass    # TODO: Add code
 
+        @staticmethod
+        def on_right_click(self, event=None):
+            print(event)    # TODO: Stub
+
     class NavigationFrame:
 
         @staticmethod
