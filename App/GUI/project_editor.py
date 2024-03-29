@@ -543,8 +543,19 @@ def project_editor(app):
     #   editor_frame  config   #
     ############################
 
-    # TODO: Configure and create children for each frame
-    #  top_nav_frame and editor_frame not done at all, navigation_frame could use some work
+    nothing_opened_label = ctk.CTkLabel(
+        master=editor_frame,
+        text="Double click a file in the Project Tree to edit!",
+        anchor="center",
+        width=999999999,
+        height=999999999,
+        font=("monospace", 25, 'italic'),
+        text_color="grey",
+    )
+    nothing_opened_label.pack(anchor="center")
+
+    # TODO: Configure and create children for each frame.
+    #  top_nav_frame not done at all. navigation_frame and editor frame could use some work.
 
     # Root mainloop (End of function)
     root.mainloop()
