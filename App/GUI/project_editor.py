@@ -207,6 +207,10 @@ def project_editor(app):
         tex_path = os.path.join(TextureHandler.get_texture_directory(), tex_name)
         button_texture_dict[tex_name.replace(".png", "")] = Image.open(tex_path)
 
+    ############################
+    #    title_menu  config    #
+    ############################
+
     # Creating title menu
     title_menu = CTkTitleMenu(
         master=root,
@@ -382,7 +386,10 @@ def project_editor(app):
         else:
             raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
 
-    # Creating children for navigation_frame
+    ################################
+    #   navigation_frame  config   #
+    ################################
+
     project_tree_toggle_nav_btn = ctk.CTkButton(    # Creating the project tree frame toggle button
         master=navigation_frame,
         text="",
@@ -402,6 +409,10 @@ def project_editor(app):
         )
     )
     project_tree_toggle_nav_btn.pack()
+
+    ##################################
+    #   project_tree_frame  config   #
+    ##################################
 
     project_tree_top_bar_frame = ctk.CTkFrame(
         project_tree_frame,
@@ -527,6 +538,10 @@ def project_editor(app):
                 )
 
         counter += 1
+
+    ############################
+    #   editor_frame  config   #
+    ############################
 
     # TODO: Configure and create children for each frame
     #  top_nav_frame and editor_frame not done at all, navigation_frame could use some work
