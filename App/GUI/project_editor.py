@@ -414,14 +414,14 @@ def project_editor(app):
     project_tree_treeview_frame.pack(fill="both", side="top")
 
     # Configuring children of project_tree_top_bar_frame
-    title_label = ctk.CTkLabel(
+    project_tree_title_label = ctk.CTkLabel(
         master=project_tree_top_bar_frame,
         text="Project Tree",
         font=("monospace", int(app.settings["font_size"]) + 5),
         anchor="w",
         width=400,
     )
-    title_label.pack(anchor="w")
+    project_tree_title_label.pack(anchor="w")
 
     # Configuring children of project_tree_treeview_frame
 
