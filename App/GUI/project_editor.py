@@ -424,6 +424,16 @@ def project_editor(app):
     title_label.pack(anchor="w")
 
     # Configuring children of project_tree_treeview_frame
+
+    FONT = ("monospace", int(app.settings["font_size"]))
+    ROW_HEIGHT = int(int(app.settings["font_size"]) * 2.5)
+
+    if int(app.settings["font_size"]) > 25:
+        FONT = ("monospace", 25)
+        ROW_HEIGHT = 50
+    if int(app.settings["font_size"]) < 18:
+        FONT = None
+
     treestyle = ttk.Style()
     treestyle.theme_use('default')
     treestyle.configure("Treeview",
@@ -431,9 +441,13 @@ def project_editor(app):
                         foreground="white",
                         fieldbackground="#2B2B2B",
                         borderwidth=0,
-                        font=("monospace", int(app.settings["font_size"])-2),
-                        rowheight=int(int(app.settings["font_size"]) * 2.5)
                         )
+    if FONT is not None:
+        treestyle.configure(
+            "Treeview",
+            font=FONT,
+            rowheight=ROW_HEIGHT
+        )
 
     project_treeview = ttk.Treeview(    # Project treeview
         project_tree_treeview_frame,
