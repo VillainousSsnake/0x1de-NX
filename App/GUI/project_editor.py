@@ -408,7 +408,6 @@ def project_editor(app):
 
     project_tree_treeview_frame = ctk.CTkFrame(
         project_tree_frame,
-        height=99999999999,
         width=400,
         fg_color="#2B2B2B",
     )
