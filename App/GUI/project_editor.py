@@ -529,6 +529,7 @@ def project_editor(app):
         counter += 1
 
     # TODO: Configure and create children for each frame
+    #  top_nav_frame and editor_frame not done at all, navigation_frame could use some work
 
     # Root mainloop (End of function)
     root.mainloop()
