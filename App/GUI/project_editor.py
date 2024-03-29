@@ -417,7 +417,7 @@ def project_editor(app):
     title_label = ctk.CTkLabel(
         master=project_tree_top_bar_frame,
         text="Project Tree",
-        font=("monospace", 20),
+        font=("monospace", int(app.settings["font_size"]) + 5),
         anchor="w",
         width=400,
     )
