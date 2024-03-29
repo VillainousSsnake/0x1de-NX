@@ -5,6 +5,7 @@
 from App.AppLib.project_handler import ProjectHandler
 from App.AppLib.texture_handler import TextureHandler
 from App.AppLib.file_handler import FileHandler
+from chlorophyll import codeview
 from PIL import ImageTk, Image
 from functools import partial
 import customtkinter as ctk
@@ -438,16 +439,16 @@ def project_editor(app):
     if int(app.settings["font_size"]) < 18:
         FONT = None
 
-    treestyle = ttk.Style()
-    treestyle.theme_use('default')
-    treestyle.configure("Treeview",
+    tree_style = ttk.Style()
+    tree_style.theme_use('default')
+    tree_style.configure("Treeview",
                         background="#2B2B2B",
                         foreground="white",
                         fieldbackground="#2B2B2B",
                         borderwidth=0,
                         )
     if FONT is not None:
-        treestyle.configure(
+        tree_style.configure(
             "Treeview",
             font=FONT,
             rowheight=ROW_HEIGHT
