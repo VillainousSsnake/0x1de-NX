@@ -15,11 +15,10 @@ None (0.0.1 releasing mid-2024)
 Joining the discord will help support the project, and you will get announcements about 0x1de-NX early. Please join the discord!
 link: https://discord.gg/GA5qfJ53bK
 
+# Help Needed
+We are excited to announce that we have created a Google form so anybody can volunteer to help 0x1de-NX! I have also edited the message in #info to include the link to the form.
 
+Here is the application form link: https://forms.gle/Hkzk6zbNExX4PeFa8
 
-
-
-
-
-
-
+Best regards,
+**0x1de NX Team**
