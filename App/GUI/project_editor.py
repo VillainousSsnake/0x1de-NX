@@ -433,20 +433,25 @@ def project_editor(app):
     FONT = ("monospace", int(app.settings["font_size"]))
     ROW_HEIGHT = int(int(app.settings["font_size"]) * 2.5)
 
+    # Minimum and maximum for font size for project Treeview widget
     if int(app.settings["font_size"]) > 25:
         FONT = ("monospace", 25)
         ROW_HEIGHT = 50
     if int(app.settings["font_size"]) < 18:
         FONT = None
 
+    # Creating tree-view style
     tree_style = ttk.Style()
     tree_style.theme_use('default')
-    tree_style.configure("Treeview",
-                        background="#2B2B2B",
-                        foreground="white",
-                        fieldbackground="#2B2B2B",
-                        borderwidth=0,
-                        )
+    tree_style.configure(
+        "Treeview",
+        background="#2B2B2B",
+        foreground="white",
+        fieldbackground="#2B2B2B",
+        borderwidth=0,
+    )
+
+    # Applying fonts
     if FONT is not None:
         tree_style.configure(
             "Treeview",
