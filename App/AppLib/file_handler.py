@@ -1,11 +1,14 @@
 # /App/AppLib/texture_handler.py
 # This is a file handler module
 
-# Importing modules and libraries
+# Importing libraries
 from tkinter import messagebox
 import customtkinter as ctk
 from pygments.lexers import data as pylexers
 from chlorophyll import *
+
+# Importing modules and file dependencies
+from App.FFLib.StandardArchive import Sarc
 import json
 import yaml
 
@@ -223,6 +226,8 @@ class FileHandler:
                 return None
 
             case "SarcArchive":                     # TODO: Displaying SARC format
+                Sarc.
+
                 # Exiting function
                 return None
 
