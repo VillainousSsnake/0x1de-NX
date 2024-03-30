@@ -6,8 +6,8 @@ from tkinter import messagebox
 import customtkinter as ctk
 import pygments.lexers.data
 from chlorophyll import *
-import pprint
 import json
+import yaml
 
 
 # The types of files that this class can detect and handle
@@ -39,7 +39,7 @@ FileFormatIcons = {
 CodeViewColorScheme = {
   "editor": {
     "bg": "#242424",
-    "fg": "#4B5059",
+    "fg": "#7F8796",
     "select_bg": "#44475a",
     "select_fg": "#f8f8f2",
     "inactive_select_bg": "#402725",
@@ -180,7 +180,26 @@ class FileHandler:
                 return None
 
             case "YetAnotherMarkupLanguage":        # Displaying YAML format
-                return None    # TODO: Stub
+
+                # Creating code_view
+                code_view = CodeView(
+                    master=master,
+                    lexer=pygments.lexers.data.YamlLexer,
+                    color_scheme=CodeViewColorScheme,
+                    width=999999,
+                    height=999999,
+                    font=("Cascadia Code", app.settings["font_size"]),
+                )
+                code_view.pack(fill="both", side="top", anchor="w")
+
+                # Inserting the yaml data into the code view widget
+                with open(item_info["values"][0], "r") as file_in:
+                    parsed_data = yaml.safe_load(file_in)
+                    pretty_yaml = yaml.dump(parsed_data, default_flow_style=False)
+                    code_view.insert(0.0, pretty_yaml)
+
+                # Exiting function
+                return None
 
             case "SarcArchive":                     # Displaying SARC format
                 return None    # TODO: Stub
