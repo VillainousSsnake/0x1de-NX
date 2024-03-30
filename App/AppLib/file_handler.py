@@ -57,9 +57,5 @@ class FileHandler:
         return {"format": file_format, "icon": file_icon}
 
     @staticmethod
-    def get_file_info_from_data(file_data):
-        pass    # TODO: Stub
-
-    @staticmethod
-    def get_file_info_from_path(file_path):
+    def display_file_to_frame_from_info(master, item_info):
         pass    # TODO: Stub
