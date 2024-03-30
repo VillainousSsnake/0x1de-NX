@@ -53,7 +53,7 @@ class ProgFunc:
                 )
                 self.nothing_opened_label.pack(anchor="center")
 
-        def open_file(self, item_info) -> None:
+        def open_file(self, app, item_info) -> None:
 
             # Detecting the type of given input, and if it is a Directory then it exits the func
             if item_info['tags'][0] == "Directory":
@@ -102,7 +102,7 @@ class ProgFunc:
                 # TODO: Create the close button for the tab
 
                 # Displaying the file
-                FileHandler.display_file_to_tabview_from_info(self.tabview, item_info)
+                FileHandler.display_file_to_tabview_from_info(app, self.tabview, item_info)
 
             else:    # Switching tab to existing one because tab exists
                 self.tabview.set(item_info["text"])
@@ -114,10 +114,10 @@ class ProgFunc:
 
     class ProjectTreeView:
         @staticmethod
-        def on_double_click(self, file_editor, event=None):
+        def on_double_click(self, file_editor, app, event=None):
             curItem = self.focus()
             item_info = self.item(curItem)
-            file_editor.open_file(item_info=item_info)
+            file_editor.open_file(app, item_info=item_info)
 
         @staticmethod
         def on_key(self, event=None):
@@ -576,7 +576,7 @@ def project_editor(app):
     project_treeview.pack(fill="both", side="top")
     project_treeview.bind(
         "<Double-Button-1>",
-        partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview, file_editor)
+        partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview, file_editor, app)
     )
     project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_key, project_treeview))
     project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, project_treeview))
