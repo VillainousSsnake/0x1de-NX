@@ -527,7 +527,10 @@ def project_editor(app):
         height=99999999,
     )
     project_treeview.pack(fill="both", side="top")
-    project_treeview.bind("<Double-Button-1>", partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview, file_editor))
+    project_treeview.bind(
+        "<Double-Button-1>",
+        partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview, file_editor)
+    )
     project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview))
     project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, project_treeview))
 
@@ -591,7 +594,6 @@ def project_editor(app):
                 )
 
         counter += 1
-
 
     # TODO: Configure and create children for each frame.
     #  top_nav_frame not done at all. navigation_frame and editor frame could use some work.
