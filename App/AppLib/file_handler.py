@@ -4,7 +4,7 @@
 # Importing modules and libraries
 from tkinter import messagebox
 import customtkinter as ctk
-import pygments.lexers.data
+from pygments.lexers import data as pylexers
 from chlorophyll import *
 import json
 import yaml
@@ -164,7 +164,7 @@ class FileHandler:
                 # Creating code_view
                 code_view = CodeView(
                     master=master,
-                    lexer=pygments.lexers.data.JsonLexer,
+                    lexer=pylexers.JsonLexer,
                     color_scheme=CodeViewColorScheme,
                     width=999999,
                     height=999999,
@@ -186,7 +186,7 @@ class FileHandler:
                 # Creating code_view
                 code_view = CodeView(
                     master=master,
-                    lexer=pygments.lexers.data.YamlLexer,
+                    lexer=pylexers.YamlLexer,
                     color_scheme=CodeViewColorScheme,
                     width=999999,
                     height=999999,
