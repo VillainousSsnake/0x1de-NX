@@ -20,6 +20,41 @@ class ProgFunc:
     def save_project():
         pass    # TODO: Stub
 
+    class FileEditor:
+        def __init__(self,
+                     master,
+                     app,
+                     tabs: list = None
+                     ):
+            self.tabview = ctk.CTkTabview(master, height=1000)
+            self.master = master
+            self.tabs = tabs
+            self.app = app
+
+            if tabs is not None:    # Creating the tabs
+                for value in tabs:
+                    self.tabview.insert("end", value)
+
+            else:   # Creating the "nothing here" label
+                self.nothing_opened_label = ctk.CTkLabel(
+                    master=editor_frame,
+                    text="Double click a file in the Project Tree to edit!",
+                    anchor="center",
+                    width=999999999,
+                    height=999999999,
+                    font=("monospace", 25, 'italic'),
+                    text_color="grey",
+                )
+                self.nothing_opened_label.pack(anchor="center")
+
+        def open_file(self):
+            pass    # TODO: Stub
+
+        def update(self):
+            self.tabview.pack(side="top", anchor="w")
+
+            print(self.tabview.get())   # TODO: Finish
+
     class ProjectTreeView:
         @staticmethod
         def on_double_click(self, event=None):
@@ -510,6 +545,7 @@ def project_editor(app):
             iid=folder_iid,
             text=folder_text,
             tags=["Directory"],
+            values=[folder_path],
         )
 
         # Creating all the files in the folder and inserting them into the tree
@@ -535,6 +571,7 @@ def project_editor(app):
                     iid=file_iid,
                     text=file_text,
                     tags=["File", file_format],
+                    values=[file_path],
                 )
 
         counter += 1
@@ -543,16 +580,6 @@ def project_editor(app):
     #   editor_frame  config   #
     ############################
 
-    nothing_opened_label = ctk.CTkLabel(
-        master=editor_frame,
-        text="Double click a file in the Project Tree to edit!",
-        anchor="center",
-        width=999999999,
-        height=999999999,
-        font=("monospace", 25, 'italic'),
-        text_color="grey",
-    )
-    nothing_opened_label.pack(anchor="center")
 
     # TODO: Configure and create children for each frame.
     #  top_nav_frame not done at all. navigation_frame and editor frame could use some work.
