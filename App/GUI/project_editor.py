@@ -64,41 +64,47 @@ class ProgFunc:
                 self.nothing_opened_label.destroy()
                 self.tabview.pack(side="top", anchor="w")
 
-            def close_tab_command():
-                self.tabview.delete(item_info["text"])
+            # If statement for if the tab exists or not
+            if item_info["text"] not in self.tabview._tab_dict:  # Creating tab because tab doesn't exist
+                print(self.tabview._tab_dict)
+                def close_tab_command():
+                    self.tabview.delete(item_info["text"])
 
-                # If the tabview doesn't have any tabs left
-                if self.tabview.get() == "":
+                    # If the tabview doesn't have any tabs left
+                    if self.tabview.get() == "":
 
-                    # Resetting the tabview
-                    self.tabview.destroy()
-                    self.tabview = ctk.CTkTabview(
-                        self.master,
-                        fg_color="#242424",
-                        height=99999999,
-                        width=99999999,
-                        anchor="w",
-                    )
+                        # Resetting the tabview
+                        self.tabview.destroy()
+                        self.tabview = ctk.CTkTabview(
+                            self.master,
+                            fg_color="#242424",
+                            height=99999999,
+                            width=99999999,
+                            anchor="w",
+                        )
 
-                    # Creating the nothing opened label
-                    self.nothing_opened_label = ctk.CTkLabel(
-                        master=self.master,
-                        text="Double click a file in the Project Tree to edit!",
-                        anchor="center",
-                        width=999999999,
-                        height=999999999,
-                        font=("monospace", 25, 'italic'),
-                        text_color="grey",
-                    )
-                    self.nothing_opened_label.pack(anchor="center")
+                        # Creating the nothing opened label
+                        self.nothing_opened_label = ctk.CTkLabel(
+                            master=self.master,
+                            text="Double click a file in the Project Tree to edit!",
+                            anchor="center",
+                            width=999999999,
+                            height=999999999,
+                            font=("monospace", 25, 'italic'),
+                            text_color="grey",
+                        )
+                        self.nothing_opened_label.pack(anchor="center")
 
-            # Creating the tab
-            tab = self.tabview.add(item_info["text"])
+                # Creating the tab
+                tab = self.tabview.add(item_info["text"])
 
-            # TODO: Create the close button for the tab
+                # TODO: Create the close button for the tab
 
-            # Displaying the file
-            FileHandler.display_file_to_frame_from_info(tab, item_info)
+                # Displaying the file
+                FileHandler.display_file_to_frame_from_info(tab, item_info)
+
+            else:    # Switching tab to existing one because tab exists
+                self.tabview.set(item_info["text"])
 
         def update(self):
             self.tabview.pack(side="top", anchor="w")
