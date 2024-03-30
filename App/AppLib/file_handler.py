@@ -222,11 +222,13 @@ class FileHandler:
                 # Exiting function
                 return None
 
-            case "SarcArchive":                     # Displaying SARC format
-                return None    # TODO: Stub
+            case "SarcArchive":                     # TODO: Displaying SARC format
+                # Exiting function
+                return None
 
-            case "ZStandard":                       # Displaying ZSTD format
-                return None    # TODO: Stub
+            case "ZStandard":                       # TODO: Displaying ZSTD format
+                # Exiting function
+                return None
 
         messagebox.showerror(title="file_format Error", message="This file is not supported!")
         tabview.delete(item_info["text"])
