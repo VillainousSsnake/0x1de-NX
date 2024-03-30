@@ -16,6 +16,7 @@ ValidFileFormats = {
         ".json": "JavaScriptObjectNotation",
         ".yaml": "YetAnotherMarkupLanguage",
         ".yml": "YetAnotherMarkupLanguage",
+        ".txt": "TextFile",
         # Sarc Archives
         ".bfarc": "SarcArchive",
         ".bkres": "SarcArchive",
@@ -25,7 +26,7 @@ ValidFileFormats = {
         ".sarc": "SarcArchive",
         ".ta": "SarcArchive",
         # ZStandard
-        ".zs": "ZStandard"
+        ".zs": "ZStandard",
 }
 
 FileFormatIcons = {
@@ -33,13 +34,14 @@ FileFormatIcons = {
     "YetAnotherMarkupLanguage": chr(0x1F5CF),
     "SarcArchive": chr(0x1F5C4),
     "ZStandard": chr(0xf15b),
+    "TextFile": chr(0x1F5CF),
     None: chr(0x1F5CB),
 }
 
 CodeViewColorScheme = {
   "editor": {
     "bg": "#242424",
-    "fg": "#7F8796",
+    "fg": "#9FAABD",
     "select_bg": "#44475a",
     "select_fg": "#f8f8f2",
     "inactive_select_bg": "#402725",
@@ -197,6 +199,25 @@ class FileHandler:
                     parsed_data = yaml.safe_load(file_in)
                     pretty_yaml = yaml.dump(parsed_data, default_flow_style=False)
                     code_view.insert(0.0, pretty_yaml)
+
+                # Exiting function
+                return None
+
+            case "TextFile":                        # Displaying Text format
+
+                # Creating code_view
+                code_view = CodeView(
+                    master=master,
+                    color_scheme=CodeViewColorScheme,
+                    width=999999,
+                    height=999999,
+                    font=("Cascadia Code", app.settings["font_size"]),
+                )
+                code_view.pack(fill="both", side="top", anchor="w")
+
+                # Inserting the yaml data into the code view widget
+                with open(item_info["values"][0], "r") as file_in:
+                    code_view.insert(0.0, file_in.read())
 
                 # Exiting function
                 return None
