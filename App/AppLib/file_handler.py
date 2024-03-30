@@ -38,8 +38,8 @@ FileFormatIcons = {
 
 CodeViewColorScheme = {
   "editor": {
-    "bg": "#282a36",
-    "fg": "#f8f8f2",
+    "bg": "#242424",
+    "fg": "#242424",
     "select_bg": "#44475a",
     "select_fg": "#f8f8f2",
     "inactive_select_bg": "#402725",
@@ -54,7 +54,7 @@ CodeViewColorScheme = {
     "escape": "#f8f8f2",
     "keyword": "#ff79c6",
     "name": "#50fa7b",
-    "string": "#99c794",
+    "string": "#699252",
     "punctuation": "#ff79c6"
   },
   "keyword": {
@@ -90,33 +90,33 @@ CodeViewColorScheme = {
     "word": "#ff79c6"
   },
   "string": {
-    "affix": "#f1fa8c",
-    "char": "#f1fa8c",
-    "delimeter": "#f1fa8c",
-    "doc": "#f1fa8c",
-    "double": "#f1fa8c",
-    "escape": "#f1fa8c",
-    "heredoc": "#f1fa8c",
-    "interpol": "#f1fa8c",
-    "regex": "#f1fa8c",
-    "single": "#f1fa8c",
-    "symbol": "#f1fa8c"
+    "affix": "#699252",
+    "char": "#699252",
+    "delimeter": "#699252",
+    "doc": "#699252",
+    "double": "#699252",
+    "escape": "#699252",
+    "heredoc": "#699252",
+    "interpol": "#699252",
+    "regex": "#699252",
+    "single": "#699252",
+    "symbol": "#699252"
   },
   "number": {
-    "binary": "#bd93f9",
-    "float": "#bd93f9",
-    "hex": "#bd93f9",
-    "integer": "#bd93f9",
-    "long": "#bd93f9",
-    "octal": "#bd93f9"
+    "binary": "#2AACB8",
+    "float": "#2AACB8",
+    "hex": "#2AACB8",
+    "integer": "#2AACB8",
+    "long": "#2AACB8",
+    "octal": "#2AACB8"
   },
   "comment": {
     "hashbang": "#6272a4",
     "multiline": "#6272a4",
     "preproc": "#ff79c6",
     "preprocfile": "#f1fa8c",
-    "single": "#6272a4",
-    "special": "#6272a4"
+    "single": "#787D73",
+    "special": "#787D73"
   }
 }
 
@@ -146,7 +146,7 @@ class FileHandler:
         return {"format": file_format, "icon": file_icon}
 
     @staticmethod
-    def display_file_to_tabview_from_info(tabview: ctk.CTkTabview, item_info: dict) -> None:
+    def display_file_to_tabview_from_info(app, tabview: ctk.CTkTabview, item_info: dict) -> None:
 
         # Creating file format variable
         file_format = item_info["tags"][1]
@@ -166,6 +166,7 @@ class FileHandler:
                     color_scheme=CodeViewColorScheme,
                     width=999999,
                     height=999999,
+                    font=("Cascadia Code", app.settings["font_size"]),
                 )
                 code_view.pack(fill="both", side="top", anchor="w")
 
@@ -174,8 +175,6 @@ class FileHandler:
                     parsed_data = json.loads(file_in.read())
                     pretty_json = json.dumps(parsed_data, indent=4) + "\n"
                     code_view.insert(0.0, pretty_json)
-
-                code_view.update()
 
                 # Exiting function
                 return None
