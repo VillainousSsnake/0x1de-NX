@@ -47,8 +47,18 @@ class ProgFunc:
                 )
                 self.nothing_opened_label.pack(anchor="center")
 
-        def open_file(self, _input, mode="i"):
-            print(_input)   # TODO: Stub
+        def open_file(self, _input) -> None:
+
+            # Detecting the type of given input, and if it is a Directory then it exits the func
+            if _input['tags'][0] == "Directory":
+                return None
+
+            # Destroying nothing opened indicator label
+            if self.nothing_opened_label.winfo_exists():
+                self.nothing_opened_label.destroy()
+
+            # Console output
+            print(_input)   # TODO: Remove and finish func
 
         def update(self):
             self.tabview.pack(side="top", anchor="w")
@@ -60,7 +70,7 @@ class ProgFunc:
         def on_double_click(self, file_editor, event=None):
             curItem = self.focus()
             item_info = self.item(curItem)
-            file_editor.open_file(_input=item_info, mode="i")
+            file_editor.open_file(_input=item_info)
 
         @staticmethod
         def on_key(self, event=None):
