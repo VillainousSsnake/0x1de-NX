@@ -262,9 +262,9 @@ def project_editor(app):
         ["Save All", "option"],
         ["sep"],    # Seperator
         ["New Project", "option"],
-        ["Close Project", "option"],
         ["Rename Project", "option"],
         ["Export Project As", "submenu", ["TKCL Package", "NX Package", "Zip File"], 'arrow'],
+        ["Close Project", "option"],
         ["sep"],    # Seperator
         ["Check For Updates", "option"],
         ["sep"],    # Seperator
