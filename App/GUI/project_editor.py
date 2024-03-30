@@ -48,7 +48,7 @@ class ProgFunc:
                 self.nothing_opened_label.pack(anchor="center")
 
         def open_file(self, _input, mode="i"):
-            pass    # TODO: Stub
+            print(_input)   # TODO: Stub
 
         def update(self):
             self.tabview.pack(side="top", anchor="w")
