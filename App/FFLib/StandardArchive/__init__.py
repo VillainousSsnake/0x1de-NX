@@ -1,4 +1,4 @@
-# App/FFLib/custom_sarc.py
+# App/FFLib/StandardArchive/__init__.py
 # Contains Sarc class
 
 # Importing modules
