@@ -3,7 +3,7 @@
 
 # Importing modules and libraries
 from tkinter import messagebox
-import os
+import customtkinter as ctk
 
 
 # The types of files that this class can detect and handle
@@ -58,7 +58,7 @@ class FileHandler:
         return {"format": file_format, "icon": file_icon}
 
     @staticmethod
-    def display_file_to_frame_from_info(master, item_info: dict) -> None:
+    def display_file_to_frame_from_info(master: ctk.CTkTabview, item_info: dict) -> None:
 
         # Creating file format variable
         file_format = item_info["tags"][1]
@@ -71,13 +71,16 @@ class FileHandler:
         match file_format:
 
             case "JavaScriptObjectNotation":
-                pass    # TODO: Stub
+                return None    # TODO: Stub
 
             case "YetAnotherMarkupLanguage":
-                pass  # TODO: Stub
+                return None    # TODO: Stub
 
             case "SarcArchive":
-                pass    # TODO: Stub
+                return None    # TODO: Stub
 
             case "ZStandard":
-                pass    # TODO: Stub
+                return None    # TODO: Stub
+
+        messagebox.showerror(title="file_format Error", message="This file is not supported!")
+        master.delete(item_info["text"])
