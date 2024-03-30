@@ -37,7 +37,7 @@ class ProgFunc:
 
             else:   # Creating the "nothing here" label
                 self.nothing_opened_label = ctk.CTkLabel(
-                    master=editor_frame,
+                    master=self.master,
                     text="Double click a file in the Project Tree to edit!",
                     anchor="center",
                     width=999999999,
@@ -47,7 +47,7 @@ class ProgFunc:
                 )
                 self.nothing_opened_label.pack(anchor="center")
 
-        def open_file(self):
+        def open_file(self, _input, mode="i"):
             pass    # TODO: Stub
 
         def update(self):
@@ -57,10 +57,10 @@ class ProgFunc:
 
     class ProjectTreeView:
         @staticmethod
-        def on_double_click(self, event=None):
+        def on_double_click(self, file_editor, event=None):
             curItem = self.focus()
             item_info = self.item(curItem)
-            print(item_info)    # TODO: Finish func
+            file_editor.open_file(_input=item_info, mode="i")
 
         @staticmethod
         def on_key(self, event=None):
@@ -421,6 +421,12 @@ def project_editor(app):
         else:
             raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
 
+    ############################
+    #   editor_frame  config   #
+    ############################
+
+    file_editor = ProgFunc.FileEditor(master=editor_frame, app=app)
+
     ################################
     #   navigation_frame  config   #
     ################################
@@ -511,7 +517,7 @@ def project_editor(app):
         height=99999999,
     )
     project_treeview.pack(fill="both", side="top")
-    project_treeview.bind("<Double-Button-1>", partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview))
+    project_treeview.bind("<Double-Button-1>", partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview, file_editor))
     project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview))
     project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, project_treeview))
 
@@ -575,10 +581,6 @@ def project_editor(app):
                 )
 
         counter += 1
-
-    ############################
-    #   editor_frame  config   #
-    ############################
 
 
     # TODO: Configure and create children for each frame.
