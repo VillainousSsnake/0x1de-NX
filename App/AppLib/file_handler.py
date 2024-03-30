@@ -39,7 +39,7 @@ FileFormatIcons = {
 CodeViewColorScheme = {
   "editor": {
     "bg": "#242424",
-    "fg": "#242424",
+    "fg": "#4B5059",
     "select_bg": "#44475a",
     "select_fg": "#f8f8f2",
     "inactive_select_bg": "#402725",
