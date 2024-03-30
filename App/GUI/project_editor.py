@@ -569,7 +569,7 @@ def project_editor(app):
         "<Double-Button-1>",
         partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview, file_editor)
     )
-    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview))
+    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_key, project_treeview))
     project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, project_treeview))
 
     vsb = ttk.Scrollbar(project_tree_treeview_frame, orient="vertical", command=project_treeview.yview)
