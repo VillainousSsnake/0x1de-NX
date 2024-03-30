@@ -11,6 +11,7 @@ from functools import partial
 import customtkinter as ctk
 from CTkMenuBar import *
 from tkinter import ttk
+import tkinter as tk
 import os
 
 
@@ -26,9 +27,13 @@ class ProgFunc:
                      app,
                      tabs: list = None
                      ):
-            self.tabview = ctk.CTkTabview(master, height=1000)
+            self.tabview = ctk.CTkTabview(
+                master,
+                height=99999999,
+                width=99999999,
+                anchor="w",
+            )
             self.master = master
-            self.tabs = tabs
             self.app = app
 
             if tabs is not None:    # Creating the tabs
@@ -56,9 +61,42 @@ class ProgFunc:
             # Destroying nothing opened indicator label
             if self.nothing_opened_label.winfo_exists():
                 self.nothing_opened_label.destroy()
+                self.tabview.pack(side="top", anchor="w")
 
-            # Console output
-            print(item_info)   # TODO: Remove and finish func
+            def close_tab_command():
+                self.tabview.delete(item_info["text"])
+
+                # If the tabview doesn't have any tabs left
+                if self.tabview.get() == "":
+
+                    # Resetting the tabview
+                    self.tabview.destroy()
+                    self.tabview = ctk.CTkTabview(
+                        self.master,
+                        height=99999999,
+                        width=99999999,
+                        anchor="w",
+                    )
+
+                    # Creating the nothing opened label
+                    self.nothing_opened_label = ctk.CTkLabel(
+                        master=self.master,
+                        text="Double click a file in the Project Tree to edit!",
+                        anchor="center",
+                        width=999999999,
+                        height=999999999,
+                        font=("monospace", 25, 'italic'),
+                        text_color="grey",
+                    )
+                    self.nothing_opened_label.pack(anchor="center")
+
+            # Creating the tab
+            tab = self.tabview.add(item_info["text"])
+
+            # TODO: Create the close button for the tab
+
+            # Displaying the file
+            FileHandler.display_file_to_frame_from_info(tab, item_info)
 
         def update(self):
             self.tabview.pack(side="top", anchor="w")
