@@ -66,7 +66,7 @@ class ProgFunc:
 
             # If statement for if the tab exists or not
             if item_info["text"] not in self.tabview._tab_dict:  # Creating tab because tab doesn't exist
-                print(self.tabview._tab_dict)
+
                 def close_tab_command():
                     self.tabview.delete(item_info["text"])
 
