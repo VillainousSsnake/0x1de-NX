@@ -2,6 +2,7 @@
 # This is a file handler module
 
 # Importing modules and libraries
+from tkinter import messagebox
 import os
 
 
@@ -57,5 +58,26 @@ class FileHandler:
         return {"format": file_format, "icon": file_icon}
 
     @staticmethod
-    def display_file_to_frame_from_info(master, item_info):
-        pass    # TODO: Stub
+    def display_file_to_frame_from_info(master, item_info: dict) -> None:
+
+        # Creating file format variable
+        file_format = item_info["tags"][1]
+
+        # Detecting if the format is recognized
+        if file_format is None:
+            messagebox.showerror(title="file_format Error", message="This file is not supported!")
+            return None
+
+        match file_format:
+
+            case "JavaScriptObjectNotation":
+                pass    # TODO: Stub
+
+            case "YetAnotherMarkupLanguage":
+                pass  # TODO: Stub
+
+            case "SarcArchive":
+                pass    # TODO: Stub
+
+            case "ZStandard":
+                pass    # TODO: Stub
