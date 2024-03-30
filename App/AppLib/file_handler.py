@@ -58,7 +58,7 @@ class FileHandler:
         return {"format": file_format, "icon": file_icon}
 
     @staticmethod
-    def display_file_to_tabview_from_info(master: ctk.CTkTabview, item_info: dict) -> None:
+    def display_file_to_tabview_from_info(tabview: ctk.CTkTabview, item_info: dict) -> None:
 
         # Creating file format variable
         file_format = item_info["tags"][1]
@@ -83,4 +83,4 @@ class FileHandler:
                 return None    # TODO: Stub
 
         messagebox.showerror(title="file_format Error", message="This file is not supported!")
-        master.delete(item_info["text"])
+        tabview.delete(item_info["text"])
