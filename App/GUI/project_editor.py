@@ -29,6 +29,7 @@ class ProgFunc:
                      ):
             self.tabview = ctk.CTkTabview(
                 master,
+                fg_color="#242424",
                 height=99999999,
                 width=99999999,
                 anchor="w",
@@ -73,6 +74,7 @@ class ProgFunc:
                     self.tabview.destroy()
                     self.tabview = ctk.CTkTabview(
                         self.master,
+                        fg_color="#242424",
                         height=99999999,
                         width=99999999,
                         anchor="w",
