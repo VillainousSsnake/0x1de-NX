@@ -226,8 +226,6 @@ class FileHandler:
                 return None
 
             case "SarcArchive":                     # TODO: Displaying SARC format
-                Sarc.
-
                 # Exiting function
                 return None
 
