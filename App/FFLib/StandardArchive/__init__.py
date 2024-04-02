@@ -27,12 +27,28 @@ class Sarc:
         match mode:
 
             case "fp":
-                pass    # TODO: Stub
+
+                # Creating sarc controller
+                with open(_input, "rb") as f_in:
+                    sarc_controller = sarc.read_file_and_make_sarc(f_in)
+
+                # Setting output to the list of files
+                output = sarc_controller.list_files()
 
             case "d":
-                pass    # TODO: Stub
+
+                # Creating the sarc controller
+                sarc_controller = sarc.SARC(_input)
+
+                # Setting output to the list of files
+                output = sarc_controller.list_files()
 
             case "s":
-                pass    # TODO: Stub
+
+                # Creating sarc controller with file object
+                sarc_controller = sarc.read_file_and_make_sarc(_input)
+
+                # Setting output to the list of files
+                output = sarc_controller.list_files()
 
         return output
