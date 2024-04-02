@@ -581,11 +581,6 @@ def project_editor(app):
     project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_key, project_treeview))
     project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, project_treeview))
 
-    vsb = ttk.Scrollbar(project_tree_treeview_frame, orient="vertical", command=project_treeview.yview)
-    vsb.pack(side="right", fill="y")
-
-    project_treeview.configure(yscrollcommand=vsb.set)
-
     # Inserting all the files and folders into tree view
     sub_directories = [x[0] for x in os.walk(app.variables["open_project_fp"])]
     counter = 0
