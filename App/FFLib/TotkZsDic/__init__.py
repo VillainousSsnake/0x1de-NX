@@ -42,6 +42,10 @@ class ZsDic:
         )
 
     @staticmethod
+    def detect_zstandard_dict(file_name):
+        pass    # TODO: Stub
+
+    @staticmethod
     def auto_decompress_file(file_path) -> bytes:
 
         # Creating output variable
