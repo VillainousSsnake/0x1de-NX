@@ -4,7 +4,7 @@ import zipfile
 
 class ZsDic:
     @staticmethod
-    def get_dict(dict_type: str) -> bytes:
+    def get_dict(dict_type: str) -> bytes | None:
         """
         :param dict_type: type of dictionary to return. Can be 'zs', 'pack', 'bcett', or 'byml'
         :return: bytes or binary data
@@ -32,6 +32,9 @@ class ZsDic:
 
             case 'bcett.byml':  # If dict_type is 'bcett.byml'
                 return zip_controller.read(name='bcett.byml.zsdic')
+
+            case None:
+                return None
 
         # If dict_type wasn't a valid value, raise error
         raise ValueError(
