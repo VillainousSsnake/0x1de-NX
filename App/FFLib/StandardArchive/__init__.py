@@ -33,11 +33,13 @@ class Sarc:
 
                 # Getting the file data and magic
                 with open(_input, "rb") as f_in:
-                    file_data = f_in.read()
                     file_magic = f_in.read(4)
 
+                with open(_input, "rb") as f_in:
+                    file_data = f_in.read()
+
                 # Detecting if the file is zstandard
-                if file_magic == b"\x28\xb5\x2f\xfd":
+                if file_magic == b"(\xb5/\xfd":
                     file_data = ZsDic.auto_decompress_file(_input)
 
                 # Creating the sarc controller
