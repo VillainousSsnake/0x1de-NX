@@ -43,4 +43,14 @@ class ZsDic:
 
     @staticmethod
     def auto_decompress_file(file_path) -> bytes:
-        pass    # TODO: Stub
+
+        # Creating output variable
+        output = bytes()
+
+        # Creating the file name variable
+        file_name = os.path.basename(file_path)
+
+        # TODO: Put code here
+
+        # Returning output
+        return output
