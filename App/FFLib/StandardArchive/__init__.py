@@ -4,13 +4,14 @@
 # Importing modules
 import zstandard
 import tempfile
-import os
 import sarc
+import os
+import io
 
 
 class Sarc:
     @staticmethod
-    def list_sarc_contents(_input: os.PathLike | bytes, mode="fp") -> list:
+    def list_sarc_contents(_input: os.PathLike | bytes | io.BytesIO, mode="fp") -> list:
         """
         :param _input: Input data (Type depends on the mode)
         :param mode: The mode of the function (Modes explained below)
@@ -29,6 +30,9 @@ class Sarc:
                 pass    # TODO: Stub
 
             case "d":
+                pass    # TODO: Stub
+
+            case "s":
                 pass    # TODO: Stub
 
         return output
