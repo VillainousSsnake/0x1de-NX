@@ -1,5 +1,6 @@
-import os
+import zstandard
 import zipfile
+import os
 
 
 class ZsDic:
@@ -42,7 +43,7 @@ class ZsDic:
         )
 
     @staticmethod
-    def detect_zstandard_dict(file_name) -> str | None:
+    def detect_zstandard_dict(file_name: str) -> str | None:
         """
         Automatically detects which dictionary to return when given the file's file name
         :param file_name: The file name of the file
@@ -62,15 +63,36 @@ class ZsDic:
         return None
 
     @staticmethod
-    def auto_decompress_file(file_path) -> bytes:
+    def auto_decompress_file(file_path: str) -> bytes | None:
+        """
+        Automatically decompresses a zstandard file depending on the file name.
+        :param file_path: The file path to the input file.
+        :return: the decompressed input file.
+        """
 
         # Creating output variable
-        output = bytes()
+        output = None
 
         # Creating the file name variable
         file_name = os.path.basename(file_path)
 
-        # TODO: Put code here
+        # Getting the zstandard dictionary type
+        dict_type = ZsDic.detect_zstandard_dict(file_name)
+
+        # Getting the correct zstandard dictionary data
+        dict_data = ZsDic.get_dict(dict_type)
+
+        # Creating the zstandard decompressor
+        zs_decompressor = zstandard.ZstdDecompressor(
+            dict_data=dict_data,
+        )
+
+        # Getting the file data
+        with open(file_path, "rb") as f:
+            file_data = f.read()
+
+        # Decompressing the file data into the output variable
+        output = zs_decompressor.decompress(file_data)
 
         # Returning output
         return output
