@@ -63,7 +63,7 @@ class ZsDic:
         return None
 
     @staticmethod
-    def auto_decompress_file(file_path: str) -> bytes | None:
+    def auto_decompress_file(file_path: str | os.PathLike) -> bytes | None:
         """
         Automatically decompresses a zstandard file depending on the file name.
         :param file_path: The file path to the input file.
