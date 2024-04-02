@@ -46,7 +46,10 @@ class Sarc:
                 sarc_controller = sarc.SARC(file_data)
 
                 # Setting output to the list of files
-                output = sarc_controller.list_files()
+                output = []
+
+                for key in sarc_controller.list_files().mapping:
+                    output.append(key)
 
             case "d":
 
