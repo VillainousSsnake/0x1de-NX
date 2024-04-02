@@ -2,10 +2,11 @@
 # This is a file handler module
 
 # Importing libraries
-from tkinter import messagebox
-import customtkinter as ctk
 from pygments.lexers import data as pylexers
+from tkinter import messagebox, ttk
+import customtkinter as ctk
 from chlorophyll import *
+import os
 
 # Importing modules and file dependencies
 from App.FFLib.StandardArchive import Sarc
@@ -225,7 +226,73 @@ class FileHandler:
                 # Exiting function
                 return None
 
-            case "SarcArchive":                     # TODO: Displaying SARC format
+            case "SarcArchive":                     # TODO: Fix Displaying SARC format
+
+                # Getting the list of sarc files
+                sarc_list = Sarc.list_sarc_contents(item_info["values"][0], mode='fp')
+
+                # Configuring children of project_tree_treeview_frame
+                FONT = ("monospace", int(app.settings["font_size"]))
+                ROW_HEIGHT = int(int(app.settings["font_size"]) * 2.5)
+
+                # Minimum and maximum for font size for project Treeview widget
+                if int(app.settings["font_size"]) > 25:
+                    FONT = ("monospace", 25)
+                    ROW_HEIGHT = 50
+                if int(app.settings["font_size"]) < 18:
+                    FONT = None
+
+                # Creating tree-view style
+                tree_style = ttk.Style()
+                tree_style.theme_use('default')
+                tree_style.configure(
+                    "Treeview",
+                    background="#2B2B2B",
+                    foreground="white",
+                    fieldbackground="#2B2B2B",
+                    borderwidth=0,
+                )
+
+                # Applying fonts
+                if FONT is not None:
+                    tree_style.configure(
+                        "Treeview",
+                        font=FONT,
+                        rowheight=ROW_HEIGHT
+                    )
+
+                sarc_treeview = ttk.Treeview(  # Project treeview
+                    master=master,
+                    show="tree",
+                    height=99999999,
+                )
+                sarc_treeview.pack(fill="both", side="top")
+
+                # Inserting all the files and folders into tree view
+                counter = 0
+                for file_path in sarc_list:
+                    # Creating the item parameter variables
+                    file_parent = os.path.split(file_path)[0]
+                    file_name = os.path.basename(file_path)
+                    file_iid = file_path
+                    file_format = FileHandler.get_file_info_from_name(file_name)["format"]
+                    file_icon = FileHandler.get_file_info_from_name(file_name)["icon"]
+                    file_text = file_icon + " " + os.path.basename(file_path)
+
+                    # Making the parent an empty string if it is the first folder
+                    if counter == 0:
+                        file_parent = ""
+
+                    # Creating the file
+                    sarc_treeview.insert(
+                        parent=file_parent,
+                        index="end",
+                        iid=file_iid,
+                        text=file_text,
+                        tags=["File", file_format],
+                        values=[file_path],
+                    )
+
                 # Exiting function
                 return None
 
