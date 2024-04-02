@@ -70,9 +70,6 @@ class ZsDic:
         :return: the decompressed input file.
         """
 
-        # Creating output variable
-        output = None
-
         # Creating the file name variable
         file_name = os.path.basename(file_path)
 
