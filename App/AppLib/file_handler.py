@@ -182,6 +182,17 @@ class FileHandler:
                     pretty_json = json.dumps(parsed_data, indent=4) + "\n"
                     code_view.insert(0.0, pretty_json)
 
+                    # Creating the update function
+                    def update_on_key(event=None):
+                        code_view_contents = code_view.get("0.0", "end")
+                        with open(item_info["values"][0], "w") as f:
+                            f.write(code_view_contents)
+
+                    # Assigning update function
+                    code_view.bind("<Key>", update_on_key)
+                    code_view.bind("<1>", update_on_key)
+                    code_view.bind("<Update>", update_on_key())
+
                 # Exiting function
                 return None
 
@@ -204,6 +215,17 @@ class FileHandler:
                     pretty_yaml = yaml.dump(parsed_data, default_flow_style=False)
                     code_view.insert(0.0, pretty_yaml)
 
+                    # Creating the update function
+                    def update_on_key(event=None):
+                        code_view_contents = code_view.get("0.0", "end")
+                        with open(item_info["values"][0], "w") as f:
+                            f.write(code_view_contents)
+
+                    # Assigning update function
+                    code_view.bind("<Key>", update_on_key)
+                    code_view.bind("<1>", update_on_key)
+                    code_view.bind("<Update>", update_on_key())
+
                 # Exiting function
                 return None
 
@@ -222,6 +244,17 @@ class FileHandler:
                 # Inserting the yaml data into the code view widget
                 with open(item_info["values"][0], "r") as file_in:
                     code_view.insert(0.0, file_in.read())
+
+                # Creating the update function
+                def update_on_key(event=None):
+                    code_view_contents = code_view.get("0.0", "end")
+                    with open(item_info["values"][0], "w") as f:
+                        f.write(code_view_contents)
+
+                # Assigning update function
+                code_view.bind("<Key>", update_on_key)
+                code_view.bind("<1>", update_on_key)
+                code_view.bind("<Update>", update_on_key())
 
                 # Exiting function
                 return None
