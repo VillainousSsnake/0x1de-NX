@@ -30,10 +30,7 @@ class ZsDic:
             case 'pack':    # If dict_type is 'pack'
                 return zip_controller.read(name='pack.zsdic')
 
-            case 'bcett':   # If dict_type is 'bcett'
-                return zip_controller.read(name='bcett.byml.zsdic')
-
-            case 'byml':    # If dict_type is 'byml'
+            case 'bcett.byml':  # If dict_type is 'bcett.byml'
                 return zip_controller.read(name='bcett.byml.zsdic')
 
         # If dict_type wasn't a valid value, raise error
@@ -42,8 +39,24 @@ class ZsDic:
         )
 
     @staticmethod
-    def detect_zstandard_dict(file_name):
-        pass    # TODO: Stub
+    def detect_zstandard_dict(file_name) -> str | None:
+        """
+        Automatically detects which dictionary to return when given the file's file name
+        :param file_name: The file name of the file
+        :return: bytes or None
+        """
+
+        if '.pack.zs' in file_name:  # If dict type is 'pack'
+            return 'pack'
+
+        elif 'bcett.byml.zs' in file_name:  # If dict type is 'bcett.byml'
+            return 'bcett.byml'
+
+        elif '.zs' in file_name:  # If dict type is 'zs'
+            return 'zs'
+
+        # Returning None if no dictionary was detected
+        return None
 
     @staticmethod
     def auto_decompress_file(file_path) -> bytes:
