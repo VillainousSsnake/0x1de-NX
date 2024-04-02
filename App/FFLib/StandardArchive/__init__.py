@@ -2,6 +2,7 @@
 # Contains Sarc class
 
 # Importing modules
+from App.FFLib.TotkZsDic import ZsDic
 import zstandard
 import tempfile
 import sarc
@@ -11,7 +12,9 @@ import typing
 
 class Sarc:
     @staticmethod
-    def list_sarc_contents(_input: os.PathLike | bytes | typing.BinaryIO, mode="fp") -> list:
+    def list_sarc_contents(
+            _input: os.PathLike | bytes | typing.BinaryIO,
+            mode: str) -> list:
         """
         :param _input: Input data (Type depends on the mode)
         :param mode: The mode of the function (Modes explained below)
@@ -28,9 +31,17 @@ class Sarc:
 
             case "fp":
 
-                # Creating sarc controller
+                # Getting the file data and magic
                 with open(_input, "rb") as f_in:
-                    sarc_controller = sarc.read_file_and_make_sarc(f_in)
+                    file_data = f_in.read()
+                    file_magic = f_in.read(4)
+
+                # Detecting if the file is zstandard
+                if file_magic == b"\x28\xb5\x2f\xfd":
+                    file_data = ZsDic.auto_decompress_file(_input)
+
+                # Creating the sarc controller
+                sarc_controller = sarc.SARC(file_data)
 
                 # Setting output to the list of files
                 output = sarc_controller.list_files()
