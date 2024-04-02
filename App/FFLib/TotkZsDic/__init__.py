@@ -5,7 +5,7 @@ import os
 
 class ZsDic:
     @staticmethod
-    def get_dict(dict_type: str) -> bytes | None:
+    def get_dict(dict_type: str) -> zstandard.ZstdCompressionDict | None:
         """
         :param dict_type: type of dictionary to return. Can be 'zs', 'pack', 'bcett', or 'byml'
         :return: bytes or binary data
@@ -26,13 +26,19 @@ class ZsDic:
         match dict_type:
 
             case 'zs':  # If dict_type is 'zs'
-                return zip_controller.read(name='zs.zsdic')
+                return zstandard.ZstdCompressionDict(
+                    zip_controller.read(name='zs.zsdic')
+                )
 
             case 'pack':    # If dict_type is 'pack'
-                return zip_controller.read(name='pack.zsdic')
+                return zstandard.ZstdCompressionDict(
+                    zip_controller.read(name='pack.zsdic')
+                )
 
             case 'bcett.byml':  # If dict_type is 'bcett.byml'
-                return zip_controller.read(name='bcett.byml.zsdic')
+                return zstandard.ZstdCompressionDict(
+                    zip_controller.read(name='bcett.byml.zsdic')
+                )
 
             case None:
                 return None
