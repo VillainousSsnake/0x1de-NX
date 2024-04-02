@@ -40,3 +40,7 @@ class ZsDic:
         raise ValueError(
             "dict_type param may either be 'zs', 'pack', 'bcett', or 'byml'. It can't be " + dict_type
         )
+
+    @staticmethod
+    def auto_decompress_file(file_path) -> bytes:
+        pass    # TODO: Stub
