@@ -1,6 +1,5 @@
 # /App/GUI/main_menu.py
 # Contains main menu code
-import webbrowser
 
 # Importing SubWin modules
 from App.GUI.SubWin.main_menu.open_project import open_project as subwin_open_project
@@ -733,7 +732,7 @@ class SegmentedButtonMenu:
             font=("inter", 25),
             width=-10,
             fg_color="#242424",
-            command=partial(webbrowser.open, "https://discord.gg/GA5qfJ53bK")
+            command=partial(wb.open, "https://discord.gg/GA5qfJ53bK")
         )
         discord_button.pack(side="bottom", pady=20)
 
