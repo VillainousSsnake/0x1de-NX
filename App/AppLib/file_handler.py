@@ -318,7 +318,7 @@ class FileHandler:
                                 parent="",
                                 index="end",
                                 iid=item,
-                                text=item,
+                                text=chr(0x0001F4C1) + " " + item,
                             )
                     else:   # If there is "/" in item
 
@@ -343,7 +343,7 @@ class FileHandler:
                                     parent=os.path.split(key)[0],
                                     index="end",
                                     iid=key,
-                                    text=os.path.basename(key),
+                                    text=chr(0x0001F4C1) + " " + os.path.basename(key),
                                 )
 
                 # Exiting function
