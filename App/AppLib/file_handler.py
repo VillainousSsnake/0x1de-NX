@@ -301,30 +301,50 @@ class FileHandler:
                 )
                 sarc_treeview.pack(fill="both", side="top")
 
-                # Inserting all the files and folders into tree view
-                counter = 0
+                # Inserting all the folders into tree view
+                dir_list = []
+
                 for file_path in sarc_list:
-                    # Creating the item parameter variables
-                    file_parent = os.path.split(file_path)[0]
-                    file_name = os.path.basename(file_path)
-                    file_iid = file_path
-                    file_format = FileHandler.get_file_info_from_name(file_name)["format"]
-                    file_icon = FileHandler.get_file_info_from_name(file_name)["icon"]
-                    file_text = file_icon + " " + os.path.basename(file_path)
 
-                    # Making the parent an empty string if it is the first folder
-                    if counter == 0:
-                        file_parent = ""
+                    if os.path.split(file_path)[0] not in dir_list:
+                        dir_list.append(os.path.split(file_path)[0])
 
-                    # Creating the file
-                    sarc_treeview.insert(
-                        parent=file_parent,
-                        index="end",
-                        iid=file_iid,
-                        text=file_text,
-                        tags=["File", file_format],
-                        values=[file_path],
-                    )
+                for item in dir_list:
+                    folder_parent = os.path.split(item)[0]
+
+                    if "/" not in item:  # Adding the items that don't have sub-folders
+                        if not sarc_treeview.exists(item):
+                            sarc_treeview.insert(
+                                parent="",
+                                index="end",
+                                iid=item,
+                                text=item,
+                            )
+                    else:   # If there is "/" in item
+
+                        # Creating item_folders_dict
+                        item_folders_dict = dict()
+                        parent = ""
+
+                        for name in item.split("/"):
+                            parent += name + "/"
+                            item_folders_dict[parent[:len(parent)-1]] = sarc_treeview.exists(parent[:len(parent)-1])
+
+                        del parent
+
+                        # Check each item to see if it exists and if not create the item
+                        for key in item_folders_dict:
+
+                            # If the item doesn't exist
+                            if not item_folders_dict[key]:
+
+                                # Creating the item
+                                sarc_treeview.insert(
+                                    parent=os.path.split(key)[0],
+                                    index="end",
+                                    iid=key,
+                                    text=os.path.basename(key),
+                                )
 
                 # Exiting function
                 return None
