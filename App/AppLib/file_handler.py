@@ -311,7 +311,6 @@ class FileHandler:
                         dir_list.append(os.path.split(file_path)[0])
 
                 for item in dir_list:
-                    folder_parent = os.path.split(item)[0]
 
                     if "/" not in item:  # Adding the items that don't have sub-folders
                         if not sarc_treeview.exists(item):
