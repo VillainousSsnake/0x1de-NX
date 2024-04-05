@@ -696,17 +696,24 @@ class SegmentedButtonMenu:
 
     def create_info_menu(self):
 
-        # Creating frames
+        # Creating and configuring the title label
+        title_label = ctk.CTkLabel(
+            master=self.master,
+            text="About 0x1de-NX",
+            font=("Inter", 30, 'bold'),
+        )
+        self.object_list.append(title_label)
+
         social_frame = ctk.CTkFrame(
             master=self.master,
-            fg_color="#242424"
+            fg_color="#242424",
+            width=999999999,
         )
-        social_frame.pack(fill='x', side='top', anchor='w')
         self.object_list.append(social_frame)
 
         scroll_frame = ctk.CTkScrollableFrame(
             master=self.master,
-            width=99999,
+            width=999999999,
             fg_color="#242424"
         )
         scroll_frame.pack(fill="both", side="left")
@@ -721,13 +728,24 @@ class SegmentedButtonMenu:
                 size=(64, 64),
             ),
             text="Join the Discord!",
-            font=("monospace", 25),
+            font=("inter", 25),
             width=-10,
             fg_color="#242424"
         )
-        discord_button.pack(side="top", anchor="w")
+        discord_button.pack(side="bottom", pady=20)
 
-        # TODO: Finish
+        # Creating and configuring children of social_frame
+        oxide_nx_desc = """
+        0x1de NX is a modding tool for Zelda: Tears of the Kingdom modders that aims to make modding 
+        and playing/managing mods as simple and easy as possible.
+        """
+        info_label = ctk.CTkLabel(
+            master=scroll_frame,
+            text=oxide_nx_desc,
+            font=("inter", 16, 'italic'),
+            wraplength=400,
+        )
+        info_label.pack(anchor="center", pady=20, padx=20)
 
     def show_projects_menu(self):
         self.object_list[0].pack(side="top", fill="x")
@@ -741,8 +759,9 @@ class SegmentedButtonMenu:
         self.object_list[4].pack(fill='both', side='left')
 
     def show_info_menu(self):
-        self.object_list[5].pack(fill='x', side='top', anchor='w')
-        self.object_list[6].pack(fill='both', side='left')
+        self.object_list[5].pack(side="top", padx=20, pady=30, fill="x")
+        self.object_list[7].pack(side="top", padx=20, pady=20)
+        self.object_list[6].pack(side="top")
 
     def hide_current_menu(self):
         for obj in self.object_list:
