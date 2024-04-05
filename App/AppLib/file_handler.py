@@ -279,10 +279,10 @@ class FileHandler:
                 tree_style = ttk.Style()
                 tree_style.theme_use('default')
                 tree_style.configure(
-                    "Treeview",
-                    background="#2B2B2B",
+                    "sarcStyle.Treeview",
+                    background="#242424",
                     foreground="white",
-                    fieldbackground="#2B2B2B",
+                    fieldbackground="#242424",
                     borderwidth=0,
                 )
 
@@ -298,6 +298,7 @@ class FileHandler:
                     master=master,
                     show="tree",
                     height=99999999,
+                    style="sarcStyle.Treeview"
                 )
                 sarc_treeview.pack(fill="both", side="top")
 
