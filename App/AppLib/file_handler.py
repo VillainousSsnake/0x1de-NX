@@ -346,6 +346,15 @@ class FileHandler:
                                     text=chr(0x0001F4C1) + " " + os.path.basename(key),
                                 )
 
+                # Inserting all the files into tree view
+                for item_path in sarc_list:
+                    sarc_treeview.insert(
+                        index="end",
+                        parent=os.path.split(item_path)[0],
+                        iid=item_path,
+                        text=os.path.basename(item_path),
+                    )
+
                 # Exiting function
                 return None
 
