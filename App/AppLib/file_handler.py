@@ -352,7 +352,8 @@ class FileHandler:
                         index="end",
                         parent=os.path.split(item_path)[0],
                         iid=item_path,
-                        text=os.path.basename(item_path),
+                        text=(FileHandler.get_file_info_from_name(os.path.basename(item_path))["icon"]
+                              + " " + os.path.basename(item_path)),
                     )
 
                 # Exiting function
