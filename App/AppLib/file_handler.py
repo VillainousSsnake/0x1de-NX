@@ -160,7 +160,7 @@ class FileHandler:
         return {"format": file_format, "icon": file_icon}
 
     @staticmethod
-    def display_file_to_tabview_from_info(app, tabview: ctk.CTkTabview, item_info: dict, fileEditorObj) -> None:
+    def display_file_to_tabview_from_info(app, tabview: ctk.CTkTabview, item_info: dict, file_editor_obj=None) -> None:
 
         # Creating file format variable
         file_format = item_info["tags"][1]
@@ -310,14 +310,16 @@ class FileHandler:
                 )
                 sarc_treeview.pack(fill="both", side="top")
 
-                # Defining the open_file function for sarc_treeview
-                def open_item(event=None):
-                    pass    # TODO: Stub
+                # Defining the on_double_click function for sarc_treeview
+                def on_double_click(file_editor, event=None):
+                    curItem = sarc_treeview.focus()
+                    itemInfo = sarc_treeview.item(curItem)
+                    file_editor.open_file(app, item_info=itemInfo)
 
                 # Binding the open function to sarc treeview
                 sarc_treeview.bind(
                     "<Double-Button-1>",
-                    partial(open_item)
+                    partial(on_double_click, file_editor_obj)
                 )
 
                 # Inserting all the folders into tree view
