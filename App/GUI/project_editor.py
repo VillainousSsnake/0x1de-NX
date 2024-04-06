@@ -102,7 +102,7 @@ class ProgFunc:
                 # TODO: Create the close button for the tab
 
                 # Displaying the file
-                FileHandler.display_file_to_tabview_from_info(app, self.tabview, item_info, fileEditorObj=self)
+                FileHandler.display_file_to_tabview_from_info(app, self.tabview, item_info, self)
 
             else:    # Switching tab to existing one because tab exists
                 self.tabview.set(item_info["text"])
