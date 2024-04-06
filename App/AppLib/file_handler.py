@@ -4,6 +4,7 @@
 # Importing libraries
 from pygments.lexers import data as pylexers
 from tkinter import messagebox, ttk
+from functools import partial
 import customtkinter as ctk
 from chlorophyll import *
 import os
@@ -159,7 +160,7 @@ class FileHandler:
         return {"format": file_format, "icon": file_icon}
 
     @staticmethod
-    def display_file_to_tabview_from_info(app, tabview: ctk.CTkTabview, item_info: dict) -> None:
+    def display_file_to_tabview_from_info(app, tabview: ctk.CTkTabview, item_info: dict, fileEditorObj) -> None:
 
         # Creating file format variable
         file_format = item_info["tags"][1]
@@ -266,7 +267,7 @@ class FileHandler:
                 # Exiting function
                 return None
 
-            case "SarcArchive":                     # TODO: Fix Displaying SARC format
+            case "SarcArchive":                     # TODO: Finish opening files (Displaying SARC format)
 
                 # Getting the list of sarc files
                 sarc_list = Sarc.list_sarc_contents(item_info["values"][0], mode='fp')
@@ -308,6 +309,16 @@ class FileHandler:
                     style="sarcStyle.Treeview"
                 )
                 sarc_treeview.pack(fill="both", side="top")
+
+                # Defining the open_file function for sarc_treeview
+                def open_item(event=None):
+                    pass    # TODO: Stub
+
+                # Binding the open function to sarc treeview
+                sarc_treeview.bind(
+                    "<Double-Button-1>",
+                    partial(open_item)
+                )
 
                 # Inserting all the folders into tree view
                 dir_list = []
