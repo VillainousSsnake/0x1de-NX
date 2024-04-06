@@ -339,6 +339,7 @@ class FileHandler:
                                 index="end",
                                 iid=item,
                                 text=chr(0x0001F4C1) + " " + item,
+                                tags=["Directory"]
                             )
                     else:   # If there is "/" in item
 
@@ -364,6 +365,7 @@ class FileHandler:
                                     index="end",
                                     iid=key,
                                     text=chr(0x0001F4C1) + " " + os.path.basename(key),
+                                    tags=["Directory"],
                                 )
 
                 # Inserting all the files into tree view
@@ -374,6 +376,11 @@ class FileHandler:
                         iid=item_path,
                         text=(FileHandler.get_file_info_from_name(os.path.basename(item_path))["icon"]
                               + " " + os.path.basename(item_path)),
+                        tags=[
+                            "File",
+                            FileHandler.get_file_info_from_name(os.path.basename(item_path))["format"]
+                        ],
+                        values=[item_path],
                     )
 
                 # Exiting function
