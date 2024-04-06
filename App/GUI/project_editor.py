@@ -53,7 +53,7 @@ class ProgFunc:
                 )
                 self.nothing_opened_label.pack(anchor="center")
 
-        def open_file(self, app, item_info, mode: str = "fp") -> None:
+        def open_file(self, app, item_info) -> None:
 
             # Detecting the type of given input, and if it is a Directory then it exits the func
             if item_info['tags'][0] == "Directory":
@@ -102,7 +102,7 @@ class ProgFunc:
                 # TODO: Create the close button for the tab
 
                 # Displaying the file
-                FileHandler.display_file_to_tabview_from_info(app, self.tabview, item_info, self, mode)
+                FileHandler.display_file_to_tabview_from_info(app, self.tabview, item_info, self)
 
             else:    # Switching tab to existing one because tab exists
                 self.tabview.set(item_info["text"])

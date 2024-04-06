@@ -160,11 +160,7 @@ class FileHandler:
         return {"format": file_format, "icon": file_icon}
 
     @staticmethod
-    def display_file_to_tabview_from_info(app,
-                                          tabview: ctk.CTkTabview,
-                                          item_info: dict,
-                                          file_editor_obj=None,
-                                          mode: str = 'fp') -> None:
+    def display_file_to_tabview_from_info(app, tabview: ctk.CTkTabview, item_info: dict, file_editor_obj=None) -> None:
 
         # Creating file format variable
         file_format = item_info["tags"][1]
