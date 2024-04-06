@@ -43,7 +43,7 @@ FileFormatIcons = {
     "JavaScriptObjectNotation": chr(0x1F5CF),
     "YetAnotherMarkupLanguage": chr(0x1F5CF),
     "SarcArchive": chr(0x1F5C4),
-    "BinaryYAML": chr(0x1F5CF),
+    "BinaryYAML": chr(0x1F5CE),
     "ZStandard": chr(0xf15b),
     "AINodeBinary": chr(0x1F916),
     "TextFile": chr(0x1F5CF),
