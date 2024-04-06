@@ -21,6 +21,8 @@ ValidFileFormats = {
         ".yaml": "YetAnotherMarkupLanguage",
         ".yml": "YetAnotherMarkupLanguage",
         ".txt": "TextFile",
+        # AINB
+        ".ainb": "AINodeBinary",
         # Sarc Archives
         ".bfarc": "SarcArchive",
         ".bkres": "SarcArchive",
@@ -42,6 +44,7 @@ FileFormatIcons = {
     "SarcArchive": chr(0x1F5C4),
     "BinaryYAML": chr(0x1F5CF),
     "ZStandard": chr(0xf15b),
+    "AINodeBinary": chr(0x1F916),
     "TextFile": chr(0x1F5CF),
     None: chr(0x1F5CB),
 }
