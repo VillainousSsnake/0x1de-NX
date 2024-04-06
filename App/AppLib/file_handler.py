@@ -390,5 +390,8 @@ class FileHandler:
                 # Exiting function
                 return None
 
-        messagebox.showerror(title="file_format Error", message="This file is not supported!")
+        messagebox.showerror(
+            title="file_format Error",
+            message="This file is not supported!\n" + f"Unsupported File Format: " + file_format
+        )
         tabview.delete(item_info["text"])
