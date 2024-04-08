@@ -215,6 +215,9 @@ class FileHandler:
                     pretty_json = json.dumps(parsed_data, indent=4) + "\n"
                     code_view.insert(0.0, pretty_json)
 
+                # Removing the extra new line at the end of file
+                code_view.delete(str(float(code_view.index("end"))-1), "end")
+
                 # Creating the button functions
                 def save_file():
                     code_view_contents = code_view.get("0.0", "end")
@@ -277,6 +280,9 @@ class FileHandler:
                     pretty_yaml = yaml.dump(parsed_data, default_flow_style=False)
                     code_view.insert(0.0, pretty_yaml)
 
+                # Removing the extra new line at the end of file
+                code_view.delete(str(float(code_view.index("end")) - 1), "end")
+
                 # Creating the update function
                 def save_file(event=None):
                     code_view_contents = code_view.get("0.0", "end")
@@ -335,6 +341,9 @@ class FileHandler:
                 # Inserting the yaml data into the code view widget
                 with open(item_info["values"][0], "r") as file_in:
                     code_view.insert(0.0, file_in.read())
+
+                # Removing the extra new line at the end of file
+                code_view.delete(str(float(code_view.index("end")) - 1), "end")
 
                 # Creating the update function
                 def save_file(event=None):
