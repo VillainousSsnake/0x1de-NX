@@ -16,8 +16,9 @@ class Sarc:
         """
         Compresses the given input directory, compresses it as a
         sarc archive, and returns the compressed sarc archive data
-                :param input_dir: Input path for the directory to compress
-                :return: compressed sarc archive data (bytes)
+
+        :param input_dir: Input path for the directory to compress
+        :return: compressed sarc archive data (bytes)
         """
 
         pass    # TODO: Stub
@@ -29,15 +30,16 @@ class Sarc:
             mode: str = "fp",) -> None:
         """
         Extracts sarc files and folders to a directory
-                :param _input: Input path/bytes/stream (Type depends on the mode)
-                :param out_dir: The path to extract the input SARC files
-                :param mode: The mode of the function (Modes explained below)
-                :return: None
 
-                MODES:
-                    - 'fp': Interprets _input as a PathLike object
-                    - 'd': Interprets _input as data
-                    - 's': Interprets _input as a file stream
+        :param _input: Input path/bytes/stream (Type depends on the mode)
+        :param out_dir: The path to extract the input SARC files
+        :param mode: The mode of the function (Modes explained below)
+        :return: None
+
+        MODES:
+            - 'fp': Interprets _input as a PathLike object
+            - 'd': Interprets _input as data
+            - 's': Interprets _input as a file stream
         """
 
         match mode:
@@ -84,6 +86,8 @@ class Sarc:
             _input: os.PathLike | bytes | typing.BinaryIO,
             mode: str) -> list:
         """
+        Returns a list of sarc file paths from within a sarc
+
         :param _input: Input path/bytes/stream (Type depends on the mode)
         :param mode: The mode of the function (Modes explained below)
         :return: list of files
