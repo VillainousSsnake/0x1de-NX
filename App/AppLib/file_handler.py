@@ -215,16 +215,14 @@ class FileHandler:
                     pretty_json = json.dumps(parsed_data, indent=4) + "\n"
                     code_view.insert(0.0, pretty_json)
 
-                    # Creating the update function
-                    def update_on_key(event=None):
-                        code_view_contents = code_view.get("0.0", "end")
-                        with open(item_info["values"][0], "w") as f:
-                            f.write(code_view_contents)
+                # Creating the button functions
+                def save_file():
+                    code_view_contents = code_view.get("0.0", "end")
+                    with open(item_info["values"][0], "w") as f:
+                        f.write(code_view_contents)
 
-                    # Assigning update function
-                    code_view.bind("<Key>", update_on_key)
-                    code_view.bind("<1>", update_on_key)
-                    code_view.bind("<Update>", update_on_key())
+                # Assigning the button functions
+                save_button.configure(command=save_file)
 
                 # Exiting function
                 return None
@@ -273,16 +271,14 @@ class FileHandler:
                     pretty_yaml = yaml.dump(parsed_data, default_flow_style=False)
                     code_view.insert(0.0, pretty_yaml)
 
-                    # Creating the update function
-                    def update_on_key(event=None):
-                        code_view_contents = code_view.get("0.0", "end")
-                        with open(item_info["values"][0], "w") as f:
-                            f.write(code_view_contents)
+                # Creating the update function
+                def save_file(event=None):
+                    code_view_contents = code_view.get("0.0", "end")
+                    with open(item_info["values"][0], "w") as f:
+                        f.write(code_view_contents)
 
-                    # Assigning update function
-                    code_view.bind("<Key>", update_on_key)
-                    code_view.bind("<1>", update_on_key)
-                    code_view.bind("<Update>", update_on_key())
+                # Assigning the button functions
+                save_button.configure(command=save_file)
 
                 # Exiting function
                 return None
@@ -329,15 +325,13 @@ class FileHandler:
                     code_view.insert(0.0, file_in.read())
 
                 # Creating the update function
-                def update_on_key(event=None):
+                def save_file(event=None):
                     code_view_contents = code_view.get("0.0", "end")
                     with open(item_info["values"][0], "w") as f:
                         f.write(code_view_contents)
 
-                # Assigning update function
-                code_view.bind("<Key>", update_on_key)
-                code_view.bind("<1>", update_on_key)
-                code_view.bind("<Update>", update_on_key())
+                # Assigning the button functions
+                save_button.configure(command=save_file)
 
                 # Exiting function
                 return None
