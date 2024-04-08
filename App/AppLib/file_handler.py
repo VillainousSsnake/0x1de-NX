@@ -221,6 +221,12 @@ class FileHandler:
                     with open(item_info["values"][0], "w") as f:
                         f.write(code_view_contents)
 
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX - Save Completed",
+                        "Saved JSON file to '" + item_info["values"][0] + "'",
+                    )
+
                 # Assigning the button functions
                 save_button.configure(command=save_file)
 
@@ -277,6 +283,12 @@ class FileHandler:
                     with open(item_info["values"][0], "w") as f:
                         f.write(code_view_contents)
 
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX - Save Completed",
+                        "Saved YAML file to '" + item_info["values"][0] + "'",
+                    )
+
                 # Assigning the button functions
                 save_button.configure(command=save_file)
 
@@ -329,6 +341,12 @@ class FileHandler:
                     code_view_contents = code_view.get("0.0", "end")
                     with open(item_info["values"][0], "w") as f:
                         f.write(code_view_contents)
+
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX - Save Completed",
+                        "Saved text file to '" + item_info["values"][0] + "'",
+                    )
 
                 # Assigning the button functions
                 save_button.configure(command=save_file)
