@@ -499,7 +499,19 @@ class FileHandler:
 
                 # Creating the button commands for the Save, Import, and Export buttons
                 def save_command():
-                    pass    # TODO: Stub
+
+                    # Getting the new sarc data
+                    new_sarc_data = Sarc.compress_sarc_from_dir(sarc_extract_folder)
+
+                    # Overwriting the file
+                    with open(item_info["values"][0], "wb") as f_out:
+                        f_out.write(new_sarc_data)
+
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX - Save Completed",
+                        "Saved SARC file to '" + item_info["values"][0] + "'",
+                    )
 
                 def import_command():
                     pass    # TODO: Stub
