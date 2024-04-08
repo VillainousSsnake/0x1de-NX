@@ -7,6 +7,7 @@ from tkinter import messagebox, ttk
 from functools import partial
 import customtkinter as ctk
 from chlorophyll import *
+from App.FFLib.AINB import AINB
 import os
 
 # Importing modules and file dependencies
@@ -550,6 +551,78 @@ class FileHandler:
                 save_button.configure(command=save_command)
                 import_button.configure(command=import_command)
                 export_button.configure(command=export_command)
+
+                # Exiting function
+                return None
+
+            case "AINodeBinary":                    # TODO: Displaying AINB Format
+
+                ainb_controller = AINB(input_=item_info["values"][0], mode="fp")
+
+                # Creating the top navigation frame
+                top_navigation_frame = ctk.CTkFrame(
+                    master=master,
+                    height=30,
+                    fg_color="#242424"
+                )
+                top_navigation_frame.pack(fill="x")
+
+                # Creating the Save, Import, and Export buttons
+                save_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x0001F5AB) + " Save",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                save_button.pack(anchor="w", side="left")
+
+                export_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x21EE) + " Export",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                export_button.pack(anchor="w", side="left")
+
+                # Creating code_view
+                code_view = CodeView(
+                    master=master,
+                    color_scheme=CodeViewColorScheme,
+                    width=999999,
+                    height=999999,
+                    font=("Cascadia Code", app.settings["font_size"]),
+                )
+                match app.settings["ainb_code_format"]:
+                    case "YAML":
+                        code_view.configure(lexer=pylexers.YamlLexer)
+                    case "JSON":
+                        code_view.configure(lexer=pylexers.JsonLexer)
+                code_view.pack(fill="both", side="top", anchor="w")
+
+                # Inserting the yaml data into the code view widget
+                if app.settings["ainb_code_format"] == "YAML":
+                    code_view.insert(0.0, ainb_controller.yaml)
+                else:
+                    code_view.insert(0.0, ainb_controller.json)
+
+                # Creating the update function
+                def save_file(event=None):
+                    code_view_contents = code_view.get("0.0", "end")
+                    with open(item_info["values"][0], "wb") as f:
+                        match app.settings["ainb_code_format"]:
+                            case "JSON":
+                                f.write(AINB.json_to_ainb(code_view_contents))
+                            case "YAML":
+                                f.write(AINB.yaml_to_ainb(code_view_contents))
+
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX - Save Completed",
+                        "Saved AINB file to '" + item_info["values"][0] + "'",
+                    )
+
+                # Assigning the button functions
+                save_button.configure(command=save_file)
 
                 # Exiting function
                 return None
