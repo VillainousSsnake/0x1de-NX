@@ -1,18 +1,31 @@
 # /0x1de-NX.py
 # Holds main program code
 
+# Importing libraries
+import shutil
+import sys
+import os
+
 # Importing modules
 from App.AppLib.app import App
 from App.AppLib.index import Index
 
+
+# Clearing the temp folder
+temp_folder = os.path.join(os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_")
+if os.path.exists(temp_folder):
+    shutil.rmtree(temp_folder)
+
+
 # Removing the splash screen
-import sys
 if getattr(sys, 'frozen', False):
     import pyi_splash
     pyi_splash.close()
 
+
 # Creating App variable
 app = App()
+
 
 # Mainloop
 while app.returnStatement != "exit":
