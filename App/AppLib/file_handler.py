@@ -269,6 +269,39 @@ class FileHandler:
 
             case "SarcArchive":                     # TODO: Finish opening files (Displaying SARC format)
 
+                # Creating the top navigation frame
+                top_navigation_frame = ctk.CTkFrame(
+                    master=master,
+                    height=30,
+                    fg_color="#242424"
+                )
+                top_navigation_frame.pack(fill="x")
+
+                # Creating the Save, Import, and Export buttons
+                save_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x0001F5AB) + " Save",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                save_button.pack(anchor="w", side="left")
+
+                import_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x2913) + " Import",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                import_button.pack(anchor="w", side="left")
+
+                export_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x21EE) + " Export",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                export_button.pack(anchor="w", side="left")
+
                 # Getting the list of sarc files
                 sarc_list = Sarc.list_sarc_contents(item_info["values"][0], mode='fp')
 
