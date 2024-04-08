@@ -272,6 +272,18 @@ class FileHandler:
                 # Getting the list of sarc files
                 sarc_list = Sarc.list_sarc_contents(item_info["values"][0], mode='fp')
 
+                # Creating path variables
+                sarc_extract_folder = os.path.join(
+                    os.path.join(os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_"),
+                    str(os.path.basename(item_info["values"][0])).replace(".", "_"),
+                )
+
+                # Creating the sarc_extract_folder
+                os.makedirs(sarc_extract_folder)
+
+                # Extracting the sarc into the folder
+                Sarc.extract_sarc_to_dir(item_info["values"][0], sarc_extract_folder)
+
                 # Configuring children of project_tree_treeview_frame
                 FONT = ("monospace", int(app.settings["font_size"]))
                 ROW_HEIGHT = int(int(app.settings["font_size"]) * 2.5)
@@ -380,7 +392,7 @@ class FileHandler:
                             "File",
                             FileHandler.get_file_info_from_name(os.path.basename(item_path))["format"]
                         ],
-                        values=[item_path],
+                        values=[os.path.join(sarc_extract_folder, item_path)],
                     )
 
                 # Exiting function
