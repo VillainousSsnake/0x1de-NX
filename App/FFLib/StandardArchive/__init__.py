@@ -12,6 +12,17 @@ import typing
 
 class Sarc:
     @staticmethod
+    def compress_sarc_from_dir(input_dir: os.PathLike | str) -> bytes:
+        """
+        Compresses the given input directory, compresses it as a
+        sarc archive, and returns the compressed sarc archive data
+                :param input_dir: Input path for the directory to compress
+                :return: compressed sarc archive data (bytes)
+        """
+
+        pass    # TODO: Stub
+
+    @staticmethod
     def extract_sarc_to_dir(
             _input: os.PathLike | bytes | typing.BinaryIO,
             out_dir: os.PathLike | str,
@@ -27,7 +38,7 @@ class Sarc:
                     - 'fp': Interprets _input as a PathLike object
                     - 'd': Interprets _input as data
                     - 's': Interprets _input as a file stream
-                """
+        """
 
         match mode:
 
