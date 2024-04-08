@@ -36,7 +36,7 @@ class Sarc:
                     content = f.read()
 
                 # Add the file to the SARC archive
-                archive.add_file(str(full_path).replace(input_dir, ''), content)
+                archive.add_file(str(full_path).replace(input_dir, '')[1:], content)
 
         return archive.get_bytes()
 
