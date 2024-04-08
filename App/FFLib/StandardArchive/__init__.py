@@ -21,7 +21,24 @@ class Sarc:
         :return: compressed sarc archive data (bytes)
         """
 
-        pass    # TODO: Stub
+        # Create a new SARC archive
+        archive = sarc.SARCWriter(be=True)  # Set 'be' parameter to True
+
+        # Walk through the folder
+        for root, dirs, files in os.walk(input_dir):
+
+            for file in files:
+                # Construct the full file path
+                full_path = os.path.join(root, file)
+
+                # Read the file content
+                with open(full_path, 'rb') as f:
+                    content = f.read()
+
+                # Add the file to the SARC archive
+                archive.add_file(str(full_path).replace(input_dir, ''), content)
+
+        return archive.get_bytes()
 
     @staticmethod
     def extract_sarc_to_dir(
