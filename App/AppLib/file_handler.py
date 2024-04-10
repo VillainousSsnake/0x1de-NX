@@ -343,14 +343,6 @@ class FileHandler:
                 )
                 save_button.pack(anchor="w", side="left")
 
-                export_button = ctk.CTkButton(
-                    master=top_navigation_frame,
-                    text=chr(0x21EE) + " Export",
-                    font=("Inter", 15),
-                    anchor="w",
-                )
-                export_button.pack(anchor="w", side="left")
-
                 # Creating code_view
                 code_view = CodeView(
                     master=master,
