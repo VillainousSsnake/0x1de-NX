@@ -1,5 +1,6 @@
 # App/FFLib/StandardArchive/__init__.py
 # Contains Sarc class
+import zstandard
 
 # Importing modules
 from App.FFLib.TotkZsDic import ZsDic
@@ -11,22 +12,46 @@ import os
 
 class Sarc:
     @staticmethod
-    def compress_sarc_from_dir(input_dir: os.PathLike | str) -> bytes:
+    def compress_sarc_from_dir(input_dir: os.PathLike | str,
+                               compress_with_zstd: bool = False) -> bytes:
         """
         Compresses the given input directory, compresses it as a
         sarc archive, and returns the compressed sarc archive data
 
         :param input_dir: Input path for the directory to compress
+        :param compress_with_zstd: Compresses the output with zstandard algorithm before returning data
         :return: compressed sarc archive data (bytes)
         """
 
+        # Running the command to compress the sarc into a file
         subprocess.run(
             os.path.join(os.getcwd(), "App", "Bin", "sarc_tool", "sarc_tool.exe")
             + " main -little " + input_dir.replace("/", "\\")
         )
-        print(input_dir + ".sarc")
+
+        # Reading the file data
         with open(input_dir + ".sarc", "rb") as f_in:
-            return f_in.read()
+            file_data = f_in.read()
+
+        # Removing the file
+        os.remove(input_dir + ".sarc")
+
+        # Compressing with zstandard compression algorithm
+        if compress_with_zstd:
+
+            # Getting the compression dictionary type
+            dict_type = ZsDic.detect_zstandard_dict(os.path.basename(input_dir))
+
+            # Creating the compressor
+            zstd_compressor = zstandard.ZstdCompressor(
+                dict_data=ZsDic.get_dict(dict_type)
+            )
+
+            # Compressing the file data
+            file_data = zstd_compressor.compress(file_data)
+
+        # Returning the file
+        return file_data
 
     @staticmethod
     def extract_sarc_to_dir(
