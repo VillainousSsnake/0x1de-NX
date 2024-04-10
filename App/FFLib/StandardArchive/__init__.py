@@ -3,11 +3,10 @@
 
 # Importing modules
 from App.FFLib.TotkZsDic import ZsDic
-import zstandard
-import tempfile
+import subprocess
+import typing
 import sarc
 import os
-import typing
 
 
 class Sarc:
@@ -21,24 +20,13 @@ class Sarc:
         :return: compressed sarc archive data (bytes)
         """
 
-        # Create a new SARC archive
-        archive = sarc.SARCWriter(be=True)  # Set 'be' parameter to True
-
-        # Walk through the folder
-        for root, dirs, files in os.walk(input_dir):
-
-            for file in files:
-                # Construct the full file path
-                full_path = os.path.join(root, file)
-
-                # Read the file content
-                with open(full_path, 'rb') as f:
-                    content = f.read()
-
-                # Add the file to the SARC archive
-                archive.add_file(str(full_path).replace(input_dir, '')[1:], content)
-
-        return archive.get_bytes()
+        subprocess.run(
+            os.path.join(os.getcwd(), "App", "Bin", "sarc_tool", "sarc_tool.exe")
+            + " main -little " + input_dir.replace("/", "\\")
+        )
+        print(input_dir + ".sarc")
+        with open(input_dir + ".sarc", "rb") as f_in:
+            return f_in.read()
 
     @staticmethod
     def extract_sarc_to_dir(
