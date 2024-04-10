@@ -4,11 +4,11 @@
 # Importing libraries and modules
 from App.AppLib.texture_handler import TextureHandler
 from App.AppLib.file_handler import FileHandler
+import App.AppLib.customtkinter as ctk
+from tkinter import ttk, messagebox
 from PIL import ImageTk, Image
 from functools import partial
-import App.AppLib.customtkinter as ctk
 from CTkMenuBar import *
-from tkinter import ttk
 import os
 
 
@@ -112,9 +112,39 @@ class ProgFunc:
             file_editor.open_file(app, item_info=item_info)
 
         @staticmethod
-        def on_key(self, event=None):
+        def on_key(self: ttk.Treeview, file_editor, event=None):
+
+            tabview = file_editor.tabview
+
+            curItem = self.item(self.focus())
+
             if event.keysym == "Delete":
-                pass    # TODO: Add code
+
+                ok_cancel_prompt = messagebox.askokcancel(
+                    "0x1de-NX | Delete File from Project (UNSAFE)",
+                    "Are you sure you want to delete this file from the project?\nWARNING: THIS CANNOT BE UNDONE YET!!!"
+                )
+
+                if ok_cancel_prompt:
+                    item_name = self.focus()
+                    self.delete(item_name)
+                    if curItem["text"] in tabview._tab_dict:
+                        tabview.delete(curItem["text"])
+
+                    if tabview.get() == "":
+                        tabview.pack_forget()
+                        file_editor.nothing_opened_label = ctk.CTkLabel(
+                            master=self.master,
+                            text="Double click a file in the Project Tree to edit!",
+                            anchor="center",
+                            width=999999999,
+                            height=999999999,
+                            font=("monospace", 25, 'italic'),
+                            text_color="grey",
+                        )
+                        file_editor.nothing_opened_label.pack(anchor="center")
+            return 0    # TODO: Finish function
+
 
         @staticmethod
         def on_right_click(self, event=None):
@@ -570,7 +600,7 @@ def project_editor(app):
         "<Double-Button-1>",
         partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview, file_editor, app)
     )
-    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_key, project_treeview))
+    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_key, project_treeview, file_editor))
     project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, project_treeview))
 
     # Inserting all the files and folders into tree view
