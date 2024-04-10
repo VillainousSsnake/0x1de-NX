@@ -378,7 +378,7 @@ class FileHandler:
                 # Exiting function
                 return None
 
-            case "SarcArchive":                     # TODO: Finish opening files (Displaying SARC format)
+            case "SarcArchive":                     # Displaying SARC format
 
                 # Creating the top navigation frame
                 top_navigation_frame = ctk.CTkFrame(
@@ -637,7 +637,7 @@ class FileHandler:
                 # Exiting function
                 return None
 
-            case "AINodeBinary":                    # TODO: Displaying AINB Format
+            case "AINodeBinary":                    # Displaying AINB Format
 
                 ainb_controller = AINB(input_=item_info["values"][0], mode="fp")
 
