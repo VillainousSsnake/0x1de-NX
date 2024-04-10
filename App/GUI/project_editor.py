@@ -2,16 +2,13 @@
 # Contains code for project editor
 
 # Importing libraries and modules
-from App.AppLib.project_handler import ProjectHandler
 from App.AppLib.texture_handler import TextureHandler
 from App.AppLib.file_handler import FileHandler
-from chlorophyll import codeview
 from PIL import ImageTk, Image
 from functools import partial
 import customtkinter as ctk
 from CTkMenuBar import *
 from tkinter import ttk
-import tkinter as tk
 import os
 
 
