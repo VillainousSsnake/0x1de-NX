@@ -22,7 +22,7 @@ class Sarc:
         # Detecting zstandard compression
         if ".zs" in file_name:
             
-            # Detecting sarc format
+            # Detecting SARC format
             if ".bfarc" in file_name:
                 return ".bfarc.zs"
             elif ".bkres" in file_name:
@@ -38,7 +38,7 @@ class Sarc:
             elif ".ta" in file_name:
                 return ".ta.zs"
 
-        # Detecting sarc format
+        # Detecting SARC format
         elif ".bfarc" in file_name:
             return ".bfarc"
         elif ".bkres" in file_name:
@@ -55,7 +55,7 @@ class Sarc:
             return ".ta"
 
         # Returning None
-        # (Because it doesn't detect a valid sarc format)
+        # (Because it doesn't detect a valid SARC format)
         return None
 
     @staticmethod
@@ -63,14 +63,14 @@ class Sarc:
                                compress_with_zstd: bool = False) -> bytes:
         """
         Compresses the given input directory, compresses it as a
-        sarc archive, and returns the compressed sarc archive data.
+        SARC archive, and returns the compressed SARC archive data.
 
         :param input_dir: Input path for the directory to compress
         :param compress_with_zstd: Compresses the output with zstandard algorithm before returning data
-        :return: compressed sarc archive data (bytes)
+        :return: compressed SARC archive data (bytes)
         """
 
-        # Running the command to compress the sarc into a file
+        # Running the command to compress the SARC into a file
         subprocess.run(
             os.path.join(os.getcwd(), "App", "Bin", "sarc_tool", "sarc_tool.exe")
             + " main -little " + input_dir.replace("/", "\\")
@@ -106,7 +106,7 @@ class Sarc:
             out_dir: os.PathLike | str,
             mode: str = "fp",) -> None:
         """
-        Extracts sarc files and folders to a directory.
+        Extracts SARC files and folders to a directory.
 
         :param _input: Input path/bytes/stream (Type depends on the mode)
         :param out_dir: The path to extract the input SARC files
@@ -134,7 +134,7 @@ class Sarc:
                 if file_magic == b"(\xb5/\xfd":
                     file_data = ZsDic.auto_decompress_file(_input)
 
-                # Creating the sarc controller
+                # Creating the SARC controller
                 sarc_controller = sarc.SARC(file_data)
 
                 # Extracting the files
@@ -142,7 +142,7 @@ class Sarc:
 
             case "d":
 
-                # Creating the sarc controller
+                # Creating the SARC controller
                 sarc_controller = sarc.SARC(_input)
 
                 # Extracting the files
@@ -150,7 +150,7 @@ class Sarc:
 
             case "s":
 
-                # Creating sarc controller with file object
+                # Creating SARC controller with file object
                 sarc_controller = sarc.read_file_and_make_sarc(_input)
 
                 # Extracting the files
@@ -163,7 +163,7 @@ class Sarc:
             _input: os.PathLike | bytes | typing.BinaryIO,
             mode: str) -> list:
         """
-        Returns a list of sarc file paths from within a sarc.
+        Returns a list of SARC file paths from within a SARC.
 
         :param _input: Input path/bytes/stream (Type depends on the mode)
         :param mode: The mode of the function (Modes explained below)
@@ -192,7 +192,7 @@ class Sarc:
                 if file_magic == b"(\xb5/\xfd":
                     file_data = ZsDic.auto_decompress_file(_input)
 
-                # Creating the sarc controller
+                # Creating the SARC controller
                 sarc_controller = sarc.SARC(file_data)
 
                 # Setting output to the list of files
@@ -203,7 +203,7 @@ class Sarc:
 
             case "d":
 
-                # Creating the sarc controller
+                # Creating the SARC controller
                 sarc_controller = sarc.SARC(_input)
 
                 # Setting output to the list of files
@@ -211,7 +211,7 @@ class Sarc:
 
             case "s":
 
-                # Creating sarc controller with file object
+                # Creating SARC controller with file object
                 sarc_controller = sarc.read_file_and_make_sarc(_input)
 
                 # Setting output to the list of files
