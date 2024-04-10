@@ -1,9 +1,9 @@
 # /App/AppLib/texture_handler.py
 # This is a file handler module
-
+import shutil
 # Importing libraries
+from tkinter import messagebox, ttk, filedialog
 from pygments.lexers import data as pylexers
-from tkinter import messagebox, ttk
 from functools import partial
 import customtkinter as ctk
 from chlorophyll import *
@@ -134,6 +134,28 @@ CodeViewColorScheme = {
     "special": "#787D73"
   }
 }
+
+ValidSarcExportFormats = (
+            ('SARC formats', [
+                # Plain sarc formats
+                "*.bfarc",
+                "*.bkres",
+                "*.blarc",
+                "*.genvb",
+                "*.pack",
+                "*.sarc",
+                "*.ta",
+                # Zstandard compressed
+                "*.bfarc.zs",
+                "*.bkres.zs",
+                "*.blarc.zs",
+                "*.genvb.zs",
+                "*.pack.zs",
+                "*.sarc.zs",
+                "*.ta.zs",
+            ]),
+            ('Zip File', '.zip'),
+        )
 
 
 # The file handler class
@@ -556,7 +578,64 @@ class FileHandler:
                     pass    # TODO: Stub
 
                 def export_command():
-                    pass    # TODO: Stub
+
+                    # Getting the file path to save the new file
+                    file_explorer_prompt = filedialog.asksaveasfilename(
+                        title="Save SARC file as...",
+                        filetypes=ValidSarcExportFormats,
+                        confirmoverwrite=True,
+                    )
+
+                    # Getting the file basename from the path
+                    file_basename = os.path.basename(file_explorer_prompt)
+
+                    # Detecting if the file is a zip or not
+                    if ".zip" not in file_basename:     # Compressing the file in SARC format
+
+                        # Detecting the file extension
+                        file_extension = Sarc.get_sarc_extension_from_file_name(file_basename)
+
+                        # Getting the new sarc data
+                        new_sarc_data = Sarc.compress_sarc_from_dir(sarc_extract_folder)
+
+                        # Detecting if the file is zstandard
+                        if ".zs" in file_extension:
+
+                            # Asking to compress with zstandard
+                            compress_with_zstandard = messagebox.askyesno(
+                                "0x1de-NX | SARC Export",
+                                "Compress with ZStandard?",
+                            )
+
+                            # Compressing with zstandard
+                            if compress_with_zstandard:
+
+                                new_sarc_data = Sarc.compress_sarc_from_dir(
+                                    input_dir=sarc_extract_folder,
+                                    compress_with_zstd=True
+                                )
+
+                        # Writing SARC to export path
+                        with open(file_explorer_prompt, "wb") as f_out:
+                            f_out.write(new_sarc_data)
+
+                    else:   # Compressing the file in Zip format
+
+                        # Compressing the SARC export directory as a ZIP file
+                        shutil.make_archive(
+                            os.path.join(   # output file name
+                                os.path.split(file_explorer_prompt)[0],
+                                os.path.basename(file_explorer_prompt).replace(".zip", "")
+                            ),
+                            'zip',
+                            sarc_extract_folder
+                        )
+
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX | SARC Export",
+                        "Successfully exported file to '" + file_explorer_prompt + "'",
+                    )
 
                 # Assigning the button commands for the Save, Import, and Export buttons
                 save_button.configure(command=save_command)
