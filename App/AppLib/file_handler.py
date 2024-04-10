@@ -643,14 +643,7 @@ class FileHandler:
                 import_button.configure(command=import_command)
                 export_button.configure(command=export_command)
 
-                # Defining the binding commands
-                def hover_in(event=None):
-                    treeview_item = sarc_treeview.identify("item", event.x, event.y)
-                    if treeview_item == "":
-                        return 0
-                    sarc_treeview.focus(treeview_item)
-                    sarc_treeview.selection_set(treeview_item)
-
+                # Defining the drop file command
                 def drop_file(event=None):
                     path = event.data[1:len(event.data)-1]
                     current_treeview_item = sarc_treeview.focus()
@@ -706,7 +699,7 @@ class FileHandler:
                                     parent="",
                                     index='end',
                                     iid=os.path.join(root, _ITEM),
-                                    text=_ITEM,
+                                    text=chr(0x0001F4C1) + " " + _ITEM,
                                     tags=["Directory"],
                                     values=[os.path.join(root, _ITEM)]
                                 )
@@ -716,7 +709,8 @@ class FileHandler:
                                     parent='',
                                     index='end',
                                     iid=ITEM,
-                                    text=ITEM,
+                                    text=FileHandler.get_file_info_from_name(os.path.basename(item_path))["icon"]
+                                          + " " + ITEM,
                                     tags=[
                                         "File",
                                         FileHandler.get_file_info_from_name(os.path.basename(item_path))["format"]
@@ -730,7 +724,7 @@ class FileHandler:
                                     parent=root,
                                     index='end',
                                     iid=os.path.join(root, _ITEM),
-                                    text=_ITEM,
+                                    text=chr(0x0001F4C1) + " " + _ITEM,
                                     tags=["Directory"],
                                     values=[os.path.join(root, _ITEM)]
                                 )
@@ -740,20 +734,14 @@ class FileHandler:
                                     parent=root,
                                     index='end',
                                     iid=os.path.join(root, ITEM),
-                                    text=ITEM,
+                                    text=FileHandler.get_file_info_from_name(os.path.basename(item_path))["icon"]
+                                          + " " + ITEM,
                                     tags=[
                                         "File",
                                         FileHandler.get_file_info_from_name(os.path.basename(item_path))["format"]
                                     ],
                                     values=[os.path.join(root, ITEM)],
                                 )
-
-                        # Output
-                        print(root)
-                        print(dirs)
-                        print(files)
-
-                sarc_treeview.bind("<Motion>", hover_in)
 
                 # Configuring the drag-and-drop features for master frame
                 master.drop_target_register(DND_FILES)
