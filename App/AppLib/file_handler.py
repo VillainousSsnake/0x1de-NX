@@ -7,11 +7,12 @@ from tkinter import messagebox, ttk
 from functools import partial
 import customtkinter as ctk
 from chlorophyll import *
-from App.FFLib.AINB import AINB
 import os
 
 # Importing modules and file dependencies
 from App.FFLib.StandardArchive import Sarc
+from App.FFLib.TotkZsDic import ZsDic
+from App.FFLib.AINB import AINB
 import json
 import yaml
 
@@ -530,6 +531,17 @@ class FileHandler:
 
                     # Getting the new sarc data
                     new_sarc_data = Sarc.compress_sarc_from_dir(sarc_extract_folder)
+
+                    # Getting the file's magic number
+                    with open(item_info["values"][0], "rb") as f_in:
+                        file_magic = f_in.read(4)
+
+                    # Detecting if the file is zstandard
+                    if file_magic == b"(\xb5/\xfd":
+                        new_sarc_data = Sarc.compress_sarc_from_dir(
+                            input_dir=sarc_extract_folder,
+                            compress_with_zstd=True
+                        )
 
                     # Overwriting the file
                     with open(item_info["values"][0], "wb") as f_out:
