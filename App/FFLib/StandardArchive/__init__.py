@@ -12,6 +12,53 @@ import os
 
 class Sarc:
     @staticmethod
+    def get_sarc_extension_from_file_name(file_name) -> str | None:
+        """
+        Returns the detected SARC format extension based on the file name.
+        :param file_name: The input file name.
+        :return: A valid SARC format extension or None
+        """
+        
+        # Detecting zstandard compression
+        if ".zs" in file_name:
+            
+            # Detecting sarc format
+            if ".bfarc" in file_name:
+                return ".bfarc.zs"
+            elif ".bkres" in file_name:
+                return ".bkres.zs"
+            elif ".blarc" in file_name:
+                return ".blarc.zs"
+            elif ".genvb" in file_name:
+                return ".genvb.zs"
+            elif ".pack" in file_name:
+                return ".pack.zs"
+            elif ".sarc" in file_name:
+                return ".sarc.zs"
+            elif ".ta" in file_name:
+                return ".ta.zs"
+
+        # Detecting sarc format
+        elif ".bfarc" in file_name:
+            return ".bfarc"
+        elif ".bkres" in file_name:
+            return ".bkres"
+        elif ".blarc" in file_name:
+            return ".blarc"
+        elif ".genvb" in file_name:
+            return ".genvb"
+        elif ".pack" in file_name:
+            return ".pack"
+        elif ".sarc" in file_name:
+            return ".sarc"
+        elif ".ta" in file_name:
+            return ".ta"
+
+        # Returning None
+        # (Because it doesn't detect a valid sarc format)
+        return None
+
+    @staticmethod
     def compress_sarc_from_dir(input_dir: os.PathLike | str,
                                compress_with_zstd: bool = False) -> bytes:
         """
