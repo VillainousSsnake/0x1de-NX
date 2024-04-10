@@ -11,7 +11,6 @@ import os
 
 # Importing modules and file dependencies
 from App.FFLib.StandardArchive import Sarc
-from App.FFLib.TotkZsDic import ZsDic
 from App.FFLib.AINB import AINB
 import json
 import yaml
