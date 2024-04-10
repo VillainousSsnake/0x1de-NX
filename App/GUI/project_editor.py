@@ -104,11 +104,6 @@ class ProgFunc:
             else:    # Switching tab to existing one because tab exists
                 self.tabview.set(item_info["text"])
 
-        def update(self):
-            self.tabview.pack(side="top", anchor="w")
-
-            print(self.tabview.get())   # TODO: Finish
-
     class ProjectTreeView:
         @staticmethod
         def on_double_click(self, file_editor, app, event=None):
