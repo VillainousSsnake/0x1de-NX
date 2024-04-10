@@ -643,13 +643,121 @@ class FileHandler:
                 import_button.configure(command=import_command)
                 export_button.configure(command=export_command)
 
-                # Defining the drag and drop command
-                def drop(event=None):
-                    print(event.data)   # TODO: Stub
+                # Defining the binding commands
+                def hover_in(event=None):
+                    treeview_item = sarc_treeview.identify("item", event.x, event.y)
+                    if treeview_item == "":
+                        return 0
+                    sarc_treeview.focus(treeview_item)
+                    sarc_treeview.selection_set(treeview_item)
+
+                def drop_file(event=None):
+                    path = event.data[1:len(event.data)-1]
+                    current_treeview_item = sarc_treeview.focus()
+
+                    if "." in current_treeview_item:
+                        current_treeview_item = os.path.split(current_treeview_item)[0]
+
+                    if current_treeview_item != "":
+
+                        if os.path.isfile(path):
+                            shutil.copy(
+                                path,
+                                os.path.join(sarc_extract_folder, current_treeview_item)
+                            )
+                        elif os.path.isdir(path):
+                            yesnopopup = messagebox.askokcancel(
+                                "0x1de-NX | Moving Folder",
+                                "Are you sure you want to move this folder into the SARC?",
+                            )
+                            if not yesnopopup:
+                                return 0
+                            shutil.move(
+                                path,
+                                os.path.join(sarc_extract_folder, current_treeview_item)
+                            )
+                        else:
+                            raise TypeError("Unknown object")
+
+                    else:
+
+                        if os.path.isfile(path):
+                            shutil.copy(path, sarc_extract_folder)
+                        elif os.path.isdir(path):
+                            yesnopopup = messagebox.askokcancel(
+                                "0x1de-NX | Moving Folder",
+                                "Are you sure you want to move this folder into the SARC?",
+                            )
+                            if not yesnopopup:
+                                return 0
+                            shutil.move(path, sarc_extract_folder)
+                        else:
+                            raise TypeError("Unknown object")
+
+                    # Deleting all the treeview items
+                    sarc_treeview.delete(*sarc_treeview.get_children())
+
+                    # Re-inserting all the items
+                    for root, dirs, files in os.walk(sarc_extract_folder):
+
+                        if os.path.basename(os.path.split(root)[0]) == "_temp_":
+                            for _ITEM in dirs:
+                                sarc_treeview.insert(
+                                    parent="",
+                                    index='end',
+                                    iid=os.path.join(root, _ITEM),
+                                    text=_ITEM,
+                                    tags=["Directory"],
+                                    values=[os.path.join(root, _ITEM)]
+                                )
+
+                            for ITEM in files:
+                                sarc_treeview.insert(
+                                    parent='',
+                                    index='end',
+                                    iid=ITEM,
+                                    text=ITEM,
+                                    tags=[
+                                        "File",
+                                        FileHandler.get_file_info_from_name(os.path.basename(item_path))["format"]
+                                    ],
+                                    values=[os.path.join(root, ITEM)]
+                                )
+
+                        else:
+                            for _ITEM in dirs:
+                                sarc_treeview.insert(
+                                    parent=root,
+                                    index='end',
+                                    iid=os.path.join(root, _ITEM),
+                                    text=_ITEM,
+                                    tags=["Directory"],
+                                    values=[os.path.join(root, _ITEM)]
+                                )
+
+                            for ITEM in files:
+                                sarc_treeview.insert(
+                                    parent=root,
+                                    index='end',
+                                    iid=os.path.join(root, ITEM),
+                                    text=ITEM,
+                                    tags=[
+                                        "File",
+                                        FileHandler.get_file_info_from_name(os.path.basename(item_path))["format"]
+                                    ],
+                                    values=[os.path.join(root, ITEM)],
+                                )
+
+                        # Output
+                        print(root)
+                        print(dirs)
+                        print(files)
+
+                sarc_treeview.bind("<Motion>", hover_in)
 
                 # Configuring the drag-and-drop features for master frame
                 master.drop_target_register(DND_FILES)
-                master.dnd_bind('<<Drop>>', drop)
+                master.dnd_bind('<<Drop>>', drop_file)
 
                 # Exiting function
                 return None
