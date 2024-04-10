@@ -6,7 +6,7 @@ from App.AppLib.texture_handler import TextureHandler
 from App.AppLib.file_handler import FileHandler
 from PIL import ImageTk, Image
 from functools import partial
-import customtkinter as ctk
+import App.AppLib.customtkinter as ctk
 from CTkMenuBar import *
 from tkinter import ttk
 import os

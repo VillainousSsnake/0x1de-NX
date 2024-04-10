@@ -4,7 +4,7 @@
 
 # Importing libraries
 from tkinter import messagebox, ttk, filedialog
-from tkinterdnd2 import DND_FILES, TkinterDnD
+from tkinterdnd2 import DND_FILES
 from pygments.lexers import data as pylexers
 from functools import partial
 import customtkinter as ctk
@@ -192,7 +192,12 @@ class FileHandler:
         file_format = item_info["tags"][1]
 
         # Creating master variable
-        master = tabview.tab(item_info["text"])
+        master = ctk.CTkFrame(
+            master=tabview.tab(item_info["text"]),
+            width=99999999,
+            height=99999999,
+        )
+        master.pack(anchor="nw", fill="both")
 
         # Match statement for displaying the different file formats
         match file_format:
@@ -203,7 +208,8 @@ class FileHandler:
                 top_navigation_frame = ctk.CTkFrame(
                     master=master,
                     height=30,
-                    fg_color="#242424"
+                    fg_color="#242424",
+                    corner_radius=0,
                 )
                 top_navigation_frame.pack(fill="x")
 
@@ -636,6 +642,14 @@ class FileHandler:
                 save_button.configure(command=save_command)
                 import_button.configure(command=import_command)
                 export_button.configure(command=export_command)
+
+                # Defining the drag and drop command
+                def drop(event=None):
+                    print(event.data)   # TODO: Stub
+
+                # Configuring the drag-and-drop features for master frame
+                master.drop_target_register(DND_FILES)
+                master.dnd_bind('<<Drop>>', drop)
 
                 # Exiting function
                 return None
