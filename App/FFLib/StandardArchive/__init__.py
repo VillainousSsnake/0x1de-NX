@@ -63,7 +63,7 @@ class Sarc:
                                compress_with_zstd: bool = False) -> bytes:
         """
         Compresses the given input directory, compresses it as a
-        sarc archive, and returns the compressed sarc archive data
+        sarc archive, and returns the compressed sarc archive data.
 
         :param input_dir: Input path for the directory to compress
         :param compress_with_zstd: Compresses the output with zstandard algorithm before returning data
@@ -106,7 +106,7 @@ class Sarc:
             out_dir: os.PathLike | str,
             mode: str = "fp",) -> None:
         """
-        Extracts sarc files and folders to a directory
+        Extracts sarc files and folders to a directory.
 
         :param _input: Input path/bytes/stream (Type depends on the mode)
         :param out_dir: The path to extract the input SARC files
@@ -163,7 +163,7 @@ class Sarc:
             _input: os.PathLike | bytes | typing.BinaryIO,
             mode: str) -> list:
         """
-        Returns a list of sarc file paths from within a sarc
+        Returns a list of sarc file paths from within a sarc.
 
         :param _input: Input path/bytes/stream (Type depends on the mode)
         :param mode: The mode of the function (Modes explained below)
