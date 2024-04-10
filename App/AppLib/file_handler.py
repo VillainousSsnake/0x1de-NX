@@ -1,12 +1,15 @@
 # /App/AppLib/texture_handler.py
 # This is a file handler module
-import shutil
+
+
 # Importing libraries
 from tkinter import messagebox, ttk, filedialog
+from tkinterdnd2 import DND_FILES, TkinterDnD
 from pygments.lexers import data as pylexers
 from functools import partial
 import customtkinter as ctk
 from chlorophyll import *
+import shutil
 import os
 
 # Importing modules and file dependencies
