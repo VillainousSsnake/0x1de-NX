@@ -743,7 +743,7 @@ class FileHandler:
                                     values=[os.path.join(root, ITEM)],
                                 )
 
-                # Configuring the drag-and-drop features for master frame
+                # Assigning the drag-and-drop commands
                 master.drop_target_register(DND_FILES)
                 master.dnd_bind('<<Drop>>', drop_file)
 
