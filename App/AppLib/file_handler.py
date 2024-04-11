@@ -4,8 +4,8 @@
 
 # Importing libraries
 from tkinter import messagebox, ttk, filedialog
-from App.FFLib.BinaryYAML import Byml
 from pygments.lexers import data as pylexers
+from App.FFLib.BinaryYAML import BYML
 from tkinterdnd2 import DND_FILES
 from functools import partial
 import customtkinter as ctk
@@ -753,6 +753,7 @@ class FileHandler:
 
             case "AINodeBinary":                    # Displaying AINB Format
 
+                # Creating the AINB controller
                 ainb_controller = AINB(input_=item_info["values"][0], mode="fp")
 
                 # Creating the top navigation frame
