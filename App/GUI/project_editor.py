@@ -9,6 +9,7 @@ from tkinter import ttk, messagebox
 from PIL import ImageTk, Image
 from functools import partial
 from CTkMenuBar import *
+import subprocess
 import os
 
 
@@ -145,15 +146,17 @@ class ProgFunc:
                         file_editor.nothing_opened_label.pack(anchor="center")
             return 0    # TODO: Finish function
 
-
         @staticmethod
         def on_right_click(self, event=None):
             print(event)    # TODO: Stub
 
     class TopNavFrame:
         @staticmethod
-        def launch_totk_command():
-            pass    # TODO: Stub
+        def launch_totk_command(app):
+            emulator_path = app.settings["emulator_path"]
+            rom_path = app.settings["rom_path"]
+            command = emulator_path + ' "' + rom_path + '"'
+            subprocess.run(command)
 
     class NavigationFrame:
 
@@ -679,7 +682,7 @@ def project_editor(app):
         ),
         fg_color="#2B2B2B",
         hover_color="#4E5157",
-        command=partial(ProgFunc.TopNavFrame.launch_totk_command)
+        command=partial(ProgFunc.TopNavFrame.launch_totk_command, app)
     )
     launch_totk_button.pack(side="right")
 
