@@ -9,7 +9,9 @@ default_settings = '''current_theme: Dark
 romfs_path: None
 ainb_code_format: JSON
 font_size: 15
-author_name: None'''  # Default settings variable
+author_name: None
+emulator_path: None
+rom_path: None'''  # Default settings variable
 
 
 class Config:
