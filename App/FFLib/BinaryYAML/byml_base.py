@@ -1,6 +1,8 @@
 # Largely adapated from https://github.com/zeldamods/evfl
 import struct
 import io
+import tempfile
+
 import mmh3
 import binascii
 
@@ -333,15 +335,28 @@ class Byml:
         else:
             self.root_node = {}
 
-    def ToYaml(self):
+    def ToYaml(self) -> str:
+        temp_dir = tempfile.TemporaryDirectory()
+        out_file = os.path.join(temp_dir.name, "output.yml")
+
         dumper = yaml.Dumper
         add_representers(dumper)
-        with open(self.filename + '.yml', 'w') as file:
-            yaml.dump(self.root_node, file, sort_keys=False, allow_unicode=True, Dumper=dumper)
 
-    def ToJson(self):
-        with open(self.filename + '.json', 'w') as file:
-            json.dump(self.root_node, file, indent=4)
+        with open(out_file, 'w') as f_out:
+            yaml.dump(self.root_node, f_out, sort_keys=False, allow_unicode=True, Dumper=dumper)
+
+        with open(out_file, "r") as f_in:
+            return f_in.read()
+
+    def ToJson(self) -> str:
+        temp_dir = tempfile.TemporaryDirectory()
+        out_file = os.path.join(temp_dir.name, "output.json")
+
+        with open(out_file, 'w') as f_out:
+            json.dump(self.root_node, f_out, indent=4)
+
+        with open(out_file, 'r') as f_in:
+            return f_in.read()
 
     # lazy reserialization for now, hopefully will work on getting all node types for later
     def Reserialize(self, output_dir=''):
