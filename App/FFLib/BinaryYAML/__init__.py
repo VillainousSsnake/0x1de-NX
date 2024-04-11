@@ -17,3 +17,12 @@ class BYML:
             raw_data = f_in.read()
 
         self.byml_controller = Byml(raw_data, os.path.basename(file_path))
+
+    def to_json(self) -> str:
+        pass    # TODO: Stub
+
+    def to_yaml(self) -> str:
+        pass    # TODO: Stub
+
+    def to_byml(self) -> bytes:
+        pass    # TODO: Stub
