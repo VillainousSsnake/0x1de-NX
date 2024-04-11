@@ -15,6 +15,8 @@ class App:
             "ainb_code_format": Config.get_setting("ainb_code_format"),
             "font_size": Config.get_setting("font_size"),
             "author_name": Config.get_setting("author_name"),
+            "emulator_path": Config.get_setting("emulator_path"),
+            "rom_path": Config.get_setting("rom_path"),
         }
         self.variables = {
             "open_project_fp": None,
