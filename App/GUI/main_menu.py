@@ -9,7 +9,7 @@ from App.GUI.SubWin.main_menu.import_tkcl import import_tkcl as subwin_import_tk
 # Importing modules and libraries:
 from App.AppLib.project_handler import ProjectHandler
 from App.AppLib.plugin_handler import PluginHandler
-from tkinter import messagebox, filedialog
+from tkinter import filedialog
 from App.AppLib.updater import Updater
 from App.AppLib.config import Config
 from PIL import Image, ImageTk
