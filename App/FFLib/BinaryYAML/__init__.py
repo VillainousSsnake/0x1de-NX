@@ -1,3 +1,5 @@
+import tempfile
+
 from App.FFLib.BinaryYAML.byml_base import Byml
 import os
 
@@ -16,13 +18,22 @@ class BYML:
         with open(file_path, "rb") as f_in:
             raw_data = f_in.read()
 
-        self.byml_controller = Byml(raw_data, os.path.basename(file_path))
+        self.byml_controller = Byml(raw_data, filename="file.byml")
 
     def to_json(self) -> str:
-        pass    # TODO: Stub
+        return self.byml_controller.ToJson()
 
     def to_yaml(self) -> str:
-        pass    # TODO: Stub
+        return self.byml_controller.ToYaml()
 
-    def to_byml(self) -> bytes:
-        pass    # TODO: Stub
+    def to_byml(self, data, mode) -> None:      # TODO: Finish
+
+        temp_dir = tempfile.TemporaryDirectory()
+
+        match mode:
+
+            case "JSON":
+                pass    # TODO: Stub
+
+            case "YAML":
+                pass    # TODO: Stub
