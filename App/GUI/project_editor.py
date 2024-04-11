@@ -153,8 +153,8 @@ class ProgFunc:
     class TopNavFrame:
         @staticmethod
         def launch_totk_command(app):
-            emulator_path = app.settings["emulator_path"]
-            rom_path = app.settings["rom_path"]
+            emulator_path = str(app.settings["emulator_path"])
+            rom_path = str(app.settings["rom_path"])
             command = emulator_path + ' "' + rom_path + '"'
             subprocess.run(command)
 
