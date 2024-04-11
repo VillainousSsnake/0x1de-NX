@@ -150,6 +150,11 @@ class ProgFunc:
         def on_right_click(self, event=None):
             print(event)    # TODO: Stub
 
+    class TopNavFrame:
+        @staticmethod
+        def launch_totk_command():
+            pass    # TODO: Stub
+
     class NavigationFrame:
 
         @staticmethod
@@ -658,6 +663,25 @@ def project_editor(app):
                 )
 
         counter += 1
+
+    ############################
+    #   top_nav_frame config   #
+    ############################
+
+    launch_totk_button = ctk.CTkButton(
+        master=top_nav_frame,
+        text="",
+        width=0,
+        image=ctk.CTkImage(
+            dark_image=button_texture_dict["btn_006"],
+            light_image=button_texture_dict["btn_006"],
+            size=(45, 45)
+        ),
+        fg_color="#2B2B2B",
+        hover_color="#4E5157",
+        command=partial(ProgFunc.TopNavFrame.launch_totk_command)
+    )
+    launch_totk_button.pack(side="right")
 
     # TODO: Configure and create children for each frame.
     #  top_nav_frame not done at all. navigation_frame and editor frame could use some work.
