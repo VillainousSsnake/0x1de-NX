@@ -4,8 +4,9 @@
 
 # Importing libraries
 from tkinter import messagebox, ttk, filedialog
-from tkinterdnd2 import DND_FILES
+from App.FFLib.BinaryYAML import Byml
 from pygments.lexers import data as pylexers
+from tkinterdnd2 import DND_FILES
 from functools import partial
 import customtkinter as ctk
 from chlorophyll import *
