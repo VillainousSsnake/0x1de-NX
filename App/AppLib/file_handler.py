@@ -822,6 +822,11 @@ class FileHandler:
                 # Exiting function
                 return None
 
+            case "BinaryYAML":                      # TODO: Displaying BYML format
+
+                # Exiting function
+                return None
+
             case "ZStandard":                       # TODO: Displaying ZSTD format
                 # Exiting function
                 return None
