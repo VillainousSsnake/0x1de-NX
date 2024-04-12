@@ -505,7 +505,8 @@ class FileHandler:
                                 index="end",
                                 iid=item,
                                 text=chr(0x0001F4C1) + " " + item,
-                                tags=["Directory"]
+                                tags=["Directory"],
+                                values=[os.path.join(sarc_extract_folder, item)]
                             )
                     else:   # If there is "/" in item
 
@@ -532,6 +533,7 @@ class FileHandler:
                                     iid=key,
                                     text=chr(0x0001F4C1) + " " + os.path.basename(key),
                                     tags=["Directory"],
+                                    values=[os.path.join(sarc_extract_folder, item)]
                                 )
 
                 # Inserting all the files into tree view
