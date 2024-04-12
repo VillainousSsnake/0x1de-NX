@@ -645,7 +645,7 @@ def project_editor(app):
         folder_text = chr(0x0001F4C1) + " " + os.path.basename(folder_path)
 
         if os.path.basename(folder_path) == "romfs":
-            folder_text = chr(0x0001F4C1) + " 𝒓𝒐𝒎𝒇𝒔"
+            folder_text = chr(0x0001F4C1) + " 𝐫𝐨𝐦𝐟𝐬"
 
         # Making the parent an empty string if it is the first folder
         if counter == 0:
