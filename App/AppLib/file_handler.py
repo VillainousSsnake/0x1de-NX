@@ -650,7 +650,12 @@ class FileHandler:
 
                 # Defining the on key command
                 def on_key(event=None):
-                    print(event)    # TODO: Stub
+
+                    match event.keysym:
+                        case "Delete":
+                            pass    # TODO: Stub
+
+                    print(event.keysym)    # TODO: Finish
 
                 # Assigning the on key command to the treeview
                 sarc_treeview.bind("<Key>", on_key)
