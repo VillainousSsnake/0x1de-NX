@@ -25,8 +25,8 @@ if getattr(sys, 'frozen', False):
     import pyi_splash
     pyi_splash.close()
 
-# Detecting if the romfs_path is None
-if app.settings["romfs_path"] is None:
+# Detecting if romfs_path is real
+if not os.path.exists(str(app.settings["romfs_path"])):
 
     # Asking user to provide romfs path
     continue_prompt = False
@@ -52,6 +52,14 @@ This will most likely cause a lot of errors in the future."""
             app.settings["romfs_path"] = romfs_folder
             Config.overwrite_setting("romfs_path", romfs_folder)
             continue_prompt = True
+
+# Checking if ROM path is real
+if not os.path.exists(str(app.settings["rom_path"])):
+    pass    # TODO: Stub
+
+# Checking if emulator path is real
+if not os.path.exists(str(app.settings["emulator_path"])):
+    pass    # TODO: Stub
 
 
 # Mainloop
