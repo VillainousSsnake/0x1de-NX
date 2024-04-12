@@ -154,7 +154,20 @@ class ProgFunc:
 
         @staticmethod
         def on_right_click(self, event=None):
-            print(event)    # TODO: Stub
+
+            # Setting selection to the item being hovered over
+            treeview_item = self.identify("item", event.x, event.y)
+            if treeview_item == "":
+                return 0
+            self.focus(treeview_item)
+            self.selection_set(treeview_item)
+
+            # Creating right click menu
+            rc_menu = CustomDropdownMenu
+            rc_menu.add_option(self=CustomDropdownMenu(widget=self), option="a")
+
+            # Printing event
+            print(event)    # TODO: Finish
 
     class TopNavFrame:
         @staticmethod
