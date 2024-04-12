@@ -10,6 +10,8 @@ from PIL import ImageTk, Image
 from functools import partial
 from CTkMenuBar import *
 import subprocess
+import threading
+import hashlib
 import shutil
 import os
 
@@ -173,17 +175,45 @@ class ProgFunc:
         @staticmethod
         def launch_totk_command(app):
 
+            # Getting the project folder name
+            sha1 = hashlib.sha1()
+            sha1.update(os.path.basename(app.variables["open_project_fp"]).encode())
+            project_folder_name = sha1.hexdigest()
+            del sha1
+
+            # Creating the folder path variables
+            src_folder = os.path.join(app.variables["open_project_fp"])
+            dest_folder = os.path.join(
+                app.settings["mod_folder_path"],
+                project_folder_name,
+            )
+
+            # Checking if the destination folder exists
+            if os.path.exists(dest_folder):
+
+                # Asking to delete the folder
+                delete_dir_confirm = messagebox.askokcancel(
+                    "0x1de-NX Folder already exists",
+                    "0x1de-NX Folder already exists, do you want to over write it?"
+                )
+
+                if delete_dir_confirm:  # Deleting the folder
+                    shutil.rmtree(dest_folder)
+
+                else:   # Exiting function
+                    return 0
+
             # Copying the folder into the mod folder location
-            # TODO: Add code here
+            shutil.copytree(src=str(src_folder), dst=str(dest_folder))
 
             # Running the emulator
             emulator_path = str(app.settings["emulator_path"])
             rom_path = str(app.settings["rom_path"])
             command = emulator_path + ' "' + rom_path + '"'
-            subprocess.run(command)
+            subprocess.call(command)
 
             # Deleting the mod folder after the emulator ran
-            # TODO: Add code here
+            shutil.rmtree(dest_folder)
 
     class NavigationFrame:
 
