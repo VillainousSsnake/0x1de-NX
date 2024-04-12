@@ -728,7 +728,7 @@ def project_editor(app):
         counter += 1
 
     # Defining the drop file command for the project treeview
-    def drop_file_command():
+    def drop_file_command(event=None):
         pass    # TODO: Stub
 
     # Assigning the drag-and-drop commands for the project treeview
