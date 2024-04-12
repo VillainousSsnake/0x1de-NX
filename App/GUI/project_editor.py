@@ -729,11 +729,11 @@ def project_editor(app):
 
     # Defining the drop file command for the project treeview
     def drop_file_command(event=None):
-        print(event)    # TODO: Stub
+        print(event.data)    # TODO: Stub
 
     # Assigning the drag-and-drop commands for the project treeview
     project_tree_frame.drop_target_register(DND_FILES)
-    project_tree_frame.dnd_bind('<<Drop>>', drop_file_command())
+    project_tree_frame.dnd_bind('<<Drop>>', drop_file_command)
 
     ############################
     #   top_nav_frame config   #
