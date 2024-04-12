@@ -650,7 +650,9 @@ class FileHandler:
 
                 # Defining the drop file command
                 def drop_file(event=None):
-                    path = event.data[1:len(event.data)-1]
+                    path = event.data
+                    if event.data[0] == "{":
+                        path = event.data[1:len(event.data)-1]
                     current_treeview_item = sarc_treeview.focus()
 
                     if "." in current_treeview_item:
