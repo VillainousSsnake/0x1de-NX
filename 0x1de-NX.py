@@ -123,6 +123,37 @@ if not os.path.exists(str(app.settings["emulator_path"])):
             Config.overwrite_setting("emulator_path", emulator_path)
             continue_prompt = True
 
+# Checking if mod folder path is real
+if not os.path.exists(str(app.settings["mod_folder_path"])):
+
+    # Asking user to provide mod folder path
+    continue_prompt = False
+
+    # While continue prompt is no, loop
+    while continue_prompt is False:
+
+        messagebox.showinfo(
+            "0x1de-NX | Select The Mod Folder Path",
+            """Please select your Nintendo Switch Emulator's mod folder path for "The Legend of Zelda: Tears of the Kingdom"."""
+        )
+        mod_folder_path = filedialog.askdirectory(
+            title="Select Zelda Mod Folder Path",
+        )
+        emulator_path = mod_folder_path
+
+        if mod_folder_path == "":
+
+            message = """Do you want to continue without a Zelda: TOTK Mod Folder?
+        This will most likely cause a lot of errors in the future."""
+            continue_prompt = messagebox.askyesno(
+                "0x1de-NX | Continue without \"Zelda: TOTK\" Mod Folder? (UNSAFE!!!)", message
+            )
+
+        else:
+            app.settings["mod_folder_path"] = mod_folder_path
+            Config.overwrite_setting("mod_folder_path", mod_folder_path)
+            continue_prompt = True
+
 
 # Mainloop
 while app.returnStatement != "exit":
