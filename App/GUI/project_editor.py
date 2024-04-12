@@ -172,10 +172,18 @@ class ProgFunc:
     class TopNavFrame:
         @staticmethod
         def launch_totk_command(app):
+
+            # Copying the folder into the mod folder location
+            # TODO: Add code here
+
+            # Running the emulator
             emulator_path = str(app.settings["emulator_path"])
             rom_path = str(app.settings["rom_path"])
             command = emulator_path + ' "' + rom_path + '"'
             subprocess.run(command)
+
+            # Deleting the mod folder after the emulator ran
+            # TODO: Add code here
 
     class NavigationFrame:
 
