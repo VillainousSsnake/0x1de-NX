@@ -6,6 +6,7 @@ from App.AppLib.texture_handler import TextureHandler
 from App.AppLib.file_handler import FileHandler
 import App.AppLib.customtkinter as ctk
 from tkinter import ttk, messagebox
+from tkinterdnd2 import DND_FILES
 from PIL import ImageTk, Image
 from functools import partial
 from CTkMenuBar import *
@@ -725,6 +726,14 @@ def project_editor(app):
                 )
 
         counter += 1
+
+    # Defining the drop file command for the project treeview
+    def drop_file_command():
+        pass    # TODO: Stub
+
+    # Assigning the drag-and-drop commands for the project treeview
+    project_tree_frame.drop_target_register(DND_FILES)
+    project_tree_frame.dnd_bind('<<Drop>>', drop_file_command())
 
     ############################
     #   top_nav_frame config   #
