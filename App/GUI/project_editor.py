@@ -10,6 +10,7 @@ from PIL import ImageTk, Image
 from functools import partial
 from CTkMenuBar import *
 import subprocess
+import shutil
 import os
 
 
@@ -59,7 +60,7 @@ class ProgFunc:
 
             # Destroying nothing opened indicator label
             if self.nothing_opened_label.winfo_exists():
-                self.nothing_opened_label.destroy()
+                self.nothing_opened_label.pack_forget()
                 self.tabview.pack(side="top", anchor="w")
 
             # If statement for if the tab exists or not
@@ -82,16 +83,7 @@ class ProgFunc:
                             anchor="w",
                         )
 
-                        # Creating the nothing opened label
-                        self.nothing_opened_label = ctk.CTkLabel(
-                            master=self.master,
-                            text="Double click a file in the Project Tree to edit!",
-                            anchor="center",
-                            width=999999999,
-                            height=999999999,
-                            font=("monospace", 25, 'italic'),
-                            text_color="grey",
-                        )
+                        # Showing the nothing opened label
                         self.nothing_opened_label.pack(anchor="center")
 
                 # Creating the tab
@@ -115,35 +107,49 @@ class ProgFunc:
         @staticmethod
         def on_key(self: ttk.Treeview, file_editor, event=None):
 
-            tabview = file_editor.tabview
-
             curItem = self.item(self.focus())
 
-            if event.keysym == "Delete":
+            # Detecting the key symbol
+            if event.keysym == "Delete":    # If the key is "delete"
 
+                # Asking for confirmation
                 ok_cancel_prompt = messagebox.askokcancel(
                     "0x1de-NX | Delete File from Project (UNSAFE)",
                     "Are you sure you want to delete this file from the project?\nWARNING: THIS CANNOT BE UNDONE YET!!!"
                 )
 
+                # If confirmed
                 if ok_cancel_prompt:
+
+                    # Removing the item from the tabview
                     item_name = self.focus()
                     self.delete(item_name)
-                    if curItem["text"] in tabview._tab_dict:
-                        tabview.delete(curItem["text"])
+                    if curItem["text"] in file_editor.tabview._tab_dict:
+                        file_editor.tabview.delete(curItem["text"])
 
-                    if tabview.get() == "":
-                        tabview.pack_forget()
-                        file_editor.nothing_opened_label = ctk.CTkLabel(
-                            master=self.master,
-                            text="Double click a file in the Project Tree to edit!",
-                            anchor="center",
-                            width=999999999,
-                            height=999999999,
-                            font=("monospace", 25, 'italic'),
-                            text_color="grey",
-                        )
+                    if file_editor.tabview.get() == "":
+                        file_editor.tabview.pack_forget()
                         file_editor.nothing_opened_label.pack(anchor="center")
+
+                    # Getting the recently deleted directory
+                    recently_deleted_dir = os.path.join(
+                        os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_", "_0_RECENTLY_0_DELETED_0_"
+                    )
+
+                    # Creating the recently deleted directory if it doesn't exist
+                    if not os.path.exists(recently_deleted_dir):
+                        os.makedirs(recently_deleted_dir)
+
+                    # Creating the destination directory variables
+                    folders_list = os.listdir(recently_deleted_dir)
+                    dest_dir = os.path.join(recently_deleted_dir, str(len(folders_list)))
+
+                    # Creating the destination directory
+                    os.makedirs(dest_dir)
+
+                    # Moving the file to the destination
+                    shutil.move(src=curItem["values"][0], dst=dest_dir)
+
             return 0    # TODO: Finish function
 
         @staticmethod
