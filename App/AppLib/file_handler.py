@@ -648,6 +648,13 @@ class FileHandler:
                 import_button.configure(command=import_command)
                 export_button.configure(command=export_command)
 
+                # Defining the on key command
+                def on_key(event=None):
+                    print(event)    # TODO: Stub
+
+                # Assigning the on key command to the treeview
+                sarc_treeview.bind("<Key>", on_key)
+
                 # Defining the drop file command
                 def drop_file(event=None):
                     path = event.data
