@@ -687,7 +687,7 @@ def project_editor(app):
     launch_totk_button.pack(side="right")
 
     # TODO: Configure and create children for each frame.
-    #  top_nav_frame not done at all. navigation_frame and editor frame could use some work.
+    #  top_nav_frame is almost there. navigation_frame could use some work.
 
     # Root mainloop (End of function)
     root.mainloop()
