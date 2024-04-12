@@ -5,7 +5,6 @@
 # Importing libraries
 from tkinter import messagebox, ttk, filedialog
 from pygments.lexers import data as pylexers
-from App.FFLib.BinaryYAML import BYML
 from tkinterdnd2 import DND_FILES
 from functools import partial
 import customtkinter as ctk
@@ -696,8 +695,6 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
 
                             # Moving the file to the destination
                             shutil.move(src=curItem["values"][0], dst=dest_dir)
-
-                    print(event.keysym)    # TODO: Finish
 
                 # Assigning the on key command to the treeview
                 sarc_treeview.bind("<Key>", partial(on_key, sarc_treeview, file_editor_obj))
