@@ -35,7 +35,7 @@ if not os.path.exists(str(app.settings["romfs_path"])):
     while continue_prompt is False:
 
         messagebox.showinfo(
-            "0x1de-NX Pop-up",
+            "Select ROMFS Path",
             "Please select your Zelda: Tears of the Kingdom RomFS dump folder.",
         )
         romfs_folder = filedialog.askdirectory(title="Select RomFS Folder Path")
@@ -65,7 +65,7 @@ if not os.path.exists(str(app.settings["rom_path"])):
     while continue_prompt is False:
 
         messagebox.showinfo(
-            "0x1de-NX | Select The \"Legend of Zelda: Tears of the Kingdom\" Game ROM",
+            "Select The \"Legend of Zelda: Tears of the Kingdom\" Game ROM",
             """Please select your \"Legend of Zelda: Tears of the Kingdom\" Game ROM file. 
 (NOTE: Make sure that this is the Game ROM file that is connected to your emulator)"""
         )
@@ -80,7 +80,7 @@ if not os.path.exists(str(app.settings["rom_path"])):
             message = """Do you want to continue without a Game ROM File?
     This will most likely cause a lot of errors in the future."""
             continue_prompt = messagebox.askyesno(
-                "0x1de-NX | Continue without Game ROM? (UNSAFE!!!)", message
+                "Continue without Game ROM? (UNSAFE!!!)", message
             )
 
         else:
@@ -90,7 +90,38 @@ if not os.path.exists(str(app.settings["rom_path"])):
 
 # Checking if emulator path is real
 if not os.path.exists(str(app.settings["emulator_path"])):
-    pass    # TODO: Stub
+    # Asking user to provide game ROM path
+    continue_prompt = False
+    supported_file_formats = (
+        ("Windows Executable File", "*.exe"),
+        ("All Files", "")
+    )
+
+    # While continue prompt is no, loop
+    while continue_prompt is False:
+
+        messagebox.showinfo(
+            "0x1de-NX | Select The \"Legend of Zelda: Tears of the Kingdom\" Emulator EXE",
+            """Please select your Nintendo Switch Emulator EXE file."""
+        )
+        emulator_path = filedialog.askopenfile(
+            title="Select Nintendo Switch Emulator EXE",
+            filetypes=supported_file_formats,
+        )
+        emulator_path = emulator_path.name
+
+        if emulator_path == "":
+
+            message = """Do you want to continue without an Emulator?
+        This will most likely cause a lot of errors in the future."""
+            continue_prompt = messagebox.askyesno(
+                "0x1de-NX | Continue without Emulator? (UNSAFE!!!)", message
+            )
+
+        else:
+            app.settings["emulator_path"] = emulator_path
+            Config.overwrite_setting("emulator_path", emulator_path)
+            continue_prompt = True
 
 
 # Mainloop
