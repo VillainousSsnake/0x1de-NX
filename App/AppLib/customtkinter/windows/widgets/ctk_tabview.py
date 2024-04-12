@@ -332,7 +332,7 @@ class CTkTabview(CTkBaseClass):
         else:
             raise ValueError(f"CTkTabview has no tab named '{name}'")
 
-    def insert(self, index: int, name: str) -> CTkFrame:
+    def insert(self, index: int | str, name: str) -> CTkFrame:
         """ creates new tab with given name at position index """
 
         if name not in self._tab_dict:
