@@ -11,7 +11,8 @@ ainb_code_format: JSON
 font_size: 15
 author_name: None
 emulator_path: None
-rom_path: None'''  # Default settings variable
+rom_path: None
+mod_folder_path: None'''  # Default settings variable
 
 
 class Config:

@@ -17,6 +17,7 @@ class App:
             "author_name": Config.get_setting("author_name"),
             "emulator_path": Config.get_setting("emulator_path"),
             "rom_path": Config.get_setting("rom_path"),
+            "mod_folder_path": Config.get_setting("mod_folder_path"),
         }
         self.variables = {
             "open_project_fp": None,
