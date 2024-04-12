@@ -729,7 +729,111 @@ def project_editor(app):
 
     # Defining the drop file command for the project treeview
     def drop_file_command(event=None):
-        print(event.data)    # TODO: Stub
+        path = event.data
+        if event.data[0] == "{":
+            path = event.data[1:len(event.data) - 1]
+        current_treeview_item = project_treeview.focus()
+
+        if "." in current_treeview_item:
+            current_treeview_item = os.path.split(current_treeview_item)[0]
+
+        if current_treeview_item != "":
+
+            if os.path.isfile(path):
+                shutil.copy(
+                    path,
+                    os.path.join(app.variables["open_project_fp"], current_treeview_item)
+                )
+            elif os.path.isdir(path):
+                yesnopopup = messagebox.askokcancel(
+                    "0x1de-NX | Moving Folder",
+                    "Are you sure you want to move this folder into the project?",
+                )
+                if not yesnopopup:
+                    return 0
+                shutil.move(
+                    path,
+                    os.path.join(app.variables["open_project_fp"], current_treeview_item)
+                )
+            else:
+                raise TypeError("Unknown object")
+
+        else:
+
+            if os.path.isfile(path):
+                shutil.copy(path, app.variables["open_project_fp"])
+            elif os.path.isdir(path):
+                yesnopopup = messagebox.askokcancel(
+                    "0x1de-NX | Moving Folder",
+                    "Are you sure you want to move this folder into the project?",
+                )
+                if not yesnopopup:
+                    return 0
+                shutil.move(path, app.variables["open_project_fp"])
+            else:
+                raise TypeError("Unknown object")
+
+        # Deleting all the treeview items
+        project_treeview.delete(*project_treeview.get_children())
+
+        # Re-inserting all the items into the treeview
+        sub_directories_ = [x[0] for x in os.walk(app.variables["open_project_fp"])]
+        counter_ = 0
+        for folder_path_ in sub_directories_:
+
+            # Creating the item parameter variables
+            folder_parent_ = folder_path_.replace(
+                os.path.basename(folder_path_), ""
+            )[:len(
+                folder_path_.replace(os.path.basename(folder_path_), "")
+            ) - 1]
+            folder_iid = folder_path_
+            folder_text = chr(0x0001F4C1) + " " + os.path.basename(folder_path_)
+
+            if os.path.basename(folder_path_) == "romfs":
+                folder_text = chr(0x0001F4C1) + " 𝐫𝐨𝐦𝐟𝐬"
+
+            # Making the parent an empty string if it is the first folder
+            if counter_ == 0:
+                folder_parent_ = ""
+
+            # Creating the folder
+            project_treeview.insert(
+                parent=folder_parent_,
+                index=0,
+                iid=folder_iid,
+                text=folder_text,
+                tags=["Directory"],
+                values=[folder_path_],
+            )
+
+            # Creating all the files in the folder and inserting them into the tree
+            for file_name_ in os.listdir(folder_path_):
+                file_path_ = folder_path_ + "\\" + file_name_
+                if os.path.isfile(file_path_):
+
+                    # Creating the item parameter variables
+                    file_parent_ = folder_path_
+                    file_iid_ = file_path_
+                    file_format_ = FileHandler.get_file_info_from_name(file_name_)["format"]
+                    file_icon_ = FileHandler.get_file_info_from_name(file_name_)["icon"]
+                    file_text_ = file_icon_ + " " + os.path.basename(file_path_)
+
+                    # Making the parent an empty string if it is the first folder
+                    if counter_ == 0:
+                        file_parent_ = ""
+
+                    # Creating the file
+                    project_treeview.insert(
+                        parent=file_parent_,
+                        index="end",
+                        iid=file_iid_,
+                        text=file_text_,
+                        tags=["File", file_format_],
+                        values=[file_path_],
+                    )
+
+            counter_ += 1
 
     # Assigning the drag-and-drop commands for the project treeview
     project_tree_frame.drop_target_register(DND_FILES)
