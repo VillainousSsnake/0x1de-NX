@@ -588,6 +588,10 @@ class FileHandler:
                         confirmoverwrite=True,
                     )
 
+                    # Exiting function on cancel
+                    if file_explorer_prompt is None:
+                        return 0
+
                     # Getting the file basename from the path
                     file_basename = os.path.basename(file_explorer_prompt)
 
