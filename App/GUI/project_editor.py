@@ -10,7 +10,6 @@ from PIL import ImageTk, Image
 from functools import partial
 from CTkMenuBar import *
 import subprocess
-import threading
 import hashlib
 import shutil
 import os
