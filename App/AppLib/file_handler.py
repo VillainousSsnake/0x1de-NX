@@ -649,16 +649,56 @@ class FileHandler:
                 export_button.configure(command=export_command)
 
                 # Defining the on key command
-                def on_key(event=None):
+                def on_key(self: ttk.Treeview, file_editor, event=None):
 
-                    match event.keysym:
-                        case "Delete":
-                            pass    # TODO: Stub
+                    curItem = self.item(self.focus())
+
+                    # Detecting the key symbol
+                    if event.keysym == "Delete":  # If the key is "delete"
+
+                        # Asking for confirmation
+                        ok_cancel_prompt = messagebox.askokcancel(
+                            "0x1de-NX | Delete File from SARC?",
+                            """Are you sure you want to delete this file from the SARC?
+WARNING: THIS CANNOT BE UNDONE YET!!!"""
+                        )
+
+                        # If confirmed
+                        if ok_cancel_prompt:
+
+                            # Removing the item from the tabview
+                            item_name = self.focus()
+                            self.delete(item_name)
+                            if curItem["text"] in file_editor.tabview._tab_dict:
+                                file_editor.tabview.delete(curItem["text"])
+
+                            if file_editor.tabview.get() == "":
+                                file_editor.tabview.pack_forget()
+                                file_editor.nothing_opened_label.pack(anchor="center")
+
+                            # Getting the recently deleted directory
+                            recently_deleted_dir = os.path.join(
+                                os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_", "_0_RECENTLY_0_DELETED_0_"
+                            )
+
+                            # Creating the recently deleted directory if it doesn't exist
+                            if not os.path.exists(recently_deleted_dir):
+                                os.makedirs(recently_deleted_dir)
+
+                            # Creating the destination directory variables
+                            folders_list = os.listdir(recently_deleted_dir)
+                            dest_dir = os.path.join(recently_deleted_dir, str(len(folders_list)))
+
+                            # Creating the destination directory
+                            os.makedirs(dest_dir)
+
+                            # Moving the file to the destination
+                            shutil.move(src=curItem["values"][0], dst=dest_dir)
 
                     print(event.keysym)    # TODO: Finish
 
                 # Assigning the on key command to the treeview
-                sarc_treeview.bind("<Key>", on_key)
+                sarc_treeview.bind("<Key>", partial(on_key, sarc_treeview, file_editor_obj))
 
                 # Defining the drop file command
                 def drop_file(event=None):
