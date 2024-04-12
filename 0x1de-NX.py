@@ -55,7 +55,38 @@ This will most likely cause a lot of errors in the future."""
 
 # Checking if ROM path is real
 if not os.path.exists(str(app.settings["rom_path"])):
-    pass    # TODO: Stub
+    # Asking user to provide game ROM path
+    continue_prompt = False
+    supported_file_formats = (
+        ("Nintendo Switch ROM File", ["*.xci", ".nsp"]),
+    )
+
+    # While continue prompt is no, loop
+    while continue_prompt is False:
+
+        messagebox.showinfo(
+            "0x1de-NX | Select The \"Legend of Zelda: Tears of the Kingdom\" Game ROM",
+            """Please select your \"Legend of Zelda: Tears of the Kingdom\" Game ROM file. 
+(NOTE: Make sure that this is the Game ROM file that is connected to your emulator)"""
+        )
+        rom_path = filedialog.askopenfile(
+            title="Select Game ROM File",
+            filetypes=supported_file_formats,
+        )
+        rom_path = rom_path.name
+
+        if rom_path == "":
+
+            message = """Do you want to continue without a Game ROM File?
+    This will most likely cause a lot of errors in the future."""
+            continue_prompt = messagebox.askyesno(
+                "0x1de-NX | Continue without Game ROM? (UNSAFE!!!)", message
+            )
+
+        else:
+            app.settings["rom_path"] = rom_path
+            Config.overwrite_setting("rom_path", rom_path)
+            continue_prompt = True
 
 # Checking if emulator path is real
 if not os.path.exists(str(app.settings["emulator_path"])):
