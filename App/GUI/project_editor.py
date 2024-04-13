@@ -110,7 +110,7 @@ class ProgFunc:
             file_editor.open_file(app, item_info=item_info)
 
         @staticmethod
-        def on_key(self: ttk.Treeview, file_editor, project_treeview, event=None):
+        def on_key(self: ttk.Treeview, file_editor, project_treeview, app, event=None):
 
             curItem = self.item(self.focus())
 
@@ -159,7 +159,7 @@ class ProgFunc:
                 pass    # TODO: Stub (Renaming files)
 
             elif event.keysym == "n" and event.state == 44:
-                subwin_new_dialog(curItem, project_treeview)
+                subwin_new_dialog(curItem, project_treeview, app)
 
         @staticmethod
         def on_right_click(self, event=None):
@@ -672,7 +672,13 @@ def project_editor(app):
         "<Double-Button-1>",
         partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview, file_editor, app)
     )
-    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_key, project_treeview, file_editor, project_treeview))
+    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_key,
+                                           project_treeview,
+                                           file_editor,
+                                           project_treeview,
+                                           app,
+                                           )
+                          )
     project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, project_treeview))
 
     # Inserting all the files and folders into tree view
