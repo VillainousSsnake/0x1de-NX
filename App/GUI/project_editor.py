@@ -152,7 +152,8 @@ class ProgFunc:
                     # Moving the file to the destination
                     shutil.move(src=curItem["values"][0], dst=dest_dir)
 
-            print(event)    # TODO: Finish function
+            elif event.keysym == "F2":
+                pass    # TODO: Stub (Renaming files)
 
         @staticmethod
         def on_right_click(self, event=None):
