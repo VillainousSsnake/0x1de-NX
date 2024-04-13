@@ -11,8 +11,69 @@ import os
 # Creating _func class
 class _func:
     @staticmethod
-    def update_project_treeview(project_treeview: ttk.Treeview):
-        pass    # TODO: Stub
+    def update_project_treeview(project_treeview: ttk.Treeview, app):
+
+        # Deleting all the treeview items
+        project_treeview.delete(*project_treeview.get_children())
+
+        # Re-inserting all the items into the treeview
+        sub_directories_ = [x[0] for x in os.walk(app.variables["open_project_fp"])]
+        counter_ = 0
+        for folder_path_ in sub_directories_:
+
+            # Creating the item parameter variables
+            folder_parent_ = folder_path_.replace(
+                os.path.basename(folder_path_), ""
+            )[:len(
+                folder_path_.replace(os.path.basename(folder_path_), "")
+            ) - 1]
+            folder_iid_ = folder_path_
+            folder_text_ = chr(0x0001F4C1) + " " + os.path.basename(folder_path_)
+
+            if os.path.basename(folder_path_) == "romfs":
+                folder_text_ = chr(0x0001F4C1) + " 𝐫𝐨𝐦𝐟𝐬"
+
+            # Making the parent an empty string if it is the first folder
+            if counter_ == 0:
+                folder_parent_ = ""
+
+            # Creating the folder
+            project_treeview.insert(
+                parent=folder_parent_,
+                index=0,
+                iid=folder_iid_,
+                text=folder_text_,
+                tags=["Directory"],
+                values=[folder_path_],
+            )
+
+            # Creating all the files in the folder and inserting them into the tree
+            for file_name_ in os.listdir(folder_path_):
+                file_path_ = folder_path_ + "\\" + file_name_
+                if os.path.isfile(file_path_):
+
+                    # Creating the item parameter variables
+                    file_parent_ = folder_path_
+                    file_iid_ = file_path_
+                    file_format_ = FileHandler.get_file_info_from_name(file_name_)["format"]
+                    file_icon_ = FileHandler.get_file_info_from_name(file_name_)["icon"]
+                    file_text_ = file_icon_ + " " + os.path.basename(file_path_)
+
+                    # Making the parent an empty string if it is the first folder
+                    if counter_ == 0:
+                        file_parent_ = ""
+
+                    # Creating the file
+                    project_treeview.insert(
+                        parent=file_parent_,
+                        index="end",
+                        iid=file_iid_,
+                        text=file_text_,
+                        tags=["File", file_format_],
+                        values=[file_path_],
+                    )
+
+            counter_ += 1
 
     @staticmethod
     def object_name_entry_command(event=None):
@@ -28,6 +89,7 @@ class _func:
             object_name_entry: ctk.CTkEntry,
             current_item,
             project_treeview,
+            app,
     ):
         # Getting the object type
         object_type = new_object_type_option_menu.get()
@@ -57,7 +119,7 @@ class _func:
                     "Created new directory at \"" + new_dir + "\" successfully!"
                 )
 
-                _func.update_project_treeview(project_treeview)
+                _func.update_project_treeview(project_treeview, app)
 
             case "SARC Archive":    # SARC Archive
                 pass  # TODO: Stub
@@ -70,7 +132,7 @@ class _func:
 
 
 # Defining new_dialog function
-def new_dialog(current_item, project_treeview):
+def new_dialog(current_item, project_treeview, app):
 
     # Setting up the toplevel window
     window = ctk.CTkToplevel()
@@ -109,7 +171,6 @@ def new_dialog(current_item, project_treeview):
     new_object_type_OptionMenu = ctk.CTkOptionMenu(  # Object type OptionMenu
         master=details_frame,
         values=object_types_list,
-        command=partial(_func.new_object_type_dropdown_command),
     )
     new_object_type_OptionMenu.grid(row=0, column=1, padx=20, pady=10)
 
@@ -143,6 +204,7 @@ def new_dialog(current_item, project_treeview):
             object_name_entry,
             current_item,
             project_treeview,
+            app,
         ),
     )
     create_button.pack(side="right", anchor="s")
