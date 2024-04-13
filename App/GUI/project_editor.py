@@ -794,11 +794,11 @@ def project_editor(app):
             )[:len(
                 folder_path_.replace(os.path.basename(folder_path_), "")
             ) - 1]
-            folder_iid = folder_path_
-            folder_text = chr(0x0001F4C1) + " " + os.path.basename(folder_path_)
+            folder_iid_ = folder_path_
+            folder_text_ = chr(0x0001F4C1) + " " + os.path.basename(folder_path_)
 
             if os.path.basename(folder_path_) == "romfs":
-                folder_text = chr(0x0001F4C1) + " 𝐫𝐨𝐦𝐟𝐬"
+                folder_text_ = chr(0x0001F4C1) + " 𝐫𝐨𝐦𝐟𝐬"
 
             # Making the parent an empty string if it is the first folder
             if counter_ == 0:
@@ -808,8 +808,8 @@ def project_editor(app):
             project_treeview.insert(
                 parent=folder_parent_,
                 index=0,
-                iid=folder_iid,
-                text=folder_text,
+                iid=folder_iid_,
+                text=folder_text_,
                 tags=["Directory"],
                 values=[folder_path_],
             )
