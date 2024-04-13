@@ -40,8 +40,10 @@ def new_dialog():
 
     # Creating variables
     object_types_list = [
-        "File",
         "Directory",
+        "SARC Archive",
+        "BinaryYAML",
+        "AI Node Binary File",
     ]
 
     # Creating the frames
