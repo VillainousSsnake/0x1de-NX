@@ -62,8 +62,6 @@ ValidFileFormats = {
         ".bphhb": "AAMP",
         ".bptcl": "AAMP",
         ".bptclconf": "AAMP",
-        # ZStandard
-        ".zs": "ZStandard",
 }
 
 FileFormatIcons = {
@@ -74,6 +72,7 @@ FileFormatIcons = {
     "ZStandard": chr(0xf15b),
     "AINodeBinary": chr(0x1F916),
     "TextFile": chr(0x1F5CF),
+    "AAMP": chr(0x1F5CF),   # TODO: Find unicode to fit AAMP
     None: chr(0x1F5CB),
 }
 
