@@ -152,7 +152,7 @@ class ProgFunc:
                     # Moving the file to the destination
                     shutil.move(src=curItem["values"][0], dst=dest_dir)
 
-            return 0    # TODO: Finish function
+            print(event)    # TODO: Finish function
 
         @staticmethod
         def on_right_click(self, event=None):
