@@ -9,11 +9,11 @@ from functools import partial
 # Creating _func class
 class _func:
     @staticmethod
-    def new_object_type_dropdown_command():
-        pass    # TODO: Stub
+    def new_object_type_dropdown_command(value):
+        print(value)    # TODO: Stub
 
     @staticmethod
-    def object_name_entry_command():
+    def object_name_entry_command(event=None):
         pass    # TODO: Stub
 
     @staticmethod
