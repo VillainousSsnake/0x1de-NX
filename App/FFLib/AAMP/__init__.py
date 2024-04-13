@@ -68,7 +68,7 @@ class AAMP:
 
         botw_tools.aamp.yml_to_aamp(args=argparse.Namespace(
             src=pathlib.Path(self.file_path),
-            dst=pathlib.Path(dest)), data=yaml.unsafe_load(yaml_data))
+            dst=pathlib.Path(dest)), data=yaml.full_load(yaml_data))
 
         with open(dest, "rb") as f_in:
             aamp_data = f_in.read()
