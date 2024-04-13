@@ -4,12 +4,11 @@
 # Importing libraries and modules
 from App.AppLib.texture_handler import TextureHandler
 from App.AppLib.file_handler import FileHandler
-import App.AppLib.customtkinter as cctk
+import App.AppLib.customtkinter as ctk
 from tkinter import ttk, messagebox
 from tkinterdnd2 import DND_FILES
 from PIL import ImageTk, Image
 from functools import partial
-import customtkinter as ctk
 from CTkMenuBar import *
 import subprocess
 import hashlib
@@ -29,7 +28,7 @@ class ProgFunc:
                      app,
                      tabs: list = None
                      ):
-            self.tabview = cctk.CTkTabview(
+            self.tabview = ctk.CTkTabview(
                 master,
                 fg_color="#242424",
                 height=99999999,
@@ -44,7 +43,7 @@ class ProgFunc:
                     self.tabview.insert("end", value)
 
             else:   # Creating the "nothing here" label
-                self.nothing_opened_label = cctk.CTkLabel(
+                self.nothing_opened_label = ctk.CTkLabel(
                     master=self.master,
                     text="Double click a file in the Project Tree to edit!",
                     anchor="center",
@@ -78,7 +77,7 @@ class ProgFunc:
 
                         # Resetting the tabview
                         self.tabview.destroy()
-                        self.tabview = cctk.CTkTabview(
+                        self.tabview = ctk.CTkTabview(
                             self.master,
                             fg_color="#242424",
                             height=99999999,
@@ -221,8 +220,8 @@ class ProgFunc:
 
         @staticmethod
         def project_tree_toggle_btn_command(
-                self: cctk.CTkButton,
-                project_tree_frame: cctk.CTkFrame
+                self: ctk.CTkButton,
+                project_tree_frame: ctk.CTkFrame
         ):
             button_color = self.cget("fg_color")
 
@@ -319,10 +318,10 @@ class ProgFunc:
 def project_editor(app):
 
     # Setting theme
-    cctk.set_appearance_mode(app.settings["current_theme"])
+    ctk.set_appearance_mode(app.settings["current_theme"])
 
     # Creating root window
-    root = cctk.CTk()
+    root = ctk.CTk()
     root.title("")
     root.geometry("1250x700")
     root.wm_iconbitmap()
@@ -340,7 +339,7 @@ def project_editor(app):
     root.protocol("WM_DELETE_WINDOW", on_close)
 
     # Creating navigation frame
-    navigation_frame = cctk.CTkFrame(
+    navigation_frame = ctk.CTkFrame(
         master=root,
         width=40,
     )
@@ -350,7 +349,7 @@ def project_editor(app):
     )
 
     # Creating project tree frame
-    project_tree_frame = cctk.CTkFrame(
+    project_tree_frame = ctk.CTkFrame(
         master=root,
         width=400,
         height=9999999,
@@ -363,7 +362,7 @@ def project_editor(app):
     )
 
     # Creating top navigation frame
-    top_nav_frame = cctk.CTkFrame(
+    top_nav_frame = ctk.CTkFrame(
         master=root,
         height=40,
     )
@@ -374,7 +373,7 @@ def project_editor(app):
     )
 
     # Creating editor view frame
-    editor_frame = cctk.CTkFrame(
+    editor_frame = ctk.CTkFrame(
         master=root,
         fg_color="#242424",
         width=9999999,
@@ -577,11 +576,11 @@ def project_editor(app):
     #   navigation_frame  config   #
     ################################
 
-    project_tree_toggle_nav_btn = cctk.CTkButton(    # Creating the project tree frame toggle button
+    project_tree_toggle_nav_btn = ctk.CTkButton(    # Creating the project tree frame toggle button
         master=navigation_frame,
         text="",
         width=0,
-        image=cctk.CTkImage(
+        image=ctk.CTkImage(
             light_image=button_texture_dict["btn_003"],
             dark_image=button_texture_dict["btn_003"],
             size=(22, 19),
@@ -601,7 +600,7 @@ def project_editor(app):
     #   project_tree_frame  config   #
     ##################################
 
-    project_tree_top_bar_frame = cctk.CTkFrame(
+    project_tree_top_bar_frame = ctk.CTkFrame(
         project_tree_frame,
         height=75,
         width=400,
@@ -609,7 +608,7 @@ def project_editor(app):
     )
     project_tree_top_bar_frame.pack(fill="x", side="top")
 
-    project_tree_treeview_frame = cctk.CTkFrame(
+    project_tree_treeview_frame = ctk.CTkFrame(
         project_tree_frame,
         width=400,
         fg_color="#2B2B2B",
@@ -617,7 +616,7 @@ def project_editor(app):
     project_tree_treeview_frame.pack(fill="both", side="top")
 
     # Configuring children of project_tree_top_bar_frame
-    project_tree_title_label = cctk.CTkLabel(
+    project_tree_title_label = ctk.CTkLabel(
         master=project_tree_top_bar_frame,
         text="Project Tree",
         font=("monospace", int(app.settings["font_size"]) + 5),
@@ -845,11 +844,11 @@ def project_editor(app):
     #   top_nav_frame config   #
     ############################
 
-    launch_totk_button = cctk.CTkButton(
+    launch_totk_button = ctk.CTkButton(
         master=top_nav_frame,
         text="",
         width=0,
-        image=cctk.CTkImage(
+        image=ctk.CTkImage(
             dark_image=button_texture_dict["btn_006"],
             light_image=button_texture_dict["btn_006"],
             size=(45, 45)
