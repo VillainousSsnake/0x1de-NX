@@ -9,8 +9,8 @@ from functools import partial
 # Creating _func class
 class _func:
     @staticmethod
-    def close_button_command():
-        pass    # TODO: Stub
+    def close_button_command(window: ctk.CTkToplevel):
+        window.destroy()
 
     @staticmethod
     def create_button_command():
@@ -56,7 +56,7 @@ def new_dialog():
     close_button = ctk.CTkButton(   # Close Button
         master=window,
         text="Close",
-        command=partial(_func.close_button_command),
+        command=partial(_func.close_button_command, window),
     )
     close_button.pack(side="left", anchor="s")
 
