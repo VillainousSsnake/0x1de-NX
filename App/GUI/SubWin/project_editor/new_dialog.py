@@ -2,6 +2,7 @@
 # Contains code for new dialog
 
 # Importing modules, packages and libraries
+from App.AppLib.file_handler import FileHandler
 import App.AppLib.customtkinter as ctk
 from tkinter import messagebox, ttk
 from functools import partial
@@ -89,7 +90,7 @@ class _func:
             object_name_entry: ctk.CTkEntry,
             current_item,
             project_treeview,
-            app,
+            app, window,
     ):
         # Getting the object type
         object_type = new_object_type_option_menu.get()
@@ -129,6 +130,9 @@ class _func:
 
             case "Binary YAML":     # Binary YAML
                 pass  # TODO: Stub
+
+        # Closing window
+        window.destroy()
 
 
 # Defining new_dialog function
@@ -204,7 +208,7 @@ def new_dialog(current_item, project_treeview, app):
             object_name_entry,
             current_item,
             project_treeview,
-            app,
+            app, window,
         ),
     )
     create_button.pack(side="right", anchor="s")
