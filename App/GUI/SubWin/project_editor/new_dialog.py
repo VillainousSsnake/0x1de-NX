@@ -53,21 +53,7 @@ def new_dialog():
     details_frame.pack(side="top", fill="both")
 
     # Creating the new window's children
-    close_button = ctk.CTkButton(   # Close Button
-        master=window,
-        text="Close",
-        command=partial(_func.close_button_command, window),
-    )
-    close_button.pack(side="left", anchor="s")
-
-    create_button = ctk.CTkButton(  # Create Button
-        master=window,
-        text="Create",
-        command=partial(_func.create_button_command),
-    )
-    create_button.pack(side="right", anchor="s")
-
-    new_object_type_label = ctk.CTkLabel(
+    new_object_type_label = ctk.CTkLabel(   # New object type Label
         master=details_frame,
         text="New Object Type",
         anchor="w",
@@ -94,5 +80,19 @@ def new_dialog():
         command=partial(_func.object_name_entry_command),
     )
     object_name_entry.grid(row=1, column=1, padx=20, pady=10)
+
+    close_button = ctk.CTkButton(  # Close Button
+        master=window,
+        text="Close",
+        command=partial(_func.close_button_command, window),
+    )
+    close_button.pack(side="left", anchor="s")
+
+    create_button = ctk.CTkButton(  # Create Button
+        master=window,
+        text="Create",
+        command=partial(_func.create_button_command),
+    )
+    create_button.pack(side="right", anchor="s")
 
 
