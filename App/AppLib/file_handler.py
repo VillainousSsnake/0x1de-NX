@@ -956,7 +956,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 # Creating the update function
                 def save_file(event=None):
                     code_view_contents = code_view.get("0.0", "end")
-                    aamp_data_out = aamp_controller.to_aamp(code_view_contents)
+                    aamp_data_out = aamp_controller.yaml_to_aamp(code_view_contents)
 
                     with open(item_info["values"][0], "wb") as f:
                         f.write(aamp_data_out)
