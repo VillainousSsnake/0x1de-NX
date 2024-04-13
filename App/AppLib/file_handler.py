@@ -14,6 +14,7 @@ import os
 
 # Importing modules and file dependencies
 from App.FFLib.StandardArchive import Sarc
+from App.FFLib.AAMP import AAMP
 from App.FFLib.AINB import AINB
 import json
 import yaml
@@ -904,6 +905,13 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 return None
 
             case "AAMP":                            # TODO: Displaying AAMP format
+
+                # Creating the AAMP Controller
+                aamp_controller = AAMP(item_info["values"][0])
+
+                # Getting the XML data
+                xml_data = aamp_controller.to_xml()
+
                 # Exiting function
                 return None
 
