@@ -1,5 +1,6 @@
 # /App/FFLib/AAMP/__init__.py
 # Contains AAMP Class
+import pathlib
 import tempfile
 
 # Importing packages and modules
@@ -28,7 +29,9 @@ class AAMP:
         temp_dir = tempfile.TemporaryDirectory()
         dest = os.path.join(temp_dir.name, "out.yml")
 
-        botw_tools.aamp.yml_to_aamp(args=argparse.Namespace(src=self.file_path, dst=dest), data=self.data)
+        botw_tools.aamp.aamp_to_yml(args=argparse.Namespace(
+            src=pathlib.Path(self.file_path),
+            dst=pathlib.Path(dest)), data=self.data)
 
         with open(dest, "r") as f_in:
             data = f_in.read()
