@@ -1,4 +1,4 @@
-# /App/GUI/SubWin/new_project.py
+# /App/GUI/SubWin/main_menu/new_project.py
 
 # Importing modules and/or libraries
 from App.AppLib.project_handler import ProjectHandler
