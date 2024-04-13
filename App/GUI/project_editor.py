@@ -155,6 +155,9 @@ class ProgFunc:
             elif event.keysym == "F2":
                 pass    # TODO: Stub (Renaming files)
 
+            elif event.keysym == "n" and event.state == 44:
+                print("New Dialog")  # TODO: Stub
+
         @staticmethod
         def on_right_click(self, event=None):
 
