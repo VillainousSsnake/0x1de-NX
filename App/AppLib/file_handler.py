@@ -903,14 +903,72 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 # Exiting function
                 return None
 
-            case "AAMP":                            # TODO: Displaying AAMP format
+            case "AAMP":                            # Displaying AAMP format
 
                 # Creating the AAMP Controller
                 aamp_controller = AAMP(item_info["values"][0])
 
                 # Getting the XML data
                 yaml_data = aamp_controller.to_yaml()
-                print(yaml_data)
+
+                # Creating the top navigation frame
+                top_navigation_frame = ctk.CTkFrame(
+                    master=master,
+                    height=30,
+                    fg_color="#242424"
+                )
+                top_navigation_frame.pack(fill="x")
+
+                # Creating the Save, Import, and Export buttons
+                save_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x0001F5AB) + " Save",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                save_button.pack(anchor="w", side="left")
+
+                export_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x21EE) + " Export",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                export_button.pack(anchor="w", side="left")
+
+                # Creating code_view
+                code_view = CodeView(
+                    master=master,
+                    lexer=pylexers.YamlLexer,
+                    color_scheme=CodeViewColorScheme,
+                    width=999999,
+                    height=999999,
+                    font=("Cascadia Code", app.settings["font_size"]),
+                )
+                code_view.pack(fill="both", side="top", anchor="w")
+
+                # Inserting the yaml data into the code view widget
+                code_view.insert(0.0, yaml_data + "\n")
+
+                # Removing the extra new line at the end of file
+                code_view.delete(str(float(code_view.index("end")) - 1), "end")
+
+                # Creating the update function
+                def save_file(event=None):
+                    code_view_contents = code_view.get("0.0", "end")
+                    aamp_data_out = aamp_controller.to_aamp()
+
+                    with open(item_info["values"][0], "wb") as f:
+                        f.write(aamp_data_out)
+
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX - Save Completed",
+                        "Saved YAML file to '" + item_info["values"][0] + "'",
+                    )
+
+                # Assigning the button functions
+                save_button.configure(command=save_file)
 
                 # Exiting function
                 return None
