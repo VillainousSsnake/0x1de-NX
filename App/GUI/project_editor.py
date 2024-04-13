@@ -107,7 +107,7 @@ class ProgFunc:
             file_editor.open_file(app, item_info=item_info)
 
         @staticmethod
-        def on_key(self: ttk.Treeview, file_editor, event=None):
+        def on_key(self: ttk.Treeview, file_editor, root, event=None):
 
             curItem = self.item(self.focus())
 
@@ -669,7 +669,7 @@ def project_editor(app):
         "<Double-Button-1>",
         partial(ProgFunc.ProjectTreeView.on_double_click, project_treeview, file_editor, app)
     )
-    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_key, project_treeview, file_editor))
+    project_treeview.bind("<Key>", partial(ProgFunc.ProjectTreeView.on_key, project_treeview, file_editor, root))
     project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, project_treeview))
 
     # Inserting all the files and folders into tree view
