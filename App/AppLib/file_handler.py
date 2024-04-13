@@ -909,7 +909,8 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 aamp_controller = AAMP(item_info["values"][0])
 
                 # Getting the XML data
-                xml_data = aamp_controller.to_xml()
+                yaml_data = aamp_controller.to_yaml()
+                print(yaml_data)
 
                 # Exiting function
                 return None
