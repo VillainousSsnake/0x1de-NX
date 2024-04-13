@@ -41,6 +41,9 @@ class AAMP:
 
         return yaml_data
 
+    def to_xml(self):
+        pass    # TODO: stub
+
     def yaml_to_aamp(self, yaml_data) -> bytes:
 
         temp_dir = tempfile.TemporaryDirectory()
