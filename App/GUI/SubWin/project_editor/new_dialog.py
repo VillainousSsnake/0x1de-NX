@@ -3,7 +3,9 @@
 
 # Importing modules, packages and libraries
 import App.AppLib.customtkinter as ctk
+from tkinter import messagebox
 from functools import partial
+import os
 
 
 # Creating _func class
@@ -21,12 +23,53 @@ class _func:
         window.destroy()
 
     @staticmethod
-    def create_button_command():
-        pass  # TODO: Stub
+    def create_button_command(
+            new_object_type_option_menu: ctk.CTkOptionMenu,
+            object_name_entry: ctk.CTkEntry,
+            current_item,
+    ):
+        # Getting the object type
+        object_type = new_object_type_option_menu.get()
+
+        # Getting the object name
+        object_name = object_name_entry.get()
+
+        # Detecting the type and creating the object accordingly
+        match object_type:
+
+            case "Directory":       # Directory
+
+                # Getting the base directory
+                base_dir = current_item["values"][0]
+                if os.path.isfile(base_dir):
+                    base_dir = os.path.split(base_dir)[0]
+
+                # Combining the base directory with the new, non-existent directory
+                new_dir = os.path.join(base_dir, object_name)
+
+                # Creating the new directory
+                os.mkdir(new_dir)
+
+                # Output
+                messagebox.showinfo(
+                    "Create New | Created New Directory",
+                    "Created new directory at \"" + new_dir + "\" successfully!"
+                )
+
+                # TODO: Update project_treeview
+
+            case "SARC Archive":    # SARC Archive
+                pass  # TODO: Stub
+
+            case "AI Node Binary":  # AI Node Binary
+                pass  # TODO: Stub
+
+            case "Binary YAML":     # Binary YAML
+                pass  # TODO: Stub
 
 
 # Defining new_dialog function
-def new_dialog():
+def new_dialog(current_item):
 
     # Setting up the toplevel window
     window = ctk.CTkToplevel()
@@ -42,7 +85,7 @@ def new_dialog():
     object_types_list = [
         "Directory",
         "SARC Archive",
-        "BinaryYAML",
+        "Binary YAML",
         "AI Node Binary File",
     ]
 
@@ -93,7 +136,12 @@ def new_dialog():
     create_button = ctk.CTkButton(  # Create Button
         master=window,
         text="Create",
-        command=partial(_func.create_button_command),
+        command=partial(
+            _func.create_button_command,
+            new_object_type_OptionMenu,
+            object_name_entry,
+            current_item,
+        ),
     )
     create_button.pack(side="right", anchor="s")
 
