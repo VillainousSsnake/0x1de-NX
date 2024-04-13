@@ -28,7 +28,9 @@ class AAMP:
         temp_dir = tempfile.TemporaryDirectory()
 
         # Getting the paths
-        aamp_tool_path = os.path.join(os.getcwd())  # TODO: Finish
+        aamp_tool_path = os.path.join(
+            os.getcwd(), "App", "Bin", "aampTool", "aampTool.exe"
+        )
 
         # Creating the temporary aamp file with self.data
         with open(os.path.join(temp_dir.name, "file.aamp"), "wb") as f_out:
