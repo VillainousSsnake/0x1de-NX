@@ -110,7 +110,7 @@ class ProgFunc:
             file_editor.open_file(app, item_info=item_info)
 
         @staticmethod
-        def on_key(self: ttk.Treeview, file_editor, event=None):
+        def on_key(self: ttk.Treeview, file_editor, project_treeview, event=None):
 
             curItem = self.item(self.focus())
 
@@ -159,7 +159,7 @@ class ProgFunc:
                 pass    # TODO: Stub (Renaming files)
 
             elif event.keysym == "n" and event.state == 44:
-                subwin_new_dialog(curItem)
+                subwin_new_dialog(curItem, project_treeview)
 
         @staticmethod
         def on_right_click(self, event=None):

@@ -3,7 +3,7 @@
 
 # Importing modules, packages and libraries
 import App.AppLib.customtkinter as ctk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 from functools import partial
 import os
 
@@ -11,8 +11,8 @@ import os
 # Creating _func class
 class _func:
     @staticmethod
-    def new_object_type_dropdown_command(value):
-        print(value)    # TODO: Stub
+    def update_project_treeview(project_treeview: ttk.Treeview):
+        pass    # TODO: Stub
 
     @staticmethod
     def object_name_entry_command(event=None):
@@ -27,6 +27,7 @@ class _func:
             new_object_type_option_menu: ctk.CTkOptionMenu,
             object_name_entry: ctk.CTkEntry,
             current_item,
+            project_treeview,
     ):
         # Getting the object type
         object_type = new_object_type_option_menu.get()
@@ -56,7 +57,7 @@ class _func:
                     "Created new directory at \"" + new_dir + "\" successfully!"
                 )
 
-                # TODO: Update project_treeview
+                _func.update_project_treeview(project_treeview)
 
             case "SARC Archive":    # SARC Archive
                 pass  # TODO: Stub
@@ -69,7 +70,7 @@ class _func:
 
 
 # Defining new_dialog function
-def new_dialog(current_item):
+def new_dialog(current_item, project_treeview):
 
     # Setting up the toplevel window
     window = ctk.CTkToplevel()
@@ -141,6 +142,7 @@ def new_dialog(current_item):
             new_object_type_OptionMenu,
             object_name_entry,
             current_item,
+            project_treeview,
         ),
     )
     create_button.pack(side="right", anchor="s")
