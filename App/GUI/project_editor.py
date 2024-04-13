@@ -1,6 +1,9 @@
 # /App/GUI/project_editor.py
 # Contains code for project editor
 
+# Importing SubWin modules
+from App.GUI.SubWin.project_editor.new_dialog import new_dialog as subwin_new_dialog
+
 # Importing libraries and modules
 from App.AppLib.texture_handler import TextureHandler
 from App.AppLib.file_handler import FileHandler
@@ -156,7 +159,7 @@ class ProgFunc:
                 pass    # TODO: Stub (Renaming files)
 
             elif event.keysym == "n" and event.state == 44:
-                print("New Dialog")  # TODO: Stub
+                subwin_new_dialog()
 
         @staticmethod
         def on_right_click(self, event=None):
