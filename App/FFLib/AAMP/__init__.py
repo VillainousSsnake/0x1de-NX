@@ -24,7 +24,7 @@ class AAMP:
         with open(file_path, "rb") as f_in:
             self.data = f_in.read()
 
-    def to_yaml(self):
+    def to_yaml(self) -> str:
 
         temp_dir = tempfile.TemporaryDirectory()
         dest = os.path.join(temp_dir.name, "out.yml")
@@ -34,8 +34,11 @@ class AAMP:
             dst=pathlib.Path(dest)), data=self.data)
 
         with open(dest, "r") as f_in:
-            data = f_in.read()
+            yaml_data = f_in.read()
 
         temp_dir.cleanup()
 
-        return data
+        return yaml_data
+
+    def to_aamp(self) -> bytes:
+        pass    # TODO: Stub
