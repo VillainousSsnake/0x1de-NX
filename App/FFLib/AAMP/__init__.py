@@ -5,6 +5,7 @@ import tempfile
 
 # Importing packages and modules
 import botw_tools.aamp
+import subprocess
 import argparse
 import yaml
 import os
@@ -42,7 +43,23 @@ class AAMP:
         return yaml_data
 
     def to_xml(self):
-        pass    # TODO: stub
+
+        # Creating temporary directory
+        temp_dir = tempfile.TemporaryDirectory()
+
+        # Creating paths
+        aamp_tool_path = os.path.join(
+            os.getcwd(), "App", "Bin", "aampTool", "aampTool.exe"
+        )
+        out_path = os.path.join(
+            temp_dir.name, "out.xml"
+        )
+
+        command = aamp_tool_path + " " + self.file_path + " -o " + out_path
+        subprocess.run(
+            command
+        )
+        # TODO: Finish
 
     def yaml_to_aamp(self, yaml_data) -> bytes:
 
