@@ -3,11 +3,26 @@
 
 # Importing modules, packages and libraries
 import App.AppLib.customtkinter as ctk
+from functools import partial
 
 
 # Creating _func class
 class _func:
-    pass    # TODO: Stub
+    @staticmethod
+    def close_button_command():
+        pass    # TODO: Stub
+
+    @staticmethod
+    def create_button_command():
+        pass    # TODO: Stub
+
+    @staticmethod
+    def new_object_type_dropdown_command():
+        pass    # TODO: Stub
+
+    @staticmethod
+    def object_name_entry_command():
+        pass    # TODO: Stub
 
 
 # Defining new_dialog function
@@ -41,12 +56,14 @@ def new_dialog():
     close_button = ctk.CTkButton(   # Close Button
         master=window,
         text="Close",
+        command=partial(_func.close_button_command),
     )
     close_button.pack(side="left", anchor="s")
 
     create_button = ctk.CTkButton(  # Create Button
         master=window,
         text="Create",
+        command=partial(_func.create_button_command),
     )
     create_button.pack(side="right", anchor="s")
 
@@ -60,6 +77,7 @@ def new_dialog():
     new_object_type_OptionMenu = ctk.CTkOptionMenu(  # Object type OptionMenu
         master=details_frame,
         values=object_types_list,
+        command=partial(_func.new_object_type_dropdown_command),
     )
     new_object_type_OptionMenu.grid(row=0, column=1, padx=20, pady=10)
 
@@ -73,6 +91,7 @@ def new_dialog():
     object_name_entry = ctk.CTkEntry(   # Object name Entry
         master=details_frame,
         placeholder_text="Enter Name Here!",
+        command=partial(_func.object_name_entry_command),
     )
     object_name_entry.grid(row=1, column=1, padx=20, pady=10)
 
