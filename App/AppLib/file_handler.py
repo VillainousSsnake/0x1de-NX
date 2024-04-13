@@ -39,6 +39,28 @@ ValidFileFormats = {
         # Binary Yaml
         "byml": "BinaryYAML",
         "bgyml": "BinaryYAML",
+        # AAMP
+        ".baglblm": "AAMP",
+        ".baglccr": "AAMP",
+        ".baglclwd": "AAMP",
+        ".baglcube": "AAMP",
+        ".bagldof": "AAMP",
+        ".baglenv": "AAMP",
+        ".baglenvset": "AAMP",
+        ".baglfila": "AAMP",
+        ".bagllmap": "AAMP",
+        ".baglmf": "AAMP",
+        ".baglshpp": "AAMP",
+        ".baglsky": "AAMP",
+        ".bgapkginfo": "AAMP",
+        ".bgapkglist": "AAMP",
+        ".bgenv": "AAMP",
+        ".bglght": "AAMP",
+        ".bgmsconf": "AAMP",
+        ".bgsdw": "AAMP",
+        ".bphhb": "AAMP",
+        ".bptcl": "AAMP",
+        ".bptclconf": "AAMP",
         # ZStandard
         ".zs": "ZStandard",
 }
@@ -881,8 +903,11 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 # Exiting function
                 return None
 
-            case "BinaryYAML":                      # TODO: Displaying BYML format
+            case "AAMP":                            # TODO: Displaying AAMP format
+                # Exiting function
+                return None
 
+            case "BinaryYAML":                      # TODO: Displaying BYML format
                 # Exiting function
                 return None
 
