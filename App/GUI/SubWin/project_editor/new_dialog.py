@@ -77,8 +77,8 @@ def new_dialog():
     object_name_entry = ctk.CTkEntry(   # Object name Entry
         master=details_frame,
         placeholder_text="Enter Name Here!",
-        command=partial(_func.object_name_entry_command),
     )
+    object_name_entry.bind("<Key>", partial(_func.object_name_entry_command))
     object_name_entry.grid(row=1, column=1, padx=20, pady=10)
 
     close_button = ctk.CTkButton(  # Close Button
