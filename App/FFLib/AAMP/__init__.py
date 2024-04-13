@@ -1,9 +1,10 @@
 # /App/FFLib/AAMP/__init__.py
 # Contains AAMP Class
+import tempfile
 
 # Importing packages and modules
-import subprocess
-import tempfile
+import botw_tools.aamp
+import argparse
 import os
 
 
@@ -22,18 +23,16 @@ class AAMP:
         with open(file_path, "rb") as f_in:
             self.data = f_in.read()
 
-    def to_xml(self):
+    def to_yaml(self):
 
-        # Creating a temporary directory
         temp_dir = tempfile.TemporaryDirectory()
+        dest = os.path.join(temp_dir.name, "out.yml")
 
-        # Getting the paths
-        aamp_tool_path = os.path.join(
-            os.getcwd(), "App", "Bin", "aampTool", "aampTool.exe"
-        )
+        botw_tools.aamp.yml_to_aamp(args=argparse.Namespace(src=self.file_path, dst=dest), data=self.data)
 
-        # Creating the temporary aamp file with self.data
-        with open(os.path.join(temp_dir.name, "file.aamp"), "wb") as f_out:
-            f_out.write(self.data)
+        with open(dest, "r") as f_in:
+            data = f_in.read()
 
-        # TODO: Finish
+        temp_dir.cleanup()
+
+        return data
