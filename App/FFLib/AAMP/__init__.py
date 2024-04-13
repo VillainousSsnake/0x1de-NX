@@ -6,6 +6,7 @@ import tempfile
 # Importing packages and modules
 import botw_tools.aamp
 import argparse
+import yaml
 import os
 
 
@@ -40,5 +41,18 @@ class AAMP:
 
         return yaml_data
 
-    def to_aamp(self) -> bytes:
-        pass    # TODO: Stub
+    def yaml_to_aamp(self, yaml_data) -> bytes:
+
+        temp_dir = tempfile.TemporaryDirectory()
+        dest = os.path.join(temp_dir.name, "out.aamp")
+
+        botw_tools.aamp.yml_to_aamp(args=argparse.Namespace(
+            src=pathlib.Path(self.file_path),
+            dst=pathlib.Path(dest)), data=yaml.unsafe_load(yaml_data))
+
+        with open(dest, "rb") as f_in:
+            aamp_data = f_in.read()
+
+        temp_dir.cleanup()
+
+        return aamp_data
