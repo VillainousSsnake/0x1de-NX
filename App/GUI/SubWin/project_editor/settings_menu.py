@@ -11,6 +11,23 @@ from tkinter import filedialog
 class ButtonFunc:
 
     @staticmethod
+    def rom_path_browse_button_command(app, rom_path_entry):
+        rom_path = filedialog.askopenfile(
+            title="Select Game ROM File",
+            filetypes=(
+                ("Nintendo Switch ROM File", ["*.xci", ".nsp"]),
+            )
+        )
+        if rom_path == "":
+            return 0
+        else:
+            rom_path = rom_path.name
+            app.settings["rom_path"] = rom_path
+            Config.overwrite_setting("rom_path", rom_path)
+            rom_path_entry.delete(0, "end")
+            rom_path_entry.insert(0, rom_path)
+
+    @staticmethod
     def emulator_path_browse_button_command(app, emulator_path_entry):
         emulator_path = filedialog.askopenfile(
             title="Select Emulator EXE",
@@ -56,6 +73,21 @@ class ButtonFunc:
 
 
 class _func:
+
+    @staticmethod
+    def focus_in_rom_entry(rom_path_label, event=None):
+        rom_path_label.configure(
+            text="TotK ROM Path*"
+        )
+
+    @staticmethod
+    def update_rom_entry(app, rom_path_entry, rom_path_label, event=None):
+        rom_path = rom_path_entry.get()
+        app.settings["rom_path"] = rom_path
+        Config.overwrite_setting("rom_path", rom_path)
+        rom_path_label.configure(
+            text="TotK ROM Path"
+        )
 
     @staticmethod
     def focus_in_emulator_entry(emulator_path_label, event=None):
@@ -222,3 +254,36 @@ def settings_menu(app):
         command=emulator_browse_command,
     )
     emulator_path_browse.grid(row=4, column=3)
+    
+    # Rom Path Setting
+    # rom path setting
+    rom_path_label = ctk.CTkLabel(
+        master=scroll_frame,
+        text="TotK ROM Path", anchor='w', width=135,
+        corner_radius=5, fg_color="#3B8ED0"
+    )
+    rom_path_label.grid(row=5, column=0, padx=20, pady=10)
+
+    rom_path_entry = ctk.CTkEntry(master=scroll_frame)
+    if app.settings["rom_path"] is None:
+        rom_path_entry.configure(placeholder_text="Eg. (D:\\romName\\rom.nsp)")
+    else:
+        rom_path_entry.insert(0, app.settings["rom_path"])
+    rom_path_entry.grid(row=5, column=1, padx=20, pady=10)
+    rom_path_entry_command_partial = partial(
+        _func.update_rom_entry,
+        app,
+        rom_path_entry,
+        rom_path_label,
+    )
+    rom_path_entry_focus_partial = partial(_func.focus_in_rom_entry, rom_path_label)
+    rom_path_entry.bind("<Return>", rom_path_entry_command_partial)
+    rom_path_entry.bind("<Key>", rom_path_entry_focus_partial)
+
+    rom_browse_command = partial(ButtonFunc.rom_path_browse_button_command, app, rom_path_entry)
+    rom_path_browse = ctk.CTkButton(
+        scroll_frame,
+        text="Browse...", fg_color="grey",
+        command=rom_browse_command,
+    )
+    rom_path_browse.grid(row=5, column=3)
