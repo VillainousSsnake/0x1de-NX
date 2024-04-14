@@ -118,7 +118,7 @@ class _func:
     @staticmethod
     def focus_in_emulator_entry(emulator_path_label, event=None):
         emulator_path_label.configure(
-            text="Emulator Path*"
+            text="Emulator EXE Path*"
         )
 
     @staticmethod
@@ -127,7 +127,7 @@ class _func:
         app.settings["emulator_path"] = emulator_path
         Config.overwrite_setting("emulator_path", emulator_path)
         emulator_path_label.configure(
-            text="Emulator Path"
+            text="Emulator EXE Path"
         )
 
     @staticmethod
