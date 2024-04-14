@@ -167,9 +167,6 @@ while app.returnStatement != "exit":
         case "project_editor":  # Project Editor Menu
             Index.project_editor(app)
 
-        case "settings_menu":
-            Index.settings_menu(app)
-
 # Clearing the temp folder
 temp_folder = os.path.join(os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_")
 if os.path.exists(temp_folder):
