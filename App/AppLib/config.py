@@ -74,7 +74,7 @@ class Config:
     def get_setting(entry):
 
         # Creating the variables that hold the paths
-        cache_path = os.path.join(os.getcwd(), "0x1de-NX", "_Cache_")
+        cache_path = os.path.join(os.getcwd(), "_Cache_")
         settings_file_path = os.path.join(cache_path, "settings.config")
 
         # Detecting if the _Cache_ path exists
@@ -93,14 +93,18 @@ class Config:
         new_data = {}
 
         for item in data:
-            new_data[item.split(": ")[0]] = item.split(": ")[1]
+
+            # Skipping blank lines
+            if item != "\n" and item != "":
+                # Creating the entry for the new_data dict
+                new_data[item.split(": ")[0]] = item.split(": ")[1]
 
         output = new_data[entry]
         if output.lower() == 'true':
             output = True
-        if output.lower() == 'false':
+        elif output.lower() == 'false':
             output = False
-        if output.lower() == 'none':
+        elif output.lower() == 'none':
             output = None
 
         return output
@@ -108,7 +112,7 @@ class Config:
     @staticmethod
     def overwrite_setting(key, value):
         # Creating the variables that hold the paths
-        cache_path = os.path.join(os.getcwd(), "0x1de-NX", "_Cache_")
+        cache_path = os.path.join(os.getcwd(), "_Cache_")
         settings_file_path = os.path.join(cache_path, "settings.config")
 
         # Detecting if the _Cache_ path exists
@@ -127,7 +131,11 @@ class Config:
         new_data = {}
 
         for item in data:
-            new_data[item.split(": ")[0]] = item.split(": ")[1]
+
+            # Skipping blank lines
+            if item != "\n" and item != "":
+                # Creating the entry for the new_data dict
+                new_data[item.split(": ")[0]] = item.split(": ")[1]
 
         # Detecting booleans in the value and converting them to strings
         if value is True:
@@ -150,6 +158,6 @@ class Config:
 
         # Overwriting the config file
         with open(settings_file_path, "w") as f_out:
-            f_out.write(compiled_data[:len(compiled_data)-1])
+            f_out.write(compiled_data[:len(compiled_data) - 1])
 
         return 0
