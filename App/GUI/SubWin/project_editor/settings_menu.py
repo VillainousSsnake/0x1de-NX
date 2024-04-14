@@ -107,12 +107,30 @@ class _func:
 # Settings menu function
 def settings_menu(app):
 
+    # Creating the window
     window = ctk.CTkToplevel()
     window.geometry("525x300")
+    window.title("0x1de-NX | Settings")
+    window.resizable(False, False)
 
+    # Setting focus on the window
+    window.focus_set()
+    window.grab_set()
+
+    # Creating the scroll frame
     scroll_frame = ctk.CTkScrollableFrame(master=window, width=10000000, fg_color="#242424")
-    scroll_frame.pack(fill='both', side='left')
+    scroll_frame.pack(fill='both', side='top')
 
+    # Creating close button
+    close_button = ctk.CTkButton(
+        master=window,
+        text="Close Settings",
+        command=window.destroy
+    )
+    close_button.pack(side="bottom", anchor="e")
+
+    # Configuring settings
+    # RomFS path settings
     romfs_path_label = ctk.CTkLabel(
         master=scroll_frame,
         text="Game Dump Location", anchor='w', width=135,
