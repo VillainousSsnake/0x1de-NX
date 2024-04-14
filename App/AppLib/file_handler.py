@@ -600,7 +600,10 @@ class FileHandler:
                     )
 
                 def import_command():
-                    pass    # TODO: Stub
+                    messagebox.showinfo(
+                        "Import File",
+                        """Drag and drop files into the sarc while having the folder you want to put the file in selected to import files!""",
+                    )
 
                 def export_command():
 
@@ -612,7 +615,7 @@ class FileHandler:
                     )
 
                     # Exiting function on cancel
-                    if file_explorer_prompt is None:
+                    if file_explorer_prompt == "":
                         return 0
 
                     # Getting the file basename from the path
