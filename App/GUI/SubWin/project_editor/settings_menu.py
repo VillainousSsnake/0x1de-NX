@@ -73,7 +73,7 @@ class _func:
 def settings_menu(app):
 
     window = ctk.CTkToplevel()
-    window.geometry("400x300")
+    window.geometry("525x300")
 
     scroll_frame = ctk.CTkScrollableFrame(master=window, width=10000000, fg_color="#242424")
     scroll_frame.pack(fill='both', side='left')
