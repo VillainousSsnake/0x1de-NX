@@ -161,15 +161,24 @@ class _func:
             text=Text
         )
 
+    @staticmethod
+    def close_window(root: ctk.CTk, window: ctk.CTkToplevel, app):
+        root.destroy()
+        window.destroy()
+        app.returnStatement = "project_editor"
+
 
 # Settings menu function
-def settings_menu(app):
+def settings_menu(root, app):
 
     # Creating the window
     window = ctk.CTkToplevel()
     window.geometry("525x300")
     window.title("0x1de-NX | Settings")
     window.resizable(False, False)
+
+    # Assigning the close button on the window top bar
+    window.protocol("WM_DELETE_WINDOW", partial(_func.close_window, root, window, app))
 
     # Setting focus on the window
     window.focus_set()
@@ -188,7 +197,7 @@ def settings_menu(app):
     close_button = ctk.CTkButton(
         master=window,
         text="Close Settings",
-        command=window.destroy
+        command=partial(_func.close_window, root, window, app),
     )
     close_button.pack(side="bottom", anchor="e")
 
