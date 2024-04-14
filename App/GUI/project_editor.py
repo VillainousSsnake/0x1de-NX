@@ -311,7 +311,6 @@ class ProgFunc:
 
         @staticmethod
         def exit_command(root, app):
-            ProgFunc.save_project()
             exit()
 
     class ViewButtonDropdown:
