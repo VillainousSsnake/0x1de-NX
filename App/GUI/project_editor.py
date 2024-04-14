@@ -3,6 +3,7 @@
 
 # Importing SubWin modules
 from App.GUI.SubWin.project_editor.new_dialog import new_dialog as subwin_new_dialog
+from App.GUI.settings_menu import settings_menu as subwin_settings_menu
 
 # Importing libraries and modules
 from App.AppLib.texture_handler import TextureHandler
@@ -313,10 +314,10 @@ class ProgFunc:
 
         @staticmethod
         def settings_command(app):
-            app.returnStatement = "settings"
+            subwin_settings_menu(app)
 
         @staticmethod
-        def toggle_console_command():
+        def toggle_console_command(app):
             pass    # TODO: Stub
 
 
