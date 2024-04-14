@@ -261,48 +261,48 @@ class ProgFunc:
         """
 
         @staticmethod
-        def new_project_command(app):
+        def new_project_command(root, app):
             pass    # TODO: Stub
 
         @staticmethod
-        def new_command(app):
+        def new_command(root, app):
             pass    # TODO: Stub
 
         @staticmethod
-        def open_command(app):
+        def open_command(root, app):
             pass    # TODO: Stub
 
         class export_project_as:
             @staticmethod
-            def tkcl_package_command(app):
+            def tkcl_package_command(root, app):
                 pass    # TODO: Stub
 
             @staticmethod
-            def nx_package_command(app):
+            def nx_package_command(root, app):
                 pass    # TODO: Stub
 
             @staticmethod
-            def zip_file_command(app):
+            def zip_file_command(root, app):
                 pass    # TODO: Stub
 
         @staticmethod
-        def close_project_command(app):
+        def close_project_command(root, app):
             pass    # TODO: Stub
 
         @staticmethod
-        def rename_project_command(app):
+        def rename_project_command(root, app):
             pass    # TODO: Stub
 
         @staticmethod
-        def save_all_command(app):
+        def save_all_command(root, app):
             pass    # TODO: Stub
 
         @staticmethod
-        def check_for_updates_command(app):
+        def check_for_updates_command(root, app):
             pass    # TODO: Stub
 
         @staticmethod
-        def exit_command(app):
+        def exit_command(root, app):
             ProgFunc.save_project()
             exit()
 
@@ -313,11 +313,11 @@ class ProgFunc:
         """
 
         @staticmethod
-        def settings_command(app):
-            subwin_settings_menu(app)
+        def settings_command(root, app):
+            subwin_settings_menu(root, app)
 
         @staticmethod
-        def toggle_console_command(app):
+        def toggle_console_command(root, app):
             pass    # TODO: Stub
 
 
@@ -499,7 +499,7 @@ def project_editor(app):
                 partial(getattr(
                     ProgFunc.FileButtonDropdown,
                     item[0].replace(" ", "_").lower() + "_command"
-                ), app)
+                ), root, app)
             )
 
         elif item[1] == "submenu":  # Sub-Menu
@@ -520,7 +520,7 @@ def project_editor(app):
                     command=partial(getattr(
                         getattr(ProgFunc.FileButtonDropdown, item[0].replace(" ", "_").lower()),  # The class
                         option.replace(" ", "_").lower() + "_command"  # The command name
-                    ), app)
+                    ), root, app)
                 )
 
         else:
@@ -546,7 +546,7 @@ def project_editor(app):
                 partial(getattr(
                     ProgFunc.ViewButtonDropdown,
                     item[0].replace(" ", "_").lower() + "_command"
-                ), app)
+                ), root, app)
             )
 
         elif item[1] == "submenu":  # Sub-Menu
@@ -567,7 +567,7 @@ def project_editor(app):
                     command=partial(getattr(
                         getattr(ProgFunc.ViewButtonDropdown, item[0].replace(" ", "_").lower()),  # The class
                         option.replace(" ", "_").lower() + "_command"  # The command name
-                    ), app)
+                    ), root, app)
                 )
 
         else:
