@@ -176,7 +176,12 @@ def settings_menu(app):
     window.grab_set()
 
     # Creating the scroll frame
-    scroll_frame = ctk.CTkScrollableFrame(master=window, width=10000000, fg_color="#242424")
+    scroll_frame = ctk.CTkScrollableFrame(
+        master=window,
+        width=10000000,
+        fg_color="#242424",
+        height=250,
+    )
     scroll_frame.pack(fill='both', side='top')
 
     # Creating close button
