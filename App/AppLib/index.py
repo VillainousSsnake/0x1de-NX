@@ -4,7 +4,7 @@
 # Importing GUI
 from App.GUI.project_editor import project_editor as project_editor_redirect
 from App.GUI.main_menu import main_menu as main_menu_redirect
-from App.GUI.settings_menu import settings_menu as settings_menu_redirect
+from App.GUI.SubWin.project_editor.settings_menu import settings_menu as settings_menu_redirect
 
 
 # Index class (Holds menu functions)

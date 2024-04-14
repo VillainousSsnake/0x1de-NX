@@ -3,7 +3,7 @@
 
 # Importing SubWin modules
 from App.GUI.SubWin.project_editor.new_dialog import new_dialog as subwin_new_dialog
-from App.GUI.settings_menu import settings_menu as subwin_settings_menu
+from App.GUI.SubWin.project_editor.settings_menu import settings_menu as subwin_settings_menu
 
 # Importing libraries and modules
 from App.AppLib.texture_handler import TextureHandler
