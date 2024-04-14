@@ -6,13 +6,14 @@ import os
 
 # Creating default_settings
 default_settings = '''current_theme: Dark
-romfs_path: None
+romfs_path: none
 ainb_code_format: JSON
 font_size: 15
-author_name: None
-emulator_path: None
-rom_path: None
-mod_folder_path: None'''  # Default settings variable
+author_name: none
+emulator_path: none
+rom_path: none
+mod_folder_path: none
+fullscreen_project_editor: false'''  # Default settings variable
 
 
 class Config:
