@@ -18,6 +18,7 @@ class App:
             "emulator_path": Config.get_setting("emulator_path"),
             "rom_path": Config.get_setting("rom_path"),
             "mod_folder_path": Config.get_setting("mod_folder_path"),
+            "fullscreen_project_editor": Config.get_setting("fullscreen_project_editor"),
         }
         self.variables = {
             "open_project_fp": None,
