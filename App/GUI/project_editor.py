@@ -2,8 +2,9 @@
 # Contains code for project editor
 
 # Importing SubWin modules
-from App.GUI.SubWin.project_editor.new_dialog import new_dialog as subwin_new_dialog
 from App.GUI.SubWin.project_editor.settings_menu import settings_menu as subwin_settings_menu
+from App.GUI.SubWin.project_editor.new_dialog import new_dialog as subwin_new_dialog
+from App.GUI.SubWin.main_menu.new_project import new_project as subwin_new_project
 
 # Importing libraries and modules
 from App.AppLib.texture_handler import TextureHandler
@@ -259,7 +260,7 @@ class ProgFunc:
 
         @staticmethod
         def new_project_command(root, app):
-            pass    # TODO: Stub
+            subwin_new_project(app, root=root)
 
         @staticmethod
         def new_command(root, app):
