@@ -162,33 +162,6 @@ def settings_menu(app):
     close_button.pack(side="bottom", anchor="e")
 
     # Configuring settings
-    # RomFS path settings
-    romfs_path_label = ctk.CTkLabel(
-        master=scroll_frame,
-        text="RomFS Dump Location", anchor='w', width=135,
-        corner_radius=5, fg_color="#3B8ED0"
-    )
-    romfs_path_label.grid(row=0, column=0, padx=20, pady=10)
-
-    romfs_path_entry = ctk.CTkEntry(master=scroll_frame)
-    if app.settings["romfs_path"] is None:
-        romfs_path_entry.configure(placeholder_text="Eg. (D:\\Tears of the Kingdom\\romfs)")
-    else:
-        romfs_path_entry.insert(0, app.settings["romfs_path"])
-    romfs_path_entry.grid(row=0, column=1, padx=20, pady=10)
-    romfs_path_entry_command_partial = partial(_func.update_romfs_entry, app, romfs_path_entry, romfs_path_label)
-    romfs_path_entry_focus_partial = partial(_func.focus_in_romfs_entry, romfs_path_label)
-    romfs_path_entry.bind("<Return>", romfs_path_entry_command_partial)
-    romfs_path_entry.bind("<Key>", romfs_path_entry_focus_partial)
-
-    romfs_browse_command = partial(ButtonFunc.romfs_path_browse_button_command, app, romfs_path_entry)
-    romfs_path_browse = ctk.CTkButton(
-        scroll_frame,
-        text="Browse...", fg_color="grey",
-        command=romfs_browse_command,
-    )
-    romfs_path_browse.grid(row=0, column=3)
-
     #   # AINB-To-Code Setting
     #   ainb_to_code_format_label = ctk.CTkLabel(
     #       master=scroll_frame,
@@ -212,16 +185,43 @@ def settings_menu(app):
         text="Font Size", anchor='w', width=135,
         corner_radius=5, fg_color="#3B8ED0"
     )
-    font_size_label.grid(row=3, column=0, padx=20, pady=10)
+    font_size_label.grid(row=0, column=0, padx=20, pady=10)
 
     font_size_entry = ctk.CTkEntry(master=scroll_frame)
     font_size_entry.insert("0", app.settings["font_size"])
-    font_size_entry.grid(row=3, column=1, padx=20, pady=10)
+    font_size_entry.grid(row=0, column=1, padx=20, pady=10)
     font_size_entry_keys_command = partial(_func.font_size_entry_keys_command, font_size_label)
     font_size_entry_return_command = partial(_func.font_size_entry_return_command, app, font_size_label,
                                              font_size_entry)
     font_size_entry.bind("<Key>", font_size_entry_keys_command)
     font_size_entry.bind("<Return>", font_size_entry_return_command)
+
+    # RomFS path settings
+    romfs_path_label = ctk.CTkLabel(
+        master=scroll_frame,
+        text="RomFS Dump Location", anchor='w', width=135,
+        corner_radius=5, fg_color="#3B8ED0"
+    )
+    romfs_path_label.grid(row=1, column=0, padx=20, pady=10)
+
+    romfs_path_entry = ctk.CTkEntry(master=scroll_frame)
+    if app.settings["romfs_path"] is None:
+        romfs_path_entry.configure(placeholder_text="Eg. (D:\\Tears of the Kingdom\\romfs)")
+    else:
+        romfs_path_entry.insert(0, app.settings["romfs_path"])
+    romfs_path_entry.grid(row=1, column=1, padx=20, pady=10)
+    romfs_path_entry_command_partial = partial(_func.update_romfs_entry, app, romfs_path_entry, romfs_path_label)
+    romfs_path_entry_focus_partial = partial(_func.focus_in_romfs_entry, romfs_path_label)
+    romfs_path_entry.bind("<Return>", romfs_path_entry_command_partial)
+    romfs_path_entry.bind("<Key>", romfs_path_entry_focus_partial)
+
+    romfs_browse_command = partial(ButtonFunc.romfs_path_browse_button_command, app, romfs_path_entry)
+    romfs_path_browse = ctk.CTkButton(
+        scroll_frame,
+        text="Browse...", fg_color="grey",
+        command=romfs_browse_command,
+    )
+    romfs_path_browse.grid(row=1, column=3)
 
     # Emulator path setting
     emulator_path_label = ctk.CTkLabel(
@@ -229,14 +229,14 @@ def settings_menu(app):
         text="Emulator EXE Path", anchor='w', width=135,
         corner_radius=5, fg_color="#3B8ED0"
     )
-    emulator_path_label.grid(row=4, column=0, padx=20, pady=10)
+    emulator_path_label.grid(row=2, column=0, padx=20, pady=10)
 
     emulator_path_entry = ctk.CTkEntry(master=scroll_frame)
     if app.settings["emulator_path"] is None:
         emulator_path_entry.configure(placeholder_text="Eg. (D:\\EmulatorName\\emulator.exe)")
     else:
         emulator_path_entry.insert(0, app.settings["emulator_path"])
-    emulator_path_entry.grid(row=4, column=1, padx=20, pady=10)
+    emulator_path_entry.grid(row=2, column=1, padx=20, pady=10)
     emulator_path_entry_command_partial = partial(
         _func.update_emulator_entry,
         app,
@@ -253,7 +253,7 @@ def settings_menu(app):
         text="Browse...", fg_color="grey",
         command=emulator_browse_command,
     )
-    emulator_path_browse.grid(row=4, column=3)
+    emulator_path_browse.grid(row=2, column=3)
     
     # Rom Path Setting
     # rom path setting
@@ -262,14 +262,14 @@ def settings_menu(app):
         text="TotK ROM Path", anchor='w', width=135,
         corner_radius=5, fg_color="#3B8ED0"
     )
-    rom_path_label.grid(row=5, column=0, padx=20, pady=10)
+    rom_path_label.grid(row=3, column=0, padx=20, pady=10)
 
     rom_path_entry = ctk.CTkEntry(master=scroll_frame)
     if app.settings["rom_path"] is None:
         rom_path_entry.configure(placeholder_text="Eg. (D:\\romName\\rom.nsp)")
     else:
         rom_path_entry.insert(0, app.settings["rom_path"])
-    rom_path_entry.grid(row=5, column=1, padx=20, pady=10)
+    rom_path_entry.grid(row=3, column=1, padx=20, pady=10)
     rom_path_entry_command_partial = partial(
         _func.update_rom_entry,
         app,
@@ -286,4 +286,4 @@ def settings_menu(app):
         text="Browse...", fg_color="grey",
         command=rom_browse_command,
     )
-    rom_path_browse.grid(row=5, column=3)
+    rom_path_browse.grid(row=3, column=3)
