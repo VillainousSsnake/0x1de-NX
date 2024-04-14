@@ -133,7 +133,7 @@ class _func:
     @staticmethod
     def focus_in_romfs_entry(romfs_path_label, event=None):
         romfs_path_label.configure(
-            text="RomFS Dump Location*"
+            text="RomFS Dump Path*"
         )
 
     @staticmethod
@@ -142,7 +142,7 @@ class _func:
         app.settings["romfs_path"] = romfs_path
         Config.overwrite_setting("romfs_path", romfs_path)
         romfs_path_label.configure(
-            text="RomFS Dump Location"
+            text="RomFS Dump Path"
         )
 
     @staticmethod
@@ -230,7 +230,7 @@ def settings_menu(app):
     # RomFS path settings
     romfs_path_label = ctk.CTkLabel(
         master=scroll_frame,
-        text="RomFS Dump Location", anchor='w', width=135,
+        text="RomFS Dump Path", anchor='w', width=135,
         corner_radius=5, fg_color="#3B8ED0"
     )
     romfs_path_label.grid(row=1, column=0, padx=20, pady=10)
