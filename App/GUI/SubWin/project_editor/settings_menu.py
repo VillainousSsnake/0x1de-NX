@@ -163,8 +163,8 @@ class _func:
 
     @staticmethod
     def close_window(root: ctk.CTk, window: ctk.CTkToplevel, app):
-        root.destroy()
         window.destroy()
+        root.destroy()
         app.returnStatement = "project_editor"
 
 
