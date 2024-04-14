@@ -12,6 +12,7 @@ from App.AppLib.file_handler import FileHandler
 import App.AppLib.customtkinter as ctk
 from tkinter import ttk, messagebox
 from tkinterdnd2 import DND_FILES
+from ctkcomponents import CTkPopupMenu
 from PIL import ImageTk, Image
 from functools import partial
 from CTkMenuBar import *
@@ -161,7 +162,7 @@ class ProgFunc:
                 subwin_new_dialog(curItem, project_treeview, app)
 
         @staticmethod
-        def on_right_click(self, event=None):
+        def on_right_click(root, self, event=None):
 
             # Setting selection to the item being hovered over
             treeview_item = self.identify("item", event.x, event.y)
@@ -171,8 +172,8 @@ class ProgFunc:
             self.selection_set(treeview_item)
 
             # Creating right click menu
-            rc_menu = CustomDropdownMenu
-            rc_menu.add_option(self=CustomDropdownMenu(widget=self), option="a")
+            rc_menu = CTkPopupMenu(master=root, title="RIGHT CLICK MENU")
+            rc_menu.option_add("Right CLick", "RightClick")
 
             # Printing event
             print(event)    # TODO: Finish
@@ -262,14 +263,6 @@ class ProgFunc:
         def new_project_command(root, app):
             subwin_new_project(app, root=root)
 
-        @staticmethod
-        def new_command(root, app):
-            pass    # TODO: Stub
-
-        @staticmethod
-        def open_command(root, app):
-            pass    # TODO: Stub
-
         class export_project_as:
             @staticmethod
             def tkcl_package_command(root, app):
@@ -299,10 +292,6 @@ class ProgFunc:
 
         @staticmethod
         def rename_project_command(root, app):
-            pass    # TODO: Stub
-
-        @staticmethod
-        def save_all_command(root, app):
             pass    # TODO: Stub
 
         @staticmethod
@@ -451,10 +440,6 @@ def project_editor(app):
 
     # Creating the menu's option lists
     file_dropdown_option_list = [
-        ["New", "option"],
-        ["Open", "option"],
-        ["Save All", "option"],
-        ["sep"],    # Seperator
         ["New Project", "option"],
         ["Rename Project", "option"],
         ["Export Project As", "submenu", ["TKCL Package", "NX Package", "Zip File"], 'arrow'],
@@ -687,7 +672,7 @@ def project_editor(app):
                                            app,
                                            )
                           )
-    project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, project_treeview))
+    project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, root, project_treeview))
 
     # Inserting all the files and folders into tree view
     sub_directories = [x[0] for x in os.walk(app.variables["open_project_fp"])]
