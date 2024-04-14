@@ -9,6 +9,24 @@ from tkinter import filedialog
 
 # ButtonFunc class (Adapted from AINB-Toolbox)
 class ButtonFunc:
+
+    @staticmethod
+    def emulator_path_browse_button_command(app, emulator_path_entry):
+        emulator_path = filedialog.askopenfile(
+            title="Select Emulator EXE",
+            filetypes=(
+                ("Windows Executable File", "*.exe"),
+                ("All Files", "")
+            ),
+        ).name
+        if emulator_path == "":
+            return 0
+        else:
+            app.settings["emulator_path"] = emulator_path
+            Config.overwrite_setting("emulator_path", emulator_path)
+            emulator_path_entry.delete(0, "end")
+            emulator_path_entry.insert(0, emulator_path)
+
     @staticmethod
     def ainb_to_code_option_menu_button_command(app, event=None):
 
@@ -37,6 +55,22 @@ class ButtonFunc:
 
 
 class _func:
+
+    @staticmethod
+    def focus_in_emulator_entry(emulator_path_label, event=None):
+        emulator_path_label.configure(
+            text="Emulator Path*"
+        )
+
+    @staticmethod
+    def update_emulator_entry(app, emulator_path_entry, emulator_path_label, event=None):
+        emulator_path = emulator_path_entry.get()
+        app.settings["emulator_path"] = emulator_path
+        Config.overwrite_setting("emulator_path", emulator_path)
+        emulator_path_label.configure(
+            text="Emulator Path"
+        )
+
     @staticmethod
     def focus_in_romfs_entry(romfs_path_label, event=None):
         romfs_path_label.configure(
@@ -137,3 +171,35 @@ def settings_menu(app):
                                              font_size_entry)
     font_size_entry.bind("<Key>", font_size_entry_keys_command)
     font_size_entry.bind("<Return>", font_size_entry_return_command)
+
+    # Emulator path setting
+    emulator_path_label = ctk.CTkLabel(
+        master=scroll_frame,
+        text="Emulator EXE Path", anchor='w', width=135,
+        corner_radius=5, fg_color="#3B8ED0"
+    )
+    emulator_path_label.grid(row=4, column=0, padx=20, pady=10)
+
+    emulator_path_entry = ctk.CTkEntry(master=scroll_frame)
+    if app.settings["emulator_path"] is None:
+        emulator_path_entry.configure(placeholder_text="Eg. (D:\\EmulatorName\\emulator.exe)")
+    else:
+        emulator_path_entry.insert(0, app.settings["emulator_path"])
+    emulator_path_entry.grid(row=4, column=1, padx=20, pady=10)
+    emulator_path_entry_command_partial = partial(
+        _func.update_emulator_entry,
+        app,
+        emulator_path_entry,
+        emulator_path_label,
+    )
+    emulator_path_entry_focus_partial = partial(_func.focus_in_emulator_entry, emulator_path_label)
+    emulator_path_entry.bind("<Return>", emulator_path_entry_command_partial)
+    emulator_path_entry.bind("<Key>", emulator_path_entry_focus_partial)
+
+    emulator_browse_command = partial(ButtonFunc.emulator_path_browse_button_command, app, emulator_path_entry)
+    emulator_path_browse = ctk.CTkButton(
+        scroll_frame,
+        text="Browse...", fg_color="grey",
+        command=emulator_browse_command,
+    )
+    emulator_path_browse.grid(row=4, column=3)
