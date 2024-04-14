@@ -147,7 +147,7 @@ class _func:
     @staticmethod
     def focus_in_romfs_entry(romfs_path_label, event=None):
         romfs_path_label.configure(
-            text="Game Dump Location*"
+            text="RomFS Dump Location*"
         )
 
     @staticmethod
@@ -156,7 +156,7 @@ class _func:
         app.settings["romfs_path"] = romfs_path
         Config.overwrite_setting("romfs_path", romfs_path)
         romfs_path_label.configure(
-            text="Game Dump Location"
+            text="RomFS Dump Location"
         )
 
     @staticmethod
