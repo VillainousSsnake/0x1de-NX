@@ -22,9 +22,6 @@ import os
 
 # ProgFunc class
 class ProgFunc:
-    @staticmethod
-    def save_project():
-        pass    # TODO: Stub
 
     class FileEditor:
         def __init__(self,
