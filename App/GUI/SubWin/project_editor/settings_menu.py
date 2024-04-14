@@ -18,10 +18,11 @@ class ButtonFunc:
                 ("Windows Executable File", "*.exe"),
                 ("All Files", "")
             ),
-        ).name
-        if emulator_path == "":
+        )
+        if emulator_path is None:
             return 0
         else:
+            emulator_path = emulator_path.name
             app.settings["emulator_path"] = emulator_path
             Config.overwrite_setting("emulator_path", emulator_path)
             emulator_path_entry.delete(0, "end")
