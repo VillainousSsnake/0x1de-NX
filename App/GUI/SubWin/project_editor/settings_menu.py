@@ -11,6 +11,17 @@ from tkinter import filedialog
 class ButtonFunc:
 
     @staticmethod
+    def mod_folder_path_browse_button_command(app, mod_folder_path_entry):
+        mod_folder_path = filedialog.askdirectory(title="Select Tears of the Kingdom RomFS Folder")
+        if mod_folder_path == "":
+            return 0
+        else:
+            app.settings["mod_folder_path"] = mod_folder_path
+            Config.overwrite_setting("mod_folder_path", mod_folder_path)
+            mod_folder_path_entry.delete(0, "end")
+            mod_folder_path_entry.insert(0, mod_folder_path)
+
+    @staticmethod
     def rom_path_browse_button_command(app, rom_path_entry):
         rom_path = filedialog.askopenfile(
             title="Select Game ROM File",
@@ -73,6 +84,21 @@ class ButtonFunc:
 
 
 class _func:
+
+    @staticmethod
+    def focus_in_mod_folder_entry(mod_folder_path_label, event=None):
+        mod_folder_path_label.configure(
+            text="TotK Mod Folder Path*"
+        )
+
+    @staticmethod
+    def update_mod_folder_entry(app, mod_folder_path_entry, mod_folder_path_label, event=None):
+        mod_folder_path = mod_folder_path_entry.get()
+        app.settings["romfs_path"] = mod_folder_path
+        Config.overwrite_setting("romfs_path", mod_folder_path)
+        mod_folder_path_label.configure(
+            text="TotK Mod Folder Path"
+        )
 
     @staticmethod
     def focus_in_rom_entry(rom_path_label, event=None):
@@ -287,3 +313,35 @@ def settings_menu(app):
         command=rom_browse_command,
     )
     rom_path_browse.grid(row=3, column=3)
+
+    # mod_folder path setting
+    mod_folder_path_label = ctk.CTkLabel(
+        master=scroll_frame,
+        text="TotK Mod Folder Path", anchor='w', width=135,
+        corner_radius=5, fg_color="#3B8ED0"
+    )
+    mod_folder_path_label.grid(row=4, column=0, padx=20, pady=10)
+
+    mod_folder_path_entry = ctk.CTkEntry(master=scroll_frame)
+    if app.settings["mod_folder_path"] is None:
+        mod_folder_path_entry.configure(placeholder_text="Eg. (D:\\mod_folderName\\mod_folder.exe)")
+    else:
+        mod_folder_path_entry.insert(0, app.settings["mod_folder_path"])
+    mod_folder_path_entry.grid(row=4, column=1, padx=20, pady=10)
+    mod_folder_path_entry_command_partial = partial(
+        _func.update_mod_folder_entry,
+        app,
+        mod_folder_path_entry,
+        mod_folder_path_label,
+    )
+    mod_folder_path_entry_focus_partial = partial(_func.focus_in_mod_folder_entry, mod_folder_path_label)
+    mod_folder_path_entry.bind("<Return>", mod_folder_path_entry_command_partial)
+    mod_folder_path_entry.bind("<Key>", mod_folder_path_entry_focus_partial)
+
+    mod_folder_browse_command = partial(ButtonFunc.mod_folder_path_browse_button_command, app, mod_folder_path_entry)
+    mod_folder_path_browse = ctk.CTkButton(
+        scroll_frame,
+        text="Browse...", fg_color="grey",
+        command=mod_folder_browse_command,
+    )
+    mod_folder_path_browse.grid(row=4, column=3)
