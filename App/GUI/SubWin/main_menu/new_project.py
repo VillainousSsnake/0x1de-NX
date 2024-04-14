@@ -64,7 +64,7 @@ class ButtonFunc:
         window.destroy()
 
     @staticmethod
-    def create(settings, window, app, segmented_button_menu_controller):
+    def create(settings, window, app, segmented_button_menu_controller=None):
         """
             settings = {
                 "Project Name": None,
@@ -131,8 +131,9 @@ class ButtonFunc:
         window.destroy()
 
         # Updating segmented_button_menu_controller
-        segmented_button_menu_controller.hide_current_menu()
-        segmented_button_menu_controller.update_projects_menu(segmented_button_menu_controller)
+        if segmented_button_menu_controller is not None:
+            segmented_button_menu_controller.hide_current_menu()
+            segmented_button_menu_controller.update_projects_menu(segmented_button_menu_controller)
 
     @staticmethod
     def select_icon(icon_image, settings, event=None):
@@ -158,7 +159,7 @@ class ButtonFunc:
         )
 
 
-def new_project(app, segmented_button_menu_controller):
+def new_project(app, segmented_button_menu_controller=None):
 
     settings = {
         "Project Name": None,
