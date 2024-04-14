@@ -287,7 +287,17 @@ class ProgFunc:
 
         @staticmethod
         def close_project_command(root, app):
-            pass    # TODO: Stub
+
+            # Asking to quit
+            ok_cancel_popup = messagebox.askokcancel(
+                "0x1de-NX | Close Project",
+                "Are you sure you want to close the project? Progress may be lost!"
+            )
+
+            # Quitting
+            if ok_cancel_popup:
+                app.returnStatement = "main"
+                root.destroy()
 
         @staticmethod
         def rename_project_command(root, app):
