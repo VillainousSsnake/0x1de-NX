@@ -1,4 +1,13 @@
 # /App/GUI/SubWin/settings_menu.py
 
-def settings_menu(root, app):
-    pass  # TODO: Stub
+# Import statements
+import customtkinter as ctk
+
+
+# Settings menu function
+def settings_menu(app):
+
+    window = ctk.CTkToplevel()
+    window.geometry("400x300")
+
+    # TODO: Finish
