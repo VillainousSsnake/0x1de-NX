@@ -977,6 +977,12 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 return None
 
             case "BinaryYAML":                      # TODO: Displaying BYML format
+
+                tabview.delete(item_info["text"])
+                messagebox.showerror(
+                    title="file_format Error",
+                    message="This file is not supported!\n" + f"Unsupported File Format: " + file_format
+                )
                 # Exiting function
                 return None
 
