@@ -563,10 +563,10 @@ def project_editor(app):
             for option in item[2]:
                 submenu.add_option(
                     option,
-                    command=getattr(
+                    command=partial(getattr(
                         getattr(ProgFunc.ViewButtonDropdown, item[0].replace(" ", "_").lower()),  # The class
                         option.replace(" ", "_").lower() + "_command"  # The command name
-                    )
+                    ), app)
                 )
 
         else:
