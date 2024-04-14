@@ -260,48 +260,48 @@ class ProgFunc:
         """
 
         @staticmethod
-        def new_project_command():
+        def new_project_command(app):
             pass    # TODO: Stub
 
         @staticmethod
-        def new_command():
+        def new_command(app):
             pass    # TODO: Stub
 
         @staticmethod
-        def open_command():
+        def open_command(app):
             pass    # TODO: Stub
 
         class export_project_as:
             @staticmethod
-            def tkcl_package_command():
+            def tkcl_package_command(app):
                 pass    # TODO: Stub
 
             @staticmethod
-            def nx_package_command():
+            def nx_package_command(app):
                 pass    # TODO: Stub
 
             @staticmethod
-            def zip_file_command():
+            def zip_file_command(app):
                 pass    # TODO: Stub
 
         @staticmethod
-        def close_project_command():
+        def close_project_command(app):
             pass    # TODO: Stub
 
         @staticmethod
-        def rename_project_command():
+        def rename_project_command(app):
             pass    # TODO: Stub
 
         @staticmethod
-        def save_all_command():
+        def save_all_command(app):
             pass    # TODO: Stub
 
         @staticmethod
-        def check_for_updates_command():
+        def check_for_updates_command(app):
             pass    # TODO: Stub
 
         @staticmethod
-        def exit_command():
+        def exit_command(app):
             ProgFunc.save_project()
             exit()
 
@@ -312,8 +312,8 @@ class ProgFunc:
         """
 
         @staticmethod
-        def settings_command():
-            pass    # TODO: Stub
+        def settings_command(app):
+            app.returnStatement = "settings"
 
         @staticmethod
         def toggle_console_command():
@@ -495,10 +495,10 @@ def project_editor(app):
             # Creating the option
             file_btn_dropdown.add_option(
                 btn_text,
-                getattr(
+                partial(getattr(
                     ProgFunc.FileButtonDropdown,
                     item[0].replace(" ", "_").lower() + "_command"
-                ),
+                ), app)
             )
 
         elif item[1] == "submenu":  # Sub-Menu
@@ -542,10 +542,10 @@ def project_editor(app):
             # Creating the option
             view_btn_dropdown.add_option(
                 btn_text,
-                getattr(
+                partial(getattr(
                     ProgFunc.ViewButtonDropdown,
                     item[0].replace(" ", "_").lower() + "_command"
-                ),
+                ), app)
             )
 
         elif item[1] == "submenu":  # Sub-Menu
