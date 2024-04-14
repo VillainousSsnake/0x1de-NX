@@ -189,22 +189,22 @@ def settings_menu(app):
     )
     romfs_path_browse.grid(row=0, column=3)
 
-    # AINB-To-Code Setting
-    ainb_to_code_format_label = ctk.CTkLabel(
-        master=scroll_frame,
-        text="AINB-To-Code Format", anchor='w', width=135,
-        corner_radius=5, fg_color="#3B8ED0"
-    )
-    ainb_to_code_format_label.grid(row=2, column=0, padx=20, pady=10)
-
-    ainb_to_code_option_menu_command = partial(ButtonFunc.ainb_to_code_option_menu_button_command, app)
-    ainb_to_code_format_option_menu = ctk.CTkOptionMenu(
-        master=scroll_frame,
-        values=["YAML", "JSON"],
-        command=ainb_to_code_option_menu_command,
-    )
-    ainb_to_code_format_option_menu.set(app.settings["ainb_code_format"])
-    ainb_to_code_format_option_menu.grid(row=2, column=1, padx=20, pady=10)
+    #   # AINB-To-Code Setting
+    #   ainb_to_code_format_label = ctk.CTkLabel(
+    #       master=scroll_frame,
+    #       text="AINB-To-Code Format", anchor='w', width=135,
+    #       corner_radius=5, fg_color="#3B8ED0"
+    #   )
+    #   ainb_to_code_format_label.grid(row=2, column=0, padx=20, pady=10)
+    #
+    #   ainb_to_code_option_menu_command = partial(ButtonFunc.ainb_to_code_option_menu_button_command, app)
+    #   ainb_to_code_format_option_menu = ctk.CTkOptionMenu(
+    #       master=scroll_frame,
+    #       values=["YAML", "JSON"],
+    #       command=ainb_to_code_option_menu_command,
+    #   )
+    #   ainb_to_code_format_option_menu.set(app.settings["ainb_code_format"])
+    #   ainb_to_code_format_option_menu.grid(row=2, column=1, padx=20, pady=10)
 
     # Font size setting
     font_size_label = ctk.CTkLabel(
