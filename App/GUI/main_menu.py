@@ -20,7 +20,6 @@ import os
 
 
 # ButtonFunc class (Adapted from AINB-Toolbox)
-# Button func
 class ButtonFunc:
     @staticmethod
     def ainb_to_code_option_menu_button_command(app, event=None):
