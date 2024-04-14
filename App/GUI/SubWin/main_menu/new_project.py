@@ -64,7 +64,7 @@ class ButtonFunc:
         window.destroy()
 
     @staticmethod
-    def create(settings, window, app, segmented_button_menu_controller=None):
+    def create(settings, window, app, segmented_button_menu_controller=None, root=None):
         """
             settings = {
                 "Project Name": None,
@@ -127,13 +127,20 @@ class ButtonFunc:
         with open(os.path.join(new_project_dir, "info.json"), "w") as f_out:
             json.dump(info_json_contents, f_out)
 
-        # Destroying the window
-        window.destroy()
-
         # Updating segmented_button_menu_controller
         if segmented_button_menu_controller is not None:
             segmented_button_menu_controller.hide_current_menu()
             segmented_button_menu_controller.update_projects_menu(segmented_button_menu_controller)
+
+        # Opening project if segmented_button_menu_controller is None
+        if segmented_button_menu_controller is None:
+            app.variables["open_project_fp"] = new_project_dir
+
+        # Destroying the window
+        window.destroy()
+
+        if root is not None:
+            root.destroy()
 
     @staticmethod
     def select_icon(icon_image, settings, event=None):
@@ -159,7 +166,7 @@ class ButtonFunc:
         )
 
 
-def new_project(app, segmented_button_menu_controller=None):
+def new_project(app, segmented_button_menu_controller=None, root=None):
 
     settings = {
         "Project Name": None,
@@ -178,7 +185,7 @@ def new_project(app, segmented_button_menu_controller=None):
     window.grab_set()
 
     # Configuring the menu widgets
-    create_command = partial(ButtonFunc.create, settings, window, app, segmented_button_menu_controller)
+    create_command = partial(ButtonFunc.create, settings, window, app, segmented_button_menu_controller, root)
     create_button = tk.CTkButton(
         master=window,
         text="Create",
