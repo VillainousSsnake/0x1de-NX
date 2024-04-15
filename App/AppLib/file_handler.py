@@ -14,6 +14,7 @@ import os
 
 # Importing modules and file dependencies
 from App.FFLib.StandardArchive import Sarc
+from App.FFLib.BinaryYAML import BYML
 from App.FFLib.AAMP import AAMP
 from App.FFLib.AINB import AINB
 import json
@@ -978,11 +979,79 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
 
             case "BinaryYAML":                      # TODO: Displaying BYML format
 
-                tabview.delete(item_info["text"])
-                messagebox.showerror(
+                # Asking to view the file
+                yes_no_prompt = messagebox.askokcancel(
                     title="file_format Error",
-                    message="This file is not supported!\n" + f"Unsupported File Format: " + file_format
+                    message=("This file is not fully supported!\n" + f"Unsupported File Format: " + file_format
+                             + "\n\nThere is no support for saving this file, do you want to attempt view it?")
                 )
+
+                # Viewing or deleting tab based on user input
+                if not yes_no_prompt:
+                    # Deleting tab and exiting
+                    tabview.delete(item_info["text"])
+                    return None
+
+                # Viewing BinaryYAML file
+
+                # Creating the BYML Controller
+                byml_controller = BYML(item_info["values"][0])
+
+                # Getting the YAML data from the BYML Controller
+                yaml_data = byml_controller.to_yaml()
+
+                # Creating the top navigation frame
+                top_navigation_frame = ctk.CTkFrame(
+                    master=master,
+                    height=30,
+                    fg_color="#242424"
+                )
+                top_navigation_frame.pack(fill="x")
+
+                # Creating the Save, Import, and Export buttons
+                save_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x0001F5AB) + " Save",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                save_button.pack(anchor="w", side="left")
+
+                export_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x21EE) + " Export",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                export_button.pack(anchor="w", side="left")
+
+                # Creating code_view
+                code_view = CodeView(
+                    master=master,
+                    lexer=pylexers.YamlLexer,
+                    color_scheme=CodeViewColorScheme,
+                    width=999999,
+                    height=999999,
+                    font=("Cascadia Code", app.settings["font_size"]),
+                )
+                code_view.pack(fill="both", side="top", anchor="w")
+
+                # Inserting the yaml data into the code view widget
+                code_view.insert(0.0, yaml_data)
+
+                # Removing the extra new line at the end of file
+                code_view.delete(str(float(code_view.index("end")) - 1), "end")
+
+                # Creating the update function
+                def save_file(event=None):
+                    messagebox.showerror(
+                        "Error: Saving BYML Files Not Supported!",
+                        "Currently the BYML File format does not support saving! Please try updating or wait for a future update to support saving BYML Files!"
+                    )
+
+                # Assigning the button functions
+                save_button.configure(command=save_file)
+
                 # Exiting function
                 return None
 
