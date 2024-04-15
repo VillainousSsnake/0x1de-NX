@@ -12,7 +12,7 @@ import converter
 # optional compress_file argument specifies whether or not to compress the file with zstd
 
 # optional baev_path argument loads the corresponding BAEV file with the ASB
-converter.asb_to_json("Lynel.root.asb", "output_folder", baev_path="Lynel.root.baev")
+converter.asb_to_json("Lynel.root.asb_dt", "output_folder", baev_path="Lynel.root.baev")
 
 converter.json_to_asb("Lynel.root.json", "output_folder")
 

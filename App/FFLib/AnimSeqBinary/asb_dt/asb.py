@@ -1796,7 +1796,7 @@ class ASB:
         if output_dir:
             os.makedirs(output_dir, exist_ok=True)
         self.current_calc_index = 0
-        with open(os.path.join(output_dir, self.filename + ".asb"), "wb") as f:
+        with open(os.path.join(output_dir, self.filename + ".asb_dt"), "wb") as f:
             buffer = WriteStream(f)
             buffer.write("ASB ".encode())
             buffer.write(u32(self.version))

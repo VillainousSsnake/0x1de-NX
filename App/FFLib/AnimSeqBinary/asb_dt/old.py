@@ -61,7 +61,7 @@ class ASB:
 
             # Header (0x74 Bytes)
             self.magic = self.stream.read(4).decode('utf-8')
-            if self.magic != "ASB ": # Must be .asb file with correct magic
+            if self.magic != "ASB ": # Must be .asb_dt file with correct magic
                 raise Exception(f"Invalid magic {self.magic} - expected 'ASB '")
             self.version = self.stream.read_u32()
             if self.version not in [0x417, 0x40F]: # Must be version 0x417 or 0x40F
@@ -1214,7 +1214,7 @@ class ASB:
         entry["Animation"] = self.ParseParameter("string")
         entry["Unknown 1"] = self.ParseParameter("bool") # loop flag
         entry["Unknown 2"] = self.stream.read_u32()
-        entry["Unknown 3"] = self.stream.read_u32() # is a bool asb parameter, is use the offset
+        entry["Unknown 3"] = self.stream.read_u32() # is a bool asb_dt parameter, is use the offset
         entry["Unknown 4"] = self.ParseParameter("float") # frame offset for results?
         offsets, x2c, event, frame, state = self.NodeConnections()
         if offsets["Child"]:
@@ -1748,7 +1748,7 @@ class ASB:
     def ToBytes(self, output_dir=''):
         if output_dir:
             os.makedirs(output_dir, exist_ok=True)
-        with open(os.path.join(output_dir, self.filename + ".asb"), 'wb') as f:
+        with open(os.path.join(output_dir, self.filename + ".asb_dt"), 'wb') as f:
             buffer = WriteStream(f)
             buffer.write("ASB ".encode())
             buffer.write(u32(self.version))
@@ -2305,8 +2305,8 @@ def json_to_asb(json_path, output_dir='', compress=False, romfs_path=''):
     file.ToBytes(output_dir)
     if compress:
         zs = zstd.Zstd(romfs_path)
-        zs.Compress(os.path.join(output_dir, file.filename + ".asb"), output_dir)
-        os.remove(os.path.join(output_dir, file.filename + ".asb"))
+        zs.Compress(os.path.join(output_dir, file.filename + ".asb_dt"), output_dir)
+        os.remove(os.path.join(output_dir, file.filename + ".asb_dt"))
 
 if __name__ == "__main__":
-    asb_to_json("Player.root.asb")
+    asb_to_json("Player.root.asb_dt")

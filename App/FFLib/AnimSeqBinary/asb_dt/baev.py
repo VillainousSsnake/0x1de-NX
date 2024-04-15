@@ -8,7 +8,7 @@ import os
 
 # Hash function for baev hashes
 # The seed is the first string in the string pool (usually null)
-# The string is either the node's GUID in the asb file or the animation's name
+# The string is either the node's GUID in the asb_dt file or the animation's name
 def calc_hash(string, seed=""):
     
     length = len(string)
