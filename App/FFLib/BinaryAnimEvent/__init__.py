@@ -68,7 +68,7 @@ class BAEV:
         # Returning the json data
         return json_data
 
-    def to_asb(self, data: str) -> bytes:
+    def to_baev(self, data: str) -> bytes:
         """
         Converts JSON string to BAEV data.
         :param data: JSON string
