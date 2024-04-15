@@ -81,9 +81,9 @@ FileFormatIcons = {
     "ZStandard": chr(0xf15b),
     "AINodeBinary": chr(0x1F916),
     "TextFile": chr(0x1F5CF),
-    "AAMP": chr(0x1F5CF),   # TODO: Find unicode to fit AAMP
-    "BinaryAnimEvent": chr(0x1F5CB),  # TODO: Find unicode to fit BAEV
-    "AnimSequenceBinary": chr(0x1F5CB),    # TODO: Find unicode to fit ASB
+    "AAMP": chr(0x1F9B4),
+    "BinaryAnimEvent": chr(0x1F9CE),
+    "AnimSequenceBinary": chr(0x1F938),
     None: chr(0x1F5CB),
 }
 
