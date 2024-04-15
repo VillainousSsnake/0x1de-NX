@@ -45,7 +45,6 @@ class ASB:
         # Returning the json data
         return json_data
 
-
     def to_asb(self, data) -> bytes:
         """
         Converts JSON string to ASB data.
