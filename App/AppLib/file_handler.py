@@ -1065,7 +1065,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
             case "AnimSequenceBinary":              # TODO: Displaying ASB format
 
                 # Creating the ASB Controller
-                asb_controller = ASB(item_info["values"][0])
+                asb_controller = ASB(item_info["values"][0], app.settings["romfs_path"])
 
                 # Getting the YAML data
                 json_data = asb_controller.to_json()
