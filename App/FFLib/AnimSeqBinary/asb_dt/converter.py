@@ -5,7 +5,7 @@ except ImportError:
 try:
     from asb import *
 except ImportError:
-    raise ImportError("asb_dt.py not found")
+    raise ImportError("asb.py not found")
 try:
     from baev import *
 except ImportError:
@@ -62,10 +62,10 @@ def json_to_asb(filepath, output_dir="", compress_file=False, romfs_path=""):
         os.makedirs(output_dir, exist_ok=True)
     if compress_file:
         file.to_binary()
-        data = compress(file.filename + ".asb_dt", romfs_path)
-        with open(os.path.join(output_dir, file.filename + ".asb_dt.zs"), "wb") as f:
+        data = compress(file.filename + ".asb", romfs_path)
+        with open(os.path.join(output_dir, file.filename + ".asb.zs"), "wb") as f:
             f.write(data)
-        os.remove(file.filename + ".asb_dt")
+        os.remove(file.filename + ".asb")
         if os.path.exists(file.filename + ".baev"):
             data = compress(file.filename + ".baev", romfs_path)
             with open(os.path.join(output_dir, file.filename + ".baev.zs"), "wb") as f:
