@@ -9,12 +9,14 @@ from tkinterdnd2 import DND_FILES
 from functools import partial
 import customtkinter as ctk
 from chlorophyll import *
+import zstandard
 import shutil
 import os
 
 # Importing modules and file dependencies
 from App.FFLib.StandardArchive import Sarc
 from App.FFLib.AnimSeqBinary import ASB
+from App.FFLib.TotkZsDic import ZsDic
 from App.FFLib.BinaryYAML import BYML
 from App.FFLib.AAMP import AAMP
 from App.FFLib.AINB import AINB
@@ -917,10 +919,10 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
             case "AAMP":                            # Displaying AAMP format
 
                 # Creating the AAMP Controller
-                asb_controller = AAMP(item_info["values"][0])
+                aamp_controller = AAMP(item_info["values"][0])
 
                 # Getting the YAML data
-                json_data = asb_controller.to_yaml()
+                json_data = aamp_controller.to_yaml()
 
                 # Creating the top navigation frame
                 top_navigation_frame = ctk.CTkFrame(
@@ -967,7 +969,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 # Creating the update function
                 def save_file(event=None):
                     code_view_contents = code_view.get("0.0", "end")
-                    aamp_data_out = asb_controller.yaml_to_aamp(code_view_contents)
+                    aamp_data_out = aamp_controller.yaml_to_aamp(code_view_contents)
 
                     with open(item_info["values"][0], "wb") as f:
                         f.write(aamp_data_out)
@@ -1115,10 +1117,20 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 # Creating the update function
                 def save_file(event=None):
                     code_view_contents = code_view.get("0.0", "end")
-                    aamp_data_out = asb_controller.to_asb(code_view_contents)
+                    asb_data_out = asb_controller.to_asb(code_view_contents)
+
+                    if asb_controller.magic == b"\x28\xb5\x2f\xfd":
+                        compress_file_prompt = messagebox.askyesno(
+                            "Compress ASB with ZSTD?",
+                            "Do you want to compress the ASB with the ZStandard compression algorithm?"
+                        )
+
+                        if compress_file_prompt:
+                            zstd_compressor = zstandard.ZstdCompressor(dict_data=ZsDic.get_dict("zs"))
+                            asb_data_out = zstd_compressor.compress(asb_data_out)
 
                     with open(item_info["values"][0], "wb") as f:
-                        f.write(aamp_data_out)
+                        f.write(asb_data_out)
 
                     # Showing output
                     messagebox.showinfo(
