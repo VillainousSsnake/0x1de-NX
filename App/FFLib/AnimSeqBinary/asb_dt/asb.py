@@ -1,15 +1,7 @@
-try:
-    from exb import EXB
-except ImportError:
-    raise ImportError("exb.py not found")
-try:
-    from utils import *
-except ImportError:
-    raise ImportError("utils.py not found")
-try:
-    from baev import *
-except ImportError:
-    raise ImportError("baev.py not found")
+
+from App.FFLib.AnimSeqBinary.asb_dt.exb import EXB
+from App.FFLib.AnimSeqBinary.asb_dt.utils import *
+from App.FFLib.AnimSeqBinary.asb_dt.baev import *
 
 from enum import Enum
 import json

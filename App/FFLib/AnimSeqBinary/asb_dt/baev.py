@@ -1,7 +1,4 @@
-try:
-    from utils import *
-except ImportError:
-    raise ImportError("utils.py not found")
+from App.FFLib.AnimSeqBinary.asb_dt.utils import *
 
 import json
 import os

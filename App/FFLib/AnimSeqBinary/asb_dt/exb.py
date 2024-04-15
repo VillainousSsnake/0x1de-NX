@@ -1,10 +1,7 @@
 # I should rewrite this but I'm lazy and it works for now
 
 from enum import Enum
-try:
-    from utils import *
-except ImportError:
-    raise ImportError("utils.py not found")
+from App.FFLib.AnimSeqBinary.asb_dt.utils import *
 
 # Enums and stuff
 class Command(Enum):
