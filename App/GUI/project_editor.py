@@ -680,11 +680,7 @@ def project_editor(app):
     for folder_path in sub_directories:
 
         # Creating the item parameter variables
-        folder_parent = folder_path.replace(
-            os.path.basename(folder_path), ""
-        )[:len(
-            folder_path.replace(os.path.basename(folder_path), "")
-        )-1]
+        folder_parent = folder_path.replace(os.path.basename(folder_path), "")[:len(folder_path.replace(os.path.basename(folder_path), ""))-1]  # TODO: Fix
         folder_iid = folder_path
         folder_text = chr(0x0001F4C1) + " " + os.path.basename(folder_path)
 
