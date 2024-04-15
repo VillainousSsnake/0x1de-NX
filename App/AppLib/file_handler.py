@@ -14,6 +14,7 @@ import os
 
 # Importing modules and file dependencies
 from App.FFLib.StandardArchive import Sarc
+from App.FFLib.AnimSeqBinary import ASB
 from App.FFLib.BinaryYAML import BYML
 from App.FFLib.AAMP import AAMP
 from App.FFLib.AINB import AINB
@@ -916,10 +917,10 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
             case "AAMP":                            # Displaying AAMP format
 
                 # Creating the AAMP Controller
-                aamp_controller = AAMP(item_info["values"][0])
+                asb_controller = AAMP(item_info["values"][0])
 
-                # Getting the XML data
-                yaml_data = aamp_controller.to_yaml()
+                # Getting the YAML data
+                json_data = asb_controller.to_yaml()
 
                 # Creating the top navigation frame
                 top_navigation_frame = ctk.CTkFrame(
@@ -958,7 +959,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 code_view.pack(fill="both", side="top", anchor="w")
 
                 # Inserting the yaml data into the code view widget
-                code_view.insert(0.0, yaml_data + "\n")
+                code_view.insert(0.0, json_data + "\n")
 
                 # Removing the extra new line at the end of file
                 code_view.delete(str(float(code_view.index("end")) - 1), "end")
@@ -966,7 +967,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 # Creating the update function
                 def save_file(event=None):
                     code_view_contents = code_view.get("0.0", "end")
-                    aamp_data_out = aamp_controller.yaml_to_aamp(code_view_contents)
+                    aamp_data_out = asb_controller.yaml_to_aamp(code_view_contents)
 
                     with open(item_info["values"][0], "wb") as f:
                         f.write(aamp_data_out)
@@ -974,7 +975,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     # Showing output
                     messagebox.showinfo(
                         "0x1de-NX - Save Completed",
-                        "Saved YAML file to '" + item_info["values"][0] + "'",
+                        "Saved AAMP file to '" + item_info["values"][0] + "'",
                     )
 
                 # Assigning the button functions
@@ -1004,7 +1005,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 byml_controller = BYML(item_info["values"][0])
 
                 # Getting the YAML data from the BYML Controller
-                yaml_data = byml_controller.to_yaml()
+                json_data = byml_controller.to_yaml()
 
                 # Creating the top navigation frame
                 top_navigation_frame = ctk.CTkFrame(
@@ -1043,7 +1044,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 code_view.pack(fill="both", side="top", anchor="w")
 
                 # Inserting the yaml data into the code view widget
-                code_view.insert(0.0, yaml_data)
+                code_view.insert(0.0, json_data)
 
                 # Removing the extra new line at the end of file
                 code_view.delete(str(float(code_view.index("end")) - 1), "end")
@@ -1053,6 +1054,76 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     messagebox.showerror(
                         "Error: Saving BYML Files Not Supported!",
                         "Currently the BYML File format does not support saving! Please try updating or wait for a future update to support saving BYML Files!"
+                    )
+
+                # Assigning the button functions
+                save_button.configure(command=save_file)
+
+                # Exiting function
+                return None
+
+            case "AnimSequenceBinary":              # TODO: Displaying ASB format
+
+                # Creating the ASB Controller
+                asb_controller = ASB(item_info["values"][0])
+
+                # Getting the YAML data
+                json_data = asb_controller.to_json()
+
+                # Creating the top navigation frame
+                top_navigation_frame = ctk.CTkFrame(
+                    master=master,
+                    height=30,
+                    fg_color="#242424"
+                )
+                top_navigation_frame.pack(fill="x")
+
+                # Creating the Save, Import, and Export buttons
+                save_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x0001F5AB) + " Save",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                save_button.pack(anchor="w", side="left")
+
+                export_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x21EE) + " Export",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                export_button.pack(anchor="w", side="left")
+
+                # Creating code_view
+                code_view = CodeView(
+                    master=master,
+                    lexer=pylexers.JsonLexer,
+                    color_scheme=CodeViewColorScheme,
+                    width=999999,
+                    height=999999,
+                    font=("Cascadia Code", app.settings["font_size"]),
+                )
+                code_view.pack(fill="both", side="top", anchor="w")
+
+                # Inserting the yaml data into the code view widget
+                code_view.insert(0.0, json_data + "\n")
+
+                # Removing the extra new line at the end of file
+                code_view.delete(str(float(code_view.index("end")) - 1), "end")
+
+                # Creating the update function
+                def save_file(event=None):
+                    code_view_contents = code_view.get("0.0", "end")
+                    aamp_data_out = asb_controller.to_asb(code_view_contents)
+
+                    with open(item_info["values"][0], "wb") as f:
+                        f.write(aamp_data_out)
+
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX - Save Completed",
+                        "Saved ASB file to '" + item_info["values"][0] + "'",
                     )
 
                 # Assigning the button functions
