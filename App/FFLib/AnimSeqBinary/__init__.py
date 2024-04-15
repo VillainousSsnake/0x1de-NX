@@ -4,7 +4,6 @@
 # Importing modules, libraries, and packages
 from App.FFLib.AnimSeqBinary.asb_dt import asb
 from App.FFLib.TotkZsDic import ZsDic
-import zstandard
 import tempfile
 import os
 
@@ -37,7 +36,7 @@ class ASB:
                 self.data = f_in.read()
 
         # Creating asb controller
-        self.asb_controller = asb.ASB(self.data)
+        self.asb_controller = asb.ASB.from_binary(self.data)
 
     def to_json(self) -> str:
         """
@@ -49,11 +48,10 @@ class ASB:
         temp_dir = tempfile.TemporaryDirectory()
 
         # Writing JSON file to out.json in temporary directory
-        self.asb_controller.filename = "out"
         self.asb_controller.to_json(temp_dir.name)
 
         # Getting the json data from the temporary file
-        with open(os.path.join(temp_dir.name, "out.json"), "r") as f_in:
+        with open(os.path.join(temp_dir.name, self.asb_controller.filename + ".json"), "r", encoding="utf-8") as f_in:
             json_data = f_in.read()
 
         # Returning the json data
