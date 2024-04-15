@@ -3,6 +3,8 @@
 
 # Importing modules, libraries, and packages
 from App.FFLib.AnimSeqBinary.asb_dt import asb
+from App.FFLib.TotkZsDic import ZsDic
+import zstandard
 import tempfile
 import os
 
@@ -18,12 +20,24 @@ class ASB:
         # Creating file path variable
         self.file_path = file_path
 
-        # Getting file data
+        # Getting file magic
         with open(self.file_path, "rb") as f_in:
-            binary_data = f_in.read()
+            self.magic = f_in.read(4)
+
+        # Detecting if the file is zstandard compressed
+        if self.magic == b"\x28\xb5\x2f\xfd":   # ZStandard compressed, getting decompressed data
+
+            # Creating ZStandard decompressor
+            self.data = ZsDic.auto_decompress_file(self.file_path)
+
+        else:   # Not ZStandard compressed, getting raw data
+
+            # Getting raw file data
+            with open(self.file_path, "rb") as f_in:
+                self.data = f_in.read()
 
         # Creating asb controller
-        self.asb_controller = asb.ASB(binary_data)
+        self.asb_controller = asb.ASB(self.data)
 
     def to_json(self) -> str:
         """
