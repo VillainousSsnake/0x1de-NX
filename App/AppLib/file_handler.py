@@ -63,6 +63,10 @@ ValidFileFormats = {
         ".bphhb": "AAMP",
         ".bptcl": "AAMP",
         ".bptclconf": "AAMP",
+        # ASB
+        ".asb": "AnimSequenceBinary",
+        # BAEV
+        ".baev": "BinaryAnimationEvent",
 }
 
 FileFormatIcons = {
@@ -74,6 +78,8 @@ FileFormatIcons = {
     "AINodeBinary": chr(0x1F916),
     "TextFile": chr(0x1F5CF),
     "AAMP": chr(0x1F5CF),   # TODO: Find unicode to fit AAMP
+    "BinaryAnimationEvent": chr(0x1F5CB),  # TODO: Find unicode to fit BAEV
+    "AnimSequenceBinary": chr(0x1F5CB),    # TODO: Find unicode to fit ASB
     None: chr(0x1F5CB),
 }
 
