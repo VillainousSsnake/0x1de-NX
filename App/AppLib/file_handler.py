@@ -15,6 +15,7 @@ import os
 
 # Importing modules and file dependencies
 from App.FFLib.StandardArchive import Sarc
+from App.FFLib.BinaryAnimEvent import BAEV
 from App.FFLib.AnimSeqBinary import ASB
 from App.FFLib.TotkZsDic import ZsDic
 from App.FFLib.BinaryYAML import BYML
@@ -69,7 +70,7 @@ ValidFileFormats = {
         # ASB
         ".asb": "AnimSequenceBinary",
         # BAEV
-        ".baev": "BinaryAnimationEvent",
+        ".baev": "BinaryAnimEvent",
 }
 
 FileFormatIcons = {
@@ -81,7 +82,7 @@ FileFormatIcons = {
     "AINodeBinary": chr(0x1F916),
     "TextFile": chr(0x1F5CF),
     "AAMP": chr(0x1F5CF),   # TODO: Find unicode to fit AAMP
-    "BinaryAnimationEvent": chr(0x1F5CB),  # TODO: Find unicode to fit BAEV
+    "BinaryAnimEvent": chr(0x1F5CB),  # TODO: Find unicode to fit BAEV
     "AnimSequenceBinary": chr(0x1F5CB),    # TODO: Find unicode to fit ASB
     None: chr(0x1F5CB),
 }
@@ -1136,6 +1137,86 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     messagebox.showinfo(
                         "0x1de-NX - Save Completed",
                         "Saved ASB file to '" + item_info["values"][0] + "'",
+                    )
+
+                # Assigning the button functions
+                save_button.configure(command=save_file)
+
+                # Exiting function
+                return None
+
+            case "BinaryAnimEvent":
+
+                # Creating the BAEV Controller
+                baev_controller = BAEV(item_info["values"][0], app.settings["romfs_path"])
+
+                # Getting the YAML data
+                json_data = baev_controller.to_json()
+
+                # Creating the top navigation frame
+                top_navigation_frame = ctk.CTkFrame(
+                    master=master,
+                    height=30,
+                    fg_color="#242424"
+                )
+                top_navigation_frame.pack(fill="x")
+
+                # Creating the Save, Import, and Export buttons
+                save_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x0001F5AB) + " Save",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                save_button.pack(anchor="w", side="left")
+
+                export_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x21EE) + " Export",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                export_button.pack(anchor="w", side="left")
+
+                # Creating code_view
+                code_view = CodeView(
+                    master=master,
+                    lexer=pylexers.JsonLexer,
+                    color_scheme=CodeViewColorScheme,
+                    width=999999,
+                    height=999999,
+                    font=("Cascadia Code", app.settings["font_size"]),
+                )
+                code_view.pack(fill="both", side="top", anchor="w")
+
+                # Inserting the yaml data into the code view widget
+                code_view.insert(0.0, json_data + "\n")
+
+                # Removing the extra new line at the end of file
+                code_view.delete(str(float(code_view.index("end")) - 1), "end")
+
+                # Creating the update function
+                def save_file(event=None):
+                    code_view_contents = code_view.get("0.0", "end")
+                    baev_data_out = baev_controller.to_baev(code_view_contents)
+
+                    if baev_controller.magic == b"\x28\xb5\x2f\xfd":
+                        compress_file_prompt = messagebox.askyesno(
+                            "Compress BAEV with ZSTD?",
+                            "Do you want to compress the BAEV file with the ZStandard compression algorithm?"
+                        )
+
+                        if compress_file_prompt:
+                            zstd_compressor = zstandard.ZstdCompressor(dict_data=ZsDic.get_dict("zs"))
+                            baev_data_out = zstd_compressor.compress(baev_data_out)
+
+                    with open(item_info["values"][0], "wb") as f:
+                        f.write(baev_data_out)
+
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX - Save Completed",
+                        "Saved BAEV file to '" + item_info["values"][0] + "'",
                     )
 
                 # Assigning the button functions
