@@ -74,11 +74,11 @@ class ASB:
 
         # Creating the file paths
         json_file_path = os.path.join(temp_dir.name, self.asb_controller.filename + ".json")
-        asb_file_path = os.path.join(temp_dir.name, self.asb_controller.filename + ".asb")
+        asb_file_path = os.path.join(temp_dir.name, self.asb_controller.filename + ".asb_dt")
 
         # Dumping the JSON data into a temporary file
         with open(json_file_path, "w") as f_out:
-            json.dump(obj=data, fp=f_out)
+            f_out.write(data)
 
         # Converting JSON file into ASB file
         converter.json_to_asb(
