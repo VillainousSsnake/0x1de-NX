@@ -1,15 +1,7 @@
-try:
-    from zstd import *
-except ImportError:
-    raise ImportError("zstd.py not found")
-try:
-    from asb import *
-except ImportError:
-    raise ImportError("asb.py not found")
-try:
-    from baev import *
-except ImportError:
-    raise ImportError("baev.py not found")
+
+from App.FFLib.AnimSeqBinary.asb_dt.zstd import *
+from App.FFLib.AnimSeqBinary.asb_dt.asb import *
+from App.FFLib.AnimSeqBinary.asb_dt.baev import *
 
 import os
 from pathlib import Path
@@ -55,8 +47,7 @@ def asb_to_json(filepath, output_dir="", romfs_path="", baev_path=""):
 
 def json_to_asb(filepath, output_dir="", compress_file=False, romfs_path=""):
     if romfs_path != "":
-        with open("romfs.txt", "w", encoding="utf-8") as f:
-            f.write(romfs_path)
+        pass
     file = ASB.from_dict(json.loads(Path(filepath).read_text("utf-8")))
     if output_dir != "":
         os.makedirs(output_dir, exist_ok=True)
