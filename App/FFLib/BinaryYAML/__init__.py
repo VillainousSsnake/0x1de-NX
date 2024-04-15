@@ -21,12 +21,26 @@ class BYML:
         self.byml_controller = Byml(raw_data, filename="file.byml")
 
     def to_json(self) -> str:
+        """
+        Converts BYML file data to JSON.
+        :return: JSON string
+        """
         return self.byml_controller.ToJson()
 
     def to_yaml(self) -> str:
+        """
+        Converts BYML file data to YAML.
+        :return: YAML string
+        """
         return self.byml_controller.ToYaml()
 
     def to_byml(self, data, mode) -> None:      # TODO: Finish
+        """
+        Converts JSON or YAML string to BYML Data.
+        :param data: JSON or YAML data
+        :param mode: Mode for data input type. Can be 'JSON' or 'YAML'
+        :return: TODO: Stub
+        """
 
         temp_dir = tempfile.TemporaryDirectory()
 
