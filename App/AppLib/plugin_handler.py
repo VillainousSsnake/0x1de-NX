@@ -9,11 +9,15 @@ import os
 # PluginHandler class
 class PluginHandler:
     @staticmethod
-    def get_plugin_folder() -> os.path:
+    def get_plugin_folder() -> str:
+        """
+        Gets plugins folder and refreshes 'plugins.json' file located in plugins folder.
+        :return: The path to the plugins' folder.
+        """
 
-        # TODO: Replace os.getcwd() with os.getenv('LOCALAPPDATA')
+        # Getting the plugins folder
         plugins_folder = os.path.join(
-            os.getcwd(), "0x1de-NX", "Plugins",
+            os.getenv('LOCALAPPDATA'), "0x1de-NX", "Plugins",
         )
 
         # Creating the directories if they don't exist
@@ -21,13 +25,12 @@ class PluginHandler:
             os.makedirs(plugins_folder)
 
         # Refreshing the plugins folder
-
         json_contents = {}
-
         for item in os.listdir(plugins_folder):
             if item != 'plugins.json':
                 json_contents[item] = False
 
+        # Writing the JSON data to the plugins.json file
         with open(os.path.join(plugins_folder, 'plugins.json'), 'w') as f_out:
             json.dump(json_contents, f_out)
 
@@ -36,9 +39,14 @@ class PluginHandler:
 
     @staticmethod
     def get_plugins() -> dict:
+        """
+        Reads the plugins.json file in the plugins folder and returns its contents.
+        :return: A dict with the plugins.json data
+        """
 
+        # Getting the plugins folder
         plugins_folder = PluginHandler.get_plugin_folder()
 
-        # Returning the contents
+        # Returning the contents of plugin.json
         with open(os.path.join(plugins_folder, 'plugins.json'), 'r') as f_in:
             return json.load(f_in)
