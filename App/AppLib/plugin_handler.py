@@ -50,3 +50,7 @@ class PluginHandler:
         # Returning the contents of plugin.json
         with open(os.path.join(plugins_folder, 'plugins.json'), 'r') as f_in:
             return json.load(f_in)
+
+    @staticmethod
+    def get_enabled_plugins() -> list:
+        pass    # TODO: Stub
