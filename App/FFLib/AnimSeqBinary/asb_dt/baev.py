@@ -278,8 +278,6 @@ class BAEV:
         container["String Pool Offset"] = self.stream.read_u64()
         container["Event Info"] = self.read_array(self.read_node)
         nodes = self.read_array(self.read_event_node)
-        with open('test.json', 'w') as f:
-            json.dump(nodes, f, indent=4)
         for entry in container["Event Info"]:
             for i in range(len(entry["Nodes"])):
                 entry["Nodes"][i] = nodes[entry["Nodes"][i]]
