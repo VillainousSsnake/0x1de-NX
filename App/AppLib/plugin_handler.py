@@ -82,3 +82,13 @@ class PluginHandler:
         # Returning the enabled plugins list
         return enabled_plugins_list
 
+    @staticmethod
+    def get_menu_node_from_json(json_dict) -> None | dict:
+        """
+        Returns the menu node data from the given plugin info.json data.
+        :param json_dict: The dict with the info.json data
+        :return: the Dict with the menu node data (or none if the given data has no menu node)
+        """
+
+        pass    # TODO: Stub
+
