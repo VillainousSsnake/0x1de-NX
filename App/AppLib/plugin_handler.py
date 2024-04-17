@@ -90,5 +90,5 @@ class PluginHandler:
         :return: the Dict with the menu node data (or none if the given data has no menu node)
         """
 
-        pass    # TODO: Stub
+        print(json_dict)    # TODO: Stub
 
