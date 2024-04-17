@@ -464,6 +464,10 @@ class FileHandler:
                     str(os.path.basename(item_info["values"][0])).replace(".", "_"),
                 )
 
+                # Deleting extract folder if it exists
+                if os.path.exists(sarc_extract_folder):
+                    shutil.rmtree(sarc_extract_folder)
+
                 # Creating the sarc_extract_folder
                 os.makedirs(sarc_extract_folder)
 
