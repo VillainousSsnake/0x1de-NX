@@ -34,9 +34,15 @@ class PluginHandler:
                     # Adding the entry to the json contents
                     json_contents[item] = False
 
+        # Deleting entries that dont exist
+        json_data_out = {}
+        for key in json_contents:
+            if os.path.exists(os.path.join(plugins_folder, key)):
+                json_data_out[key] = json_contents[key]
+
         # Writing the JSON data to the plugins.json file
         with open(os.path.join(plugins_folder, 'plugins.json'), 'w') as f_out:
-            json.dump(json_contents, f_out)
+            json.dump(json_data_out, f_out)
 
     @staticmethod
     def get_plugin_folder() -> str:
