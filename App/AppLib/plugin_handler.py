@@ -172,5 +172,26 @@ class PluginHandler:
 
     @staticmethod
     def set_plugin(plugin_name: str, value: bool) -> None:
-        pass    # TODO: Stub
+        """
+        Overwrites plugin_name with value.
+        :param plugin_name: (String/str) The name of the plugin you want to overwrite.
+        :param value: (Boolean/bool) The True or False value for the plugin.
+        :return: None
+        """
+
+        # Getting the plugins
+        plugins = PluginHandler.get_plugins()
+
+        # Setting the plugin name to the plugin value
+        plugins[plugin_name] = value
+
+        # Getting the plugins folder
+        plugins_json_path = os.path.join(PluginHandler.get_plugin_folder(), "plugins.json")
+
+        # Dumping the contents of plugins to plugins.json
+        with open(plugins_json_path, "w") as f_out:
+            json.dump(plugins, f_out)
+
+        # Returning None
+        return None
 
