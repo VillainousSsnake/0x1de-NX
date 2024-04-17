@@ -3,6 +3,7 @@
 
 # Importing SubWin modules
 from App.GUI.SubWin.project_editor.settings_menu import settings_menu as subwin_settings_menu
+from App.GUI.SubWin.project_editor.plugins_menu import plugins_menu as subwin_plugins_menu
 from App.GUI.SubWin.project_editor.new_dialog import new_dialog as subwin_new_dialog
 from App.GUI.SubWin.main_menu.new_project import new_project as subwin_new_project
 
@@ -317,6 +318,11 @@ class ProgFunc:
         def toggle_console_command(root, app):
             pass    # TODO: Stub
 
+    class PluginsButtonDropdown:
+        @staticmethod
+        def configure_plugin_command(root, app):
+            subwin_plugins_menu(root, app)
+
 
 # Defining project_editor
 def project_editor(app):
@@ -456,6 +462,10 @@ def project_editor(app):
         ["Toggle Console", "option"]
     ]
     plugins_dropdown_option_list = PluginHandler.get_plugins_menu_dropdown(root, app)
+    plugins_dropdown_option_list.append(["sep"])
+    plugins_dropdown_option_list.append(
+        ["Configure Plugins", partial(ProgFunc.PluginsButtonDropdown.configure_plugin_command, root, app)]
+    )
 
     # Creating the file button dropdown
     file_btn_dropdown = CustomDropdownMenu(
@@ -578,14 +588,21 @@ def project_editor(app):
     # Creating options for plugins button dropdown
     for item in plugins_dropdown_option_list:  # Plugins btn dropdown
 
-        # Creating the text var
-        btn_text = item[0]
+        if item[0] == "sep":
 
-        # Creating the option
-        plugins_btn_dropdown.add_option(
-            btn_text,
-            item[1],
-        )
+            # Inserting seperator
+            plugins_btn_dropdown.add_separator()
+
+        else:
+
+            # Creating the text var
+            btn_text = item[0]
+
+            # Creating the option
+            plugins_btn_dropdown.add_option(
+                btn_text,
+                item[1],
+            )
 
     ############################
     #   editor_frame  config   #
