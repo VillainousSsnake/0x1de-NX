@@ -23,3 +23,7 @@ class Index:
 
         project_editor_redirect(app)
 
+    @staticmethod
+    def launch_plugin_menu_node(app, node_name):
+        enabled_plugins_data = PluginHandler.get_enabled_plugins()  # TODO: Finish
+
