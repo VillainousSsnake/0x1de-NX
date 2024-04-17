@@ -169,9 +169,15 @@ while app.returnStatement != "exit":
             Index.project_editor(app)
 
         case _:
-            print(
-                "Bad Index Parameter '" + app.returnStatement + "'"
-            )  # TODO: Stub
+
+            # If there are no enabled plugins
+            if PluginHandler.get_enabled_plugins() == {}:
+                print(
+                    "Bad Index Parameter '" + app.returnStatement + "'"
+                )
+
+            else:   # Otherwise, looking for enabled plugins with menu nodes
+                pass    # TODO: Stub
 
 # Clearing the temp folder
 temp_folder = os.path.join(os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_")
