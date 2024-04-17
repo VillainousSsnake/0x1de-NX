@@ -169,6 +169,5 @@ class PluginHandler:
             # Adding the item to the output list
             output.append(item_list)
 
-
         return output
 
