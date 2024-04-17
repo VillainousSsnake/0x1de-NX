@@ -93,11 +93,11 @@ class PluginHandler:
         print(json_dict)    # TODO: Stub
 
     @staticmethod
-    def get_plugins_menu_dropdown() -> list:
+    def get_plugins_menu_dropdown() -> dict:
         """
-        Returns list of options for the plugins menu dropdown.
+        Returns dict of options for the plugins menu dropdown, and the command for the option.
         This makes it possible to calculate enabled plugins in real time, without having to restart.
-        :return: Returns list of options for the plugins menu dropdown
+        :return: {"Option Name", SpecifiedCommandFromPluginInfo}
         """
 
         pass    # TODO: Stub
