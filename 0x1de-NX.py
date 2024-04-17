@@ -168,7 +168,7 @@ while app.returnStatement != "exit":
         case "project_editor":  # Project Editor Menu
             Index.project_editor(app)
 
-        case _:
+        case _:     # If no cases are matched
 
             # If there are no enabled plugins
             if PluginHandler.get_enabled_plugins() == {}:
