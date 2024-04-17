@@ -49,7 +49,6 @@ class Index:
 
         # Configuring command params
         command_params_dict = {}
-        raw_params = current_menu_node["CommandParams"]
 
         for item in raw_params:
             if item == 'App':
