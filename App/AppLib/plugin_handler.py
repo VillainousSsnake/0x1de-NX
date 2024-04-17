@@ -2,6 +2,7 @@
 # This is a plugin handler library
 
 # Importing libraries and modules
+from functools import partial
 import importlib.util
 import json
 import os
@@ -101,7 +102,7 @@ class PluginHandler:
         print(json_dict)    # TODO: Stub
 
     @staticmethod
-    def get_plugins_menu_dropdown() -> list:
+    def get_plugins_menu_dropdown(root=None, app=None) -> list:
         """
         Returns list of options for the plugins menu dropdown, and the command for the option.
         This makes it possible to calculate enabled plugins in real time, without having to restart.
@@ -146,8 +147,23 @@ class PluginHandler:
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
 
+            # Creating command
+            command = getattr(module, command_name)
+
+            # Configuring command params
+            command_params_dict = {}
+            raw_params = plugins_dropdown_node["CommandParams"]
+
+            for item in raw_params:
+                if item == "App":
+                    command_params_dict["App"] = app
+                elif item == "Root":
+                    command_params_dict["Root"] = root
+
+            command = partial(command, command_params_dict)
+
             # Appending the command to the item list
-            item_list.append(getattr(module, command_name))
+            item_list.append(command)
 
             # Adding the item to the output list
             output.append(item_list)
