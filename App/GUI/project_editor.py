@@ -455,7 +455,7 @@ def project_editor(app):
         ["sep"],    # Seperator
         ["Toggle Console", "option"]
     ]
-    plugins_dropdown_option_list = PluginHandler.get_plugins_menu_dropdown()
+    plugins_dropdown_option_list = PluginHandler.get_plugins_menu_dropdown(root, app)
 
     # Creating the file button dropdown
     file_btn_dropdown = CustomDropdownMenu(
