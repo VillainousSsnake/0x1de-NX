@@ -53,4 +53,24 @@ class PluginHandler:
 
     @staticmethod
     def get_enabled_plugins() -> list:
-        pass    # TODO: Stub
+        """
+        Reads the plugins.json file in the plugins folder and returns all the names of the enabled plugins.
+        :return: A list with the enabled plugins
+        """
+
+        # Getting the plugins folder
+        plugins_folder = PluginHandler.get_plugin_folder()
+
+        # Getting the contents of plugin.json
+        with open(os.path.join(plugins_folder, 'plugins.json'), 'r') as f_in:
+            raw_dict = json.load(f_in)
+
+        # Creating a new list with only the enabled ones
+        enabled_plugins_list = []
+        for key in raw_dict:
+            if raw_dict[key]:
+                enabled_plugins_list.append(key)
+
+        # Returning the enabled plugins list
+        return enabled_plugins_list
+
