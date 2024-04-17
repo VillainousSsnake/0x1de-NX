@@ -100,5 +100,22 @@ class PluginHandler:
         :return: {"Option Name", SpecifiedCommandFromPluginInfo}
         """
 
-        pass    # TODO: Stub
+        # Getting enabled plugins
+        enabled_plugins_dict = PluginHandler.get_enabled_plugins()
+
+        # Creating the output dict
+        output = dict()
+
+        # Going through each plugin and getting the command
+        for key in enabled_plugins_dict:
+
+            # Getting the plugin info
+            plugin_info = enabled_plugins_dict[key]
+
+            # Getting the "PluginsDropdownOptionNode"
+            plugin_dropdown_option_node = plugin_info["PluginsDropdownOptionNode"]
+
+            print(plugin_dropdown_option_node)
+
+        return output   # TODO: Finish
 
