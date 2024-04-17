@@ -183,8 +183,13 @@ while app.returnStatement != "exit":
                 menu_node_plugins = {}
 
                 for key in enabled_plugins:
+
                     if PluginHandler.get_menu_nodes_from_json(enabled_plugins[key]) is not None:
-                        pass    # TODO: Stub
+                        current_menu_node = PluginHandler.get_menu_nodes_from_json(enabled_plugins[key])
+
+                        if app.returnStatement == current_menu_node["ShortcutName"]:
+                            Index.launch_plugin_menu_node(app, enabled_plugins[key])
+                            break
 
 # Clearing the temp folder
 temp_folder = os.path.join(os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_")
