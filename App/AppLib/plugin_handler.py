@@ -30,7 +30,7 @@ class PluginHandler:
         for item in os.listdir(plugins_folder):
             if item != 'plugins.json':
 
-                if item not in json_contents:
+                if (item not in json_contents) and (item in os.listdir(plugins_folder)):
                     # Adding the entry to the json contents
                     json_contents[item] = False
 
@@ -63,6 +63,9 @@ class PluginHandler:
         :return: A dict with the plugins.json data
         """
 
+        # Updating plugins.json file
+        PluginHandler._update_plugins_json_file()
+
         # Getting the plugins folder
         plugins_folder = PluginHandler.get_plugin_folder()
 
@@ -77,6 +80,9 @@ class PluginHandler:
         dictionary with the enabled plugins name, and the enabled plugin data.
         :return:{"(Plugin Name Here)", (Plugin json dict here)}
         """
+
+        # Updating plugins.json file
+        PluginHandler._update_plugins_json_file()
 
         # Getting the plugins folder
         plugins_folder = PluginHandler.get_plugin_folder()
@@ -118,6 +124,9 @@ class PluginHandler:
         This makes it possible to calculate enabled plugins in real time, without having to restart.
         :return: [["Option Name", SpecifiedCommandFromPluginInfo], ...]
         """
+
+        # Updating plugins.json file
+        PluginHandler._update_plugins_json_file()
 
         # Getting enabled plugins
         enabled_plugins_dict = PluginHandler.get_enabled_plugins()
@@ -188,6 +197,9 @@ class PluginHandler:
         :param value: (Boolean/bool) The True or False value for the plugin.
         :return: None
         """
+
+        # Updating plugins.json file
+        PluginHandler._update_plugins_json_file()
 
         # Getting the plugins
         plugins = PluginHandler.get_plugins()
