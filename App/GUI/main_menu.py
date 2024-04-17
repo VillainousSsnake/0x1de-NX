@@ -672,11 +672,16 @@ class SegmentedButtonMenu:
             plugin_button.pack(side='top', fill='both')
 
             plugin_checkbox = ctk.CTkCheckBox(
-                master=plugin_button, text="", width=-10, command=
+                master=plugin_button, text="", width=-10, onvalue=True, offvalue=False
             )
             if plugins_dict[key]:
                 plugin_checkbox.select()
             plugin_checkbox.grid(row=2, column=1)
+
+            # Defining and assigning the checkbox command
+            def on_click():
+                PluginHandler.set_plugin(key, bool(plugin_checkbox.get()))
+            plugin_checkbox.configure(command=on_click)
 
         if not plugins_dict:
             nothing_here_label = ctk.CTkLabel(
