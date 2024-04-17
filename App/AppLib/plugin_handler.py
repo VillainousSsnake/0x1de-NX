@@ -176,11 +176,9 @@ class PluginHandler:
             # Appending the plugin's option name to the item list
             item_list.append(plugins_dropdown_node["ButtonName"])
 
-            # Getting the connected file node
-            command_file = plugins_dropdown_node["CommandFile"]
-
             # Getting the items' command
             command_name = plugins_dropdown_node["CommandName"]
+            command_file = plugins_dropdown_node["CommandFile"]
             file_path = os.path.join(
                 PluginHandler.get_plugin_folder(),
                 key, command_file
