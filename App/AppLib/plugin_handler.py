@@ -11,11 +11,7 @@ import os
 # PluginHandler class
 class PluginHandler:
     @staticmethod
-    def get_plugin_folder() -> str:
-        """
-        Gets plugins folder and refreshes 'plugins.json' file located in plugins folder.
-        :return: The path to the plugins' folder.
-        """
+    def _update_plugins_json_file():
 
         # Getting the plugins folder
         plugins_folder = os.path.join(
@@ -35,13 +31,27 @@ class PluginHandler:
             if item != 'plugins.json':
 
                 if item not in json_contents:
-
                     # Adding the entry to the json contents
                     json_contents[item] = False
 
         # Writing the JSON data to the plugins.json file
         with open(os.path.join(plugins_folder, 'plugins.json'), 'w') as f_out:
             json.dump(json_contents, f_out)
+
+    @staticmethod
+    def get_plugin_folder() -> str:
+        """
+        Gets plugins folder and refreshes 'plugins.json' file located in plugins folder.
+        :return: The path to the plugins' folder.
+        """
+
+        # Getting the plugins folder
+        plugins_folder = os.path.join(
+            os.getenv('LOCALAPPDATA'), "0x1de-NX", "Plugins",
+        )
+
+        # Updating the plugins.json file
+        PluginHandler._update_plugins_json_file()
 
         # Returning the plugins folder path
         return plugins_folder
