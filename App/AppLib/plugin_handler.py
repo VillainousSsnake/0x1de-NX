@@ -170,3 +170,7 @@ class PluginHandler:
 
         return output
 
+    @staticmethod
+    def set_plugin(plugin_name: str, value: bool) -> None:
+        pass    # TODO: Stub
+

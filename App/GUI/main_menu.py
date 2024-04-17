@@ -672,7 +672,7 @@ class SegmentedButtonMenu:
             plugin_button.pack(side='top', fill='both')
 
             plugin_checkbox = ctk.CTkCheckBox(
-                master=plugin_button, text="", width=-10
+                master=plugin_button, text="", width=-10, command=
             )
             if plugins_dict[key]:
                 plugin_checkbox.select()
