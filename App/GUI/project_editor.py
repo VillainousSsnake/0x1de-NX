@@ -8,6 +8,7 @@ from App.GUI.SubWin.main_menu.new_project import new_project as subwin_new_proje
 
 # Importing libraries and modules
 from App.AppLib.texture_handler import TextureHandler
+from App.AppLib.plugin_handler import PluginHandler
 from App.AppLib.file_handler import FileHandler
 import App.AppLib.customtkinter as ctk
 from tkinter import ttk, messagebox
@@ -454,6 +455,7 @@ def project_editor(app):
         ["sep"],    # Seperator
         ["Toggle Console", "option"]
     ]
+    plugins_dropdown_option_list = PluginHandler.get_plugins_menu_dropdown()
 
     # Creating the file button dropdown
     file_btn_dropdown = CustomDropdownMenu(
@@ -470,6 +472,14 @@ def project_editor(app):
         pady=0
     )
     view_btn_dropdown.corner_radius = -5
+
+    # Creating the plugins button dropdown
+    plugins_btn_dropdown = CustomDropdownMenu(
+        master=title_menu,
+        widget=plugins_btn_title_bar,
+        pady=0
+    )
+    plugins_btn_dropdown.corner_radius = -5
 
     # Creating options for each dropdown
     for item in file_dropdown_option_list:  # File btn dropdown
@@ -518,7 +528,7 @@ def project_editor(app):
         else:
             raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
 
-    # Creating options for each dropdown
+    # Creating options for view button dropdown
     for item in view_dropdown_option_list:  # File btn dropdown
 
         if item[0] == "sep":  # Seperator
@@ -564,6 +574,18 @@ def project_editor(app):
 
         else:
             raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
+
+    # Creating options for plugins button dropdown
+    for item in plugins_dropdown_option_list:  # Plugins btn dropdown
+
+        # Creating the text var
+        btn_text = item[0]
+
+        # Creating the option
+        plugins_btn_dropdown.add_option(
+            btn_text,
+            item[1],
+        )
 
     ############################
     #   editor_frame  config   #
