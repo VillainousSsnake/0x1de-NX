@@ -22,6 +22,11 @@ class PluginHandler:
         if not os.path.exists(plugins_folder):
             os.makedirs(plugins_folder)
 
+        # Creating plugins.json if it doesn't exist
+        if not os.path.exists(os.path.join(plugins_folder, "plugins.json")):
+            with open(os.path.join(plugins_folder, "plugins.json"), "w") as f_out:
+                json.dump({}, f_out)
+
         # Getting the plugins json data
         with open(os.path.join(plugins_folder, 'plugins.json'), "r") as f_in:
             json_contents = json.load(f_in)
