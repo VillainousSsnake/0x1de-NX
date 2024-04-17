@@ -56,7 +56,7 @@ class PluginHandler:
         """
         Reads the plugins.json file in the plugins folder and returns a
         dictionary with the enabled plugins name, and the enabled plugin data.
-        :return:{"(Plugin Name Here)", (Plugin Data here)}
+        :return:{"(Plugin Name Here)", (Plugin json dict here)}
         """
 
         # Getting the plugins folder
