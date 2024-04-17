@@ -128,11 +128,11 @@ class PluginHandler:
             # Getting the plugin nodes
             plugin_nodes = plugin_info["Plugin Nodes"]
 
-            # Getting "PluginsDropdownOptionNode" node
-            plugins_dropdown_node = plugin_nodes["PluginDropdownOptionNode"]
+            # Getting the button node
+            plugins_dropdown_node = plugin_nodes["ButtonNode"]
 
             # Appending the plugin's option name to the item list
-            item_list.append(plugins_dropdown_node["OptionName"])
+            item_list.append(plugins_dropdown_node["ButtonName"])
 
             # Getting the connected file node
             command_file = plugins_dropdown_node["CommandFile"]
