@@ -53,8 +53,6 @@ class Index:
         for item in raw_params:
             if item == 'App':
                 command_params_dict["App"] = app
-            elif item == 'Root':
-                command_params_dict["Root"] = root
 
         command = partial(command, command_params_dict)
 
