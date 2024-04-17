@@ -155,9 +155,10 @@ class PluginHandler:
             raw_params = plugins_dropdown_node["CommandParams"]
 
             for item in raw_params:
-                if item == "App":
+                print(item)
+                if "App" in item:
                     command_params_dict["App"] = app
-                elif item == "Root":
+                elif "Root" in item:
                     command_params_dict["Root"] = root
 
             command = partial(command, command_params_dict)
