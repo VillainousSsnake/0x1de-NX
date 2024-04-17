@@ -1,16 +1,17 @@
 # /0x1de-NX.py
 # Holds main program code
 
-# Importing libraries
+# Importing packages
 from tkinter import messagebox, filedialog
-from App.AppLib.config import Config
 import shutil
 import sys
 import os
 
 # Importing modules
-from App.AppLib.app import App
+from App.AppLib.plugin_handler import PluginHandler
+from App.AppLib.config import Config
 from App.AppLib.index import Index
+from App.AppLib.app import App
 
 # Clearing the temp folder
 temp_folder = os.path.join(os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_")
