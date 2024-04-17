@@ -2,6 +2,7 @@
 # This is a plugin handler library
 
 # Importing libraries and modules
+import importlib.util
 import json
 import os
 
@@ -100,29 +101,57 @@ class PluginHandler:
         print(json_dict)    # TODO: Stub
 
     @staticmethod
-    def get_plugins_menu_dropdown() -> dict:
+    def get_plugins_menu_dropdown() -> list:
         """
-        Returns dict of options for the plugins menu dropdown, and the command for the option.
+        Returns list of options for the plugins menu dropdown, and the command for the option.
         This makes it possible to calculate enabled plugins in real time, without having to restart.
-        :return: {"Option Name", SpecifiedCommandFromPluginInfo}
+        :return: [["Option Name", SpecifiedCommandFromPluginInfo], ...]
         """
 
         # Getting enabled plugins
         enabled_plugins_dict = PluginHandler.get_enabled_plugins()
 
         # Creating the output dict
-        output = dict()
+        output = list()
 
         # Going through each plugin and getting the command
         for key in enabled_plugins_dict:
 
+            # Creating the list for this plugin.
+            #  this will be added to output at the end of this for loop.
+            item_list = list()
+
             # Getting the plugin info
             plugin_info = enabled_plugins_dict[key]
 
-            # Getting the "PluginsDropdownOptionNode"
-            plugin_dropdown_option_node = plugin_info["PluginsDropdownOptionNode"]
+            # Getting the plugin nodes
+            plugin_nodes = plugin_info["Plugin Nodes"]
 
-            print(plugin_dropdown_option_node)
+            # Getting "PluginsDropdownOptionNode" node
+            plugins_dropdown_node = plugin_nodes["PluginDropdownOptionNode"]
 
-        return output   # TODO: Finish
+            # Appending the plugin's option name to the item list
+            item_list.append(plugins_dropdown_node["OptionName"])
+
+            # Getting the connected file node
+            command_file = plugins_dropdown_node["CommandFile"]
+
+            # Getting the items' command
+            command_name = plugins_dropdown_node["CommandName"]
+            file_path = os.path.join(
+                PluginHandler.get_plugin_folder(),
+                key, command_file
+            )
+            spec = importlib.util.spec_from_file_location(command_name, file_path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+            # Appending the command to the item list
+            item_list.append(getattr(module, command_name))
+
+            # Adding the item to the output list
+            output.append(item_list)
+
+
+        return output
 
