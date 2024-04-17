@@ -126,8 +126,19 @@ class PluginHandler:
         :return: the Dict with the menu node data (or none if the given data has no menu node)
         """
 
-        print(json_dict)    # TODO: Stub
-        return None
+        # Getting the plugin nodes
+        plugin_nodes = json_dict["Plugin Nodes"]
+
+        # Detecting if there are menu nodes in the nodes dictionary
+        if 'MenuNode' not in plugin_nodes:  # If there are no menu nodes
+
+            # Returning None
+            return None
+
+        else:   # If there are menu nodes
+
+            # Returning the menu node contents
+            return plugin_nodes["MenuNode"]
 
     @staticmethod
     def get_plugins_menu_dropdown(root, app) -> list:
