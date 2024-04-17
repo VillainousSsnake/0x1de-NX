@@ -127,6 +127,7 @@ class PluginHandler:
         """
 
         print(json_dict)    # TODO: Stub
+        return None
 
     @staticmethod
     def get_plugins_menu_dropdown(root, app) -> list:
