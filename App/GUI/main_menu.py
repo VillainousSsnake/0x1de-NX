@@ -636,17 +636,11 @@ class SegmentedButtonMenu:
         self.object_list.append(scroll_frame)
 
         # Navigation frame configuration
-        import_plugin = ctk.CTkButton(
+        open_plugins_folder_button = ctk.CTkButton(
             master=nav_frame,
-            text="Import Plugin",
+            text="Open Plugins Folder",
         )
-        import_plugin.pack(side="left")
-
-        apply_plugins = ctk.CTkButton(
-            master=nav_frame,
-            text="Apply Plugins"
-        )
-        apply_plugins.pack(side='left')
+        open_plugins_folder_button.pack(side="left")
 
         # Scroll frame configuration
         plugins_dict = PluginHandler.get_plugins()
