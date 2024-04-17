@@ -52,10 +52,11 @@ class PluginHandler:
             return json.load(f_in)
 
     @staticmethod
-    def get_enabled_plugins() -> list:
+    def get_enabled_plugins() -> dict:
         """
-        Reads the plugins.json file in the plugins folder and returns all the names of the enabled plugins.
-        :return: A list with the enabled plugins
+        Reads the plugins.json file in the plugins folder and returns a
+        dictionary with the enabled plugins name, and the enabled plugin data.
+        :return:{"(Plugin Name Here)", (Plugin Data here)}
         """
 
         # Getting the plugins folder
@@ -66,10 +67,17 @@ class PluginHandler:
             raw_dict = json.load(f_in)
 
         # Creating a new list with only the enabled ones
-        enabled_plugins_list = []
+        enabled_plugins_list = {}
         for key in raw_dict:
             if raw_dict[key]:
-                enabled_plugins_list.append(key)
+
+                # Reading the plugins info.json
+                info_json = os.path.join(plugins_folder, key, "info.json")
+                with open(info_json, "r") as f_in:
+                    json_dict = json.load(f_in)
+
+                # Creating the dictionary entry
+                enabled_plugins_list[key] = json_dict
 
         # Returning the enabled plugins list
         return enabled_plugins_list
