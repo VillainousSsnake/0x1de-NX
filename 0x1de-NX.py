@@ -183,7 +183,7 @@ while app.returnStatement != "exit":
                 menu_node_plugins = {}
 
                 for key in enabled_plugins:
-                    if PluginHandler.get_menu_node_from_json(enabled_plugins[key]) is not None:
+                    if PluginHandler.get_menu_nodes_from_json(enabled_plugins[key]) is not None:
                         pass    # TODO: Stub
 
 # Clearing the temp folder
