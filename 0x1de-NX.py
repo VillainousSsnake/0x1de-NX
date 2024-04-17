@@ -188,7 +188,10 @@ while app.returnStatement != "exit":
                         current_menu_node = PluginHandler.get_menu_node_from_json(enabled_plugins[key])
 
                         if app.returnStatement == current_menu_node["ShortcutName"]:
-                            Index.launch_plugin_menu_node(app, enabled_plugins[key])
+                            Index.launch_plugin_menu_node(
+                                app, current_menu_node,
+                                os.path.join(PluginHandler.get_plugin_folder(), key)
+                            )
                             break
 
 # Clearing the temp folder
