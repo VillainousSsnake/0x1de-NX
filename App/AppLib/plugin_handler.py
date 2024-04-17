@@ -28,7 +28,14 @@ class PluginHandler:
         json_contents = {}
         for item in os.listdir(plugins_folder):
             if item != 'plugins.json':
-                json_contents[item] = False
+
+                # Getting the contents of info.json
+                info_json_path = os.path.join(plugins_folder, item, "info.json")
+                with open(info_json_path, "r") as f_in:
+                    plugin_info = json.load(f_in)
+
+                # Adding the entry to the json contents
+                json_contents[item] = plugin_info["Info"]["IsEnabled"]
 
         # Writing the JSON data to the plugins.json file
         with open(os.path.join(plugins_folder, 'plugins.json'), 'w') as f_out:
