@@ -160,7 +160,7 @@ class ProgFunc:
             elif event.keysym == "F2":
                 pass    # TODO: Stub (Renaming files)
 
-            elif event.keysym == "n" and event.state == 44:
+            elif event.char == "\x0e":
                 subwin_new_dialog(curItem, project_treeview, app)
 
         @staticmethod
