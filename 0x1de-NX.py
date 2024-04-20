@@ -74,20 +74,20 @@ if not os.path.exists(str(app.settings["rom_path"])):
             title="Select Game ROM File",
             filetypes=supported_file_formats,
         )
-        rom_path = rom_path.name
 
-        if rom_path == "":
-
+        if rom_path is None:
             message = """Do you want to continue without a Game ROM File?
-    This will most likely cause a lot of errors in the future."""
+        This will most likely cause a lot of errors in the future."""
             continue_prompt = messagebox.askyesno(
                 "Continue without Game ROM? (UNSAFE!!!)", message
             )
 
         else:
-            app.settings["rom_path"] = rom_path
-            Config.overwrite_setting("rom_path", rom_path)
-            continue_prompt = True
+            rom_path = rom_path.name
+
+        app.settings["rom_path"] = rom_path
+        Config.overwrite_setting("rom_path", rom_path)
+        continue_prompt = True
 
 # Checking if emulator path is real
 if not os.path.exists(str(app.settings["emulator_path"])):
@@ -109,20 +109,19 @@ if not os.path.exists(str(app.settings["emulator_path"])):
             title="Select Nintendo Switch Emulator EXE",
             filetypes=supported_file_formats,
         )
-        emulator_path = emulator_path.name
-
-        if emulator_path == "":
+        if emulator_path is None:
 
             message = """Do you want to continue without an Emulator?
         This will most likely cause a lot of errors in the future."""
             continue_prompt = messagebox.askyesno(
                 "0x1de-NX | Continue without Emulator? (UNSAFE!!!)", message
             )
-
         else:
-            app.settings["emulator_path"] = emulator_path
-            Config.overwrite_setting("emulator_path", emulator_path)
-            continue_prompt = True
+            emulator_path = emulator_path.name
+
+        app.settings["emulator_path"] = emulator_path
+        Config.overwrite_setting("emulator_path", emulator_path)
+        continue_prompt = True
 
 # Checking if mod folder path is real
 if not os.path.exists(str(app.settings["mod_folder_path"])):
