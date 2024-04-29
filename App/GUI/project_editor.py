@@ -12,9 +12,9 @@ from App.AppLib.texture_handler import TextureHandler
 from App.AppLib.plugin_handler import PluginHandler
 from App.AppLib.file_handler import FileHandler
 import App.AppLib.customtkinter as ctk
+from ctkcomponents import CTkPopupMenu
 from tkinter import ttk, messagebox
 from tkinterdnd2 import DND_FILES
-from ctkcomponents import CTkPopupMenu
 from PIL import ImageTk, Image
 from functools import partial
 from CTkMenuBar import *
