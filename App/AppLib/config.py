@@ -22,7 +22,7 @@ class Config:
     def get_all_settings(mode="dict"):
 
         # Creating the variables that hold the paths
-        cache_path = os.path.join(os.getcwd(), "0x1de-NX", "_Cache_")
+        cache_path = os.path.join(os.getenv('LOCALAPPDATA'), "0x1de-NX", "_Cache_")
         settings_file_path = os.path.join(cache_path, "settings.config")
 
         # Detecting if the _Cache_ path exists
@@ -74,7 +74,7 @@ class Config:
     def get_setting(entry):
 
         # Creating the variables that hold the paths
-        cache_path = os.path.join(os.getcwd(), "0x1de-NX", "_Cache_")
+        cache_path = os.path.join(os.getenv('LOCALAPPDATA'), "0x1de-NX", "_Cache_")
         settings_file_path = os.path.join(cache_path, "settings.config")
 
         # Detecting if the _Cache_ path exists
@@ -112,7 +112,7 @@ class Config:
     @staticmethod
     def overwrite_setting(key, value):
         # Creating the variables that hold the paths
-        cache_path = os.path.join(os.getcwd(), "0x1de-NX", "_Cache_")
+        cache_path = os.path.join(os.getenv('LOCALAPPDATA'), "0x1de-NX", "_Cache_")
         settings_file_path = os.path.join(cache_path, "settings.config")
 
         # Detecting if the _Cache_ path exists
