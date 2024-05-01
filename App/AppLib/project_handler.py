@@ -10,6 +10,7 @@ import os
 class ProjectHandler:
     @staticmethod
     def get_project_directory() -> str:
+        """Returns the project directory path"""
 
         # Creating the project folder path
         project_folder_path = os.path.join(
