@@ -10,9 +10,8 @@ import os
 class ProjectHandler:
     @staticmethod
     def get_project_directory() -> str:
-        # TODO: Replace os.getcwd() with os.getenv('LOCALAPPDATA')
         project_folder_path = os.path.join(
-            os.getcwd(), "0x1de-NX", "Projects",
+            os.getenv('LOCALAPPDATA'), "0x1de-NX", "Projects",
         )
         # Creating the directories if they don't exist
         if not os.path.exists(project_folder_path):
