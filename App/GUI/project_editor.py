@@ -4,10 +4,12 @@
 # Importing SubWin modules
 from App.GUI.SubWin.project_editor.settings_menu import settings_menu as subwin_settings_menu
 from App.GUI.SubWin.project_editor.plugins_menu import plugins_menu as subwin_plugins_menu
+from App.GUI.SubWin.main_menu.open_project import open_project as subwin_open_project
 from App.GUI.SubWin.project_editor.new_dialog import new_dialog as subwin_new_dialog
 from App.GUI.SubWin.main_menu.new_project import new_project as subwin_new_project
 
 # Importing libraries and modules
+from App.AppLib.project_handler import ProjectHandler
 from App.AppLib.texture_handler import TextureHandler
 from App.AppLib.plugin_handler import PluginHandler
 from App.AppLib.file_handler import FileHandler
@@ -323,6 +325,11 @@ class ProgFunc:
         def configure_plugin_command(root, app):
             subwin_plugins_menu(root, app)
 
+    class ProjectsButtonDropdown:
+        @staticmethod
+        def open_project_command(root, app):
+            subwin_open_project(root, app)
+
 
 # Defining project_editor
 def project_editor(app):
@@ -466,6 +473,7 @@ def project_editor(app):
     plugins_dropdown_option_list.append(
         ["Configure Plugins", partial(ProgFunc.PluginsButtonDropdown.configure_plugin_command, root, app)]
     )
+    projects_dropdown_option_list = ProjectHandler.get_projects_menu_dropdown(root, app)
 
     # Creating the file button dropdown
     file_btn_dropdown = CustomDropdownMenu(
@@ -490,6 +498,14 @@ def project_editor(app):
         pady=0
     )
     plugins_btn_dropdown.corner_radius = -5
+
+    # Creating the projects button dropdown
+    projects_btn_dropdown = CustomDropdownMenu(
+        master=title_menu,
+        widget=projects_btn_title_bar,
+        pady=0
+    )
+    projects_btn_dropdown.corner_radius = -5
 
     # Creating options for each dropdown
     for item in file_dropdown_option_list:  # File btn dropdown
@@ -539,7 +555,7 @@ def project_editor(app):
             raise ValueError("The second option can only be 'option' or 'submenu' or 'sep', not " + item[1])
 
     # Creating options for view button dropdown
-    for item in view_dropdown_option_list:  # File btn dropdown
+    for item in view_dropdown_option_list:  # View btn dropdown
 
         if item[0] == "sep":  # Seperator
             view_btn_dropdown.add_separator()
@@ -600,6 +616,25 @@ def project_editor(app):
 
             # Creating the option
             plugins_btn_dropdown.add_option(
+                btn_text,
+                item[1],
+            )
+
+    # Creating options for projects button dropdown
+    for item in projects_dropdown_option_list:  # Projects btn dropdown
+
+        if item[0] == "sep":
+
+            # Inserting seperator
+            projects_btn_dropdown.add_separator()
+
+        else:
+
+            # Creating the text var
+            btn_text = item[0]
+
+            # Creating the option
+            projects_btn_dropdown.add_option(
                 btn_text,
                 item[1],
             )
