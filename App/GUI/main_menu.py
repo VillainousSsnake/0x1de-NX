@@ -1028,8 +1028,12 @@ def main_menu(app):
         hover_color="#2B2B2B",
     )
 
+    # Creating the current version string for version label
+    current_version_out = Updater.get_app_version()["type"] + " " + Updater.get_app_version()["version"]
+    if Updater.is_outdated_client():    # Adding the warning unicode symbol if outdated
+        current_version_out += " " + chr(0x26A0)
+
     # Creating version label
-    current_version_out = Updater.get_app_version()["type"] + " " + Updater.get_latest_version()["version"]
     info_version_label = ctk.CTkLabel(
         master=info_button,
         fg_color="#2B2B2B",
