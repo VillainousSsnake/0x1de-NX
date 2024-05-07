@@ -21,7 +21,7 @@ def plugins_menu(root, app):
     # Creating the window
     window = ctk.CTkToplevel()
     window.geometry("525x300")
-    window.title("0x1de-NX | Settings")
+    window.title("0x1de-NX | Plugins")
     window.resizable(False, False)
 
     # Assigning the close button on the window top bar
