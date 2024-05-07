@@ -27,3 +27,7 @@ class Updater:
         response = requests.get(url)
         data = json.loads(response.text)
         return data["latest_app_version"]
+
+    @staticmethod
+    def check_for_updates():
+        pass    # TODO: Stub
