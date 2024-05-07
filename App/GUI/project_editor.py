@@ -474,6 +474,10 @@ def project_editor(app):
         ["Configure Plugins", partial(ProgFunc.PluginsButtonDropdown.configure_plugin_command, root, app)]
     )
     projects_dropdown_option_list = ProjectHandler.get_projects_menu_dropdown(root, app)
+    projects_dropdown_option_list.append(["sep"])
+    projects_dropdown_option_list.append(
+        ["Open...", partial(ProgFunc.ProjectsButtonDropdown.open_project_command, root, app)]
+    )
 
     # Creating the file button dropdown
     file_btn_dropdown = CustomDropdownMenu(
