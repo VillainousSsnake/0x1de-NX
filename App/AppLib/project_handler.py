@@ -2,6 +2,7 @@
 # This is a plugin handler module
 
 # Importing libraries
+from tkinter import filedialog
 from functools import partial
 import json
 import os
@@ -84,7 +85,8 @@ class ProjectHandler:
         :return: [["Option Name", OpenProjectWithOptionName], ...]
         """
 
-        def subwin_open_project(root, app, project_path):
+        # Creating the open project function
+        def open_command(root_, app_, project_path):
 
             if project_path is None:
 
@@ -103,26 +105,29 @@ class ProjectHandler:
                 project_path = folder_select
 
             # Setting the open project variable to the project path
-            app.variables["open_project_fp"] = project_path
+            app_.variables["open_project_fp"] = project_path
 
             # Exiting the current menu and summoning the next one
-            root.destroy()
-            app.returnStatement = "project_editor"
+            root_.destroy()
+            app_.returnStatement = "project_editor"
 
         # Getting all projects
         projects_info_list = ProjectHandler.get_projects()
         projects_list = list()
 
+        # Loop for every info dict in the list of info dicts
         for project_info in projects_info_list:
 
             # Getting the command
             project_open_command = partial(
-                subwin_open_project,
+                open_command,
                 root, app, os.path.join(project_info["ProjectFolder"], project_info["Name"])
             )
 
+            # Creating the list item
             project_list_item = [project_info["Name"], project_open_command]
 
+            # Appending the list item
             projects_list.append(project_list_item)
 
         return projects_list
