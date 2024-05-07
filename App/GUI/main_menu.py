@@ -9,9 +9,9 @@ from App.GUI.SubWin.main_menu.import_tkcl import import_tkcl as subwin_import_tk
 # Importing modules and libraries:
 from App.AppLib.project_handler import ProjectHandler
 from App.AppLib.plugin_handler import PluginHandler
-from tkinter import filedialog
 from App.AppLib.updater import Updater
 from App.AppLib.config import Config
+from tkinter import filedialog
 from PIL import Image, ImageTk
 from functools import partial
 import customtkinter as ctk
@@ -1029,10 +1029,11 @@ def main_menu(app):
     )
 
     # Creating version label
+    current_version_out = Updater.get_app_version()["type"] + " " + Updater.get_latest_version()["version"]
     info_version_label = ctk.CTkLabel(
         master=info_button,
         fg_color="#2B2B2B",
-        text=Updater.get_app_version(),
+        text=current_version_out,
         font=ctk.CTkFont(size=14),
         anchor="w",
     )
