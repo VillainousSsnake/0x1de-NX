@@ -1,7 +1,7 @@
 # /App/GUI/SubWin/open_project.py
 
 
-# Importing modules and libraries\
+# Importing modules and libraries
 from App.AppLib.project_handler import ProjectHandler
 from tkinter import filedialog
 
