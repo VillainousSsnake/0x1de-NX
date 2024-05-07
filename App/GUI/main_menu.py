@@ -972,7 +972,7 @@ def main_menu(app):
 
     # Creating root window
     root = ctk.CTk()
-    root.title("0x1de-NX | Alpha v0.0.1")
+    root.title(f"0x1de-NX | {Updater.get_app_version()['type'] + ' v' + Updater.get_app_version()['version']}")
     root.geometry("850x525+200+200")
     root.wm_iconbitmap()
     root.iconphoto(
@@ -1029,7 +1029,7 @@ def main_menu(app):
     )
 
     # Creating the current version string for version label
-    current_version_out = Updater.get_app_version()["type"] + " " + Updater.get_app_version()["version"]
+    current_version_out = Updater.get_app_version()["type"] + " v" + Updater.get_app_version()["version"]
     if Updater.is_outdated_client():    # Adding the warning unicode symbol if outdated
         current_version_out += " " + chr(0x26A0)
 
