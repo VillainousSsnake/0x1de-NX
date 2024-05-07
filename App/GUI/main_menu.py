@@ -1044,6 +1044,10 @@ def main_menu(app):
     info_version_label.place(x=82, y=37)
     info_button.pack(fill="x", side="top")
 
+    # Making version label's text red if client is out of date
+    if Updater.is_outdated_client():
+        info_version_label.configure(text_color="red")
+
     #################################
     #  Configuring Navigation Menu  #
     #################################
