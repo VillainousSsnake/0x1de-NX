@@ -2,6 +2,7 @@
 # Contains code for project editor
 
 # Importing SubWin modules
+from App.GUI.SubWin.project_editor.rename_project_menu import rename_project_menu as subwin_rename_project_menu
 from App.GUI.SubWin.project_editor.settings_menu import settings_menu as subwin_settings_menu
 from App.GUI.SubWin.project_editor.plugins_menu import plugins_menu as subwin_plugins_menu
 from App.GUI.SubWin.main_menu.open_project import open_project as subwin_open_project
@@ -297,7 +298,7 @@ class ProgFunc:
 
         @staticmethod
         def rename_project_command(root, app):
-            pass    # TODO: Stub
+            subwin_rename_project_menu(root, app)
 
         @staticmethod
         def check_for_updates_command(root, app):
