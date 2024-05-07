@@ -305,7 +305,8 @@ class ProgFunc:
 
         @staticmethod
         def exit_command(root, app):
-            exit()
+            root.destroy()
+            app.returnStatement = "exit"
 
     class ViewButtonDropdown:
         """
