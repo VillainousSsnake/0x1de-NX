@@ -2,7 +2,7 @@
 # This is a plugin handler module
 
 # Importing libraries
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from functools import partial
 import json
 import os
@@ -88,6 +88,17 @@ class ProjectHandler:
         # Creating the open project function
         def open_command(root_, app_, project_path):
 
+            # Asking to quit
+            ok_cancel_popup = messagebox.askokcancel(
+                "0x1de-NX | Close Project",
+                "Are you sure you want to close the project? Progress may be lost!"
+            )
+
+            # Quitting or continuing based on ok cancel prompt
+            if not ok_cancel_popup:
+                return 0
+
+            # Opening the project
             if project_path is None:
 
                 # Asking user for the project folder
