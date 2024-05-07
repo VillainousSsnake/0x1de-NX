@@ -7,7 +7,10 @@ import json
 
 
 # Global Variables
-CurrentVersionGlobal = "Alpha 0.0.1"
+CurrentVersionGlobal = {
+  "type": "Early Access",
+  "version": "1.0.1"
+}
 
 
 # Updater class
@@ -20,7 +23,7 @@ class Updater:
     @staticmethod
     def get_latest_version():
 
-        url = f"https://api.github.com/repos/VillainousSsnake/0x1de-NX/tags"
+        url = f"https://raw.githubusercontent.com/VillainousSsnake/0x1de-NX/main/latest_version.json"
         response = requests.get(url)
         data = json.loads(response.text)
-        return data[0]['name'] if data else None
+        return data["latest_app_version"]
