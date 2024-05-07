@@ -43,4 +43,18 @@ class Updater:
         if CurrentVersionGlobal["version"] != Updater.get_latest_version()["version"]:
             message = f"Update needed!\nCurrent Version: {current_ver_out}\nLatest Version: {latest_ver_out}"
 
+        # Outputting the message
         messagebox.showinfo("0x1de-NX | Updater", message)
+
+    @staticmethod
+    def is_outdated_client() -> bool:
+        """
+        Returns bool for if the client is outdated or not.
+        """
+
+        # Returning True if out of date
+        if CurrentVersionGlobal["version"] != Updater.get_latest_version()["version"]:
+            return True
+
+        # Returning False if up to date
+        return False
