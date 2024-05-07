@@ -16,7 +16,7 @@ class _func:
 
 
 # Defining rename_project_dialog function
-def rename_project_menu(current_item, project_treeview, app):
+def rename_project_menu(root, app):
 
     # Setting up the toplevel window
     window = ctk.CTkToplevel()
