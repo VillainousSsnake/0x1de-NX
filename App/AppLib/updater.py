@@ -2,6 +2,7 @@
 # Contains Updater class
 
 # Importing libraries and modules
+from tkinter import messagebox
 import requests
 import json
 
@@ -30,4 +31,16 @@ class Updater:
 
     @staticmethod
     def check_for_updates():
-        pass    # TODO: Stub
+
+        # Creating the version output strings
+        current_ver_out = str(CurrentVersionGlobal['type'] + " " + CurrentVersionGlobal['version'])
+        latest_ver_out = str(Updater.get_latest_version()["type"] + " " + Updater.get_latest_version()["version"])
+
+        # Creating the message variable
+        message = f"0x1de-NX is up to date!\n Current Version: {current_ver_out}"
+
+        # Modifying the message variable if 0x1de-NX is out of date
+        if CurrentVersionGlobal["version"] != Updater.get_latest_version()["version"]:
+            message = f"Update needed!\nCurrent Version: {current_ver_out}\nLatest Version: {latest_ver_out}"
+
+        messagebox.showinfo("0x1de-NX | Updater", message)
