@@ -15,6 +15,7 @@ from App.AppLib.plugin_handler import PluginHandler
 from App.AppLib.file_handler import FileHandler
 import App.AppLib.customtkinter as ctk
 from ctkcomponents import CTkPopupMenu
+from App.AppLib.updater import Updater
 from tkinter import ttk, messagebox
 from tkinterdnd2 import DND_FILES
 from PIL import ImageTk, Image
@@ -300,7 +301,7 @@ class ProgFunc:
 
         @staticmethod
         def check_for_updates_command(root, app):
-            pass    # TODO: Stub
+            Updater.check_for_updates()
 
         @staticmethod
         def exit_command(root, app):
