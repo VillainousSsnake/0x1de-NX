@@ -93,7 +93,7 @@ class ProjectHandler:
                 # Asking user for the project folder
                 folder_select = filedialog.askdirectory(
                     initialdir=ProjectHandler.get_project_directory(),
-                    title="Open Folder...",
+                    title="Open Project...",
                     mustexist=True,
                 )
 
