@@ -4,6 +4,8 @@
 from App.AppLib.plugin_handler import PluginHandler
 import customtkinter as ctk
 from functools import partial
+import subprocess
+import os
 
 
 # _func class (Contains program methods)
@@ -16,7 +18,7 @@ class _func:
 
     @staticmethod
     def open_plugins_folder_command():
-        pass    # TODO: Stub
+        subprocess.run(f'explorer.exe {PluginHandler.get_plugin_folder()}')
 
 
 # Plugins menu function
