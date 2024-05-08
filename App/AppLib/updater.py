@@ -10,7 +10,7 @@ import json
 # Global Variables
 CurrentVersionGlobal = {
   "type": "Early Access",
-  "version": "1.0.1"
+  "version": "1.1.0"
 }
 
 
