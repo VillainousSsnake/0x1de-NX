@@ -14,6 +14,10 @@ class _func:
         root.destroy()
         app.returnStatement = "project_editor"
 
+    @staticmethod
+    def open_plugins_folder_command():
+        pass    # TODO: Stub
+
 
 # Plugins menu function
 def plugins_menu(root, app):
@@ -51,6 +55,7 @@ def plugins_menu(root, app):
     open_plugins_folder_button = ctk.CTkButton(
         master=nav_frame,
         text="Open Plugins Folder",
+        command=_func.open_plugins_folder_command,
     )
     open_plugins_folder_button.pack(side="left")
 
