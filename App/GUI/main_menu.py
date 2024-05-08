@@ -16,6 +16,7 @@ from PIL import Image, ImageTk
 from functools import partial
 import customtkinter as ctk
 import webbrowser as wb
+import subprocess
 import os
 
 
@@ -639,6 +640,7 @@ class SegmentedButtonMenu:
         open_plugins_folder_button = ctk.CTkButton(
             master=nav_frame,
             text="Open Plugins Folder",
+            command=partial(subprocess.run, f'explorer.exe {PluginHandler.get_plugin_folder()}')
         )
         open_plugins_folder_button.pack(side="left")
 
