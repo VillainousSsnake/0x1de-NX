@@ -1,4 +1,4 @@
-# /App/GUI/settings_menu.py
+# /App/GUI/SubWin/settings_menu.py
 
 # Import statements
 import customtkinter as ctk
