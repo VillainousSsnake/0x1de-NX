@@ -178,6 +178,7 @@ class _func:
 
     @staticmethod
     def update_search_bar_projects_menu(self, segmented_button_controller, event=None):
+
         # Updating segmented_button_menu_controller
         segmented_button_controller.hide_current_menu()
 
@@ -418,7 +419,7 @@ class SegmentedButtonMenu:
             )
             nothing_label.pack(fill="both")
 
-    def update_projects_menu(self, segmented_button_controller, search_query=None):
+    def update_projects_menu(self, segmented_button_controller, search_query: str = None):
 
         # Creating variables
         app = self.app
@@ -436,7 +437,7 @@ class SegmentedButtonMenu:
         if search_query is not None:
 
             for item in self.variables["Projects"]:
-                if search_query in item["Name"]:
+                if search_query.lower() in item["Name"].lower():
                     new_projects_list.append(item)
 
             self.variables["Projects"] = new_projects_list
