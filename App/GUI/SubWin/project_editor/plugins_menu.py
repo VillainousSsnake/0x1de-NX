@@ -2,7 +2,7 @@
 
 # Import statements
 from App.AppLib.plugin_handler import PluginHandler
-import customtkinter as ctk
+import App.AppLib.customtkinter as ctk
 from functools import partial
 import subprocess
 import os

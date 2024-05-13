@@ -1,9 +1,9 @@
 # /App/GUI/SubWin/settings_menu.py
 
 # Import statements
-import customtkinter as ctk
-from functools import partial
+import App.AppLib.customtkinter as ctk
 from App.AppLib.config import Config
+from functools import partial
 from tkinter import filedialog
 
 

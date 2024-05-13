@@ -9,12 +9,12 @@ from App.GUI.SubWin.main_menu.import_tkcl import import_tkcl as subwin_import_tk
 # Importing modules and libraries:
 from App.AppLib.project_handler import ProjectHandler
 from App.AppLib.plugin_handler import PluginHandler
+import App.AppLib.customtkinter as ctk
 from App.AppLib.updater import Updater
 from App.AppLib.config import Config
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from functools import partial
-import customtkinter as ctk
 import webbrowser as wb
 import subprocess
 import os

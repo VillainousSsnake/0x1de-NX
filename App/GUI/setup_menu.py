@@ -1,7 +1,7 @@
 # /App/GUI/setup_menu.py
 
 # Import statements
-import customtkinter as ctk
+import App.AppLib.customtkinter as ctk
 
 
 # ButtonFunc class (Adapted from AINB-Toolbox)
