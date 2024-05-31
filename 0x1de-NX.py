@@ -7,6 +7,19 @@ import shutil
 import sys
 import os
 
+# Pre-Boot menu
+
+# Removing the splash screen
+#if getattr(sys, 'frozen', False):
+#    import pyi_splash
+#    pyi_splash.close()
+#
+#
+#popup = messagebox.askyesno("0x1de-NX - Pre-Boot Menu", "Do you want to clear the cache?")
+#if popup:
+#    cache_path = os.path.join(os.getenv('LOCALAPPDATA'), "0x1de-NX", "_Cache_")
+#    shutil.rmtree(cache_path)
+
 # Importing modules
 from App.AppLib.plugin_handler import PluginHandler
 from App.AppLib.config import Config
