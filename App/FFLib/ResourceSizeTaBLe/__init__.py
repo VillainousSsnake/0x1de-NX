@@ -12,6 +12,10 @@ import os
 class RESTBL:
 
     @staticmethod
+    def get_game_version_from_romfs_dump(romfs_path: os.PathLike | str) -> str:
+        pass    # TODO: Stub
+
+    @staticmethod
     def generate_restbl_from_folder(folder_path: os.PathLike | str, game_version=None) -> None:
         """
         Generates a ResourceSizeTaBLe file for the given project path and shows progress with a toplevel window.
