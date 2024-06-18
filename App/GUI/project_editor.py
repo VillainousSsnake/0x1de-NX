@@ -14,6 +14,7 @@ from App.AppLib.project_handler import ProjectHandler
 from App.AppLib.texture_handler import TextureHandler
 from App.AppLib.plugin_handler import PluginHandler
 from App.AppLib.file_handler import FileHandler
+from App.FFLib.ResourceSizeTaBLe import RESTBL
 import App.AppLib.customtkinter as ctk
 from ctkcomponents import CTkPopupMenu
 from App.AppLib.updater import Updater
@@ -215,6 +216,9 @@ class ProgFunc:
 
                 else:   # Exiting function
                     return 0
+
+            # Generating the RESTBL files
+            RESTBL.generate_restbl_from_folder(str(src_folder))
 
             # Copying the folder into the mod folder location
             shutil.copytree(src=str(src_folder), dst=str(dest_folder))
