@@ -1,10 +1,10 @@
 # App/FFLib/StandardArchive/__init__.py
 # Contains Sarc class
-import zstandard
 
 # Importing modules
 from App.FFLib.TotkZsDic import ZsDic
 import subprocess
+import zstandard
 import typing
 import sarc
 import os
