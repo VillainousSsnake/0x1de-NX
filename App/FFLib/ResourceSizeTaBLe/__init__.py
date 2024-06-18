@@ -12,10 +12,11 @@ import os
 class RESTBL:
 
     @staticmethod
-    def generate_restbl_from_folder(folder_path: os.PathLike | str) -> None:
+    def generate_restbl_from_folder(folder_path: os.PathLike | str, game_version=None) -> None:
         """
         Generates a ResourceSizeTaBLe file for the given project path and shows progress with a toplevel window.
         :param folder_path: The input path for the folder that the function generates a rstb file from.
+        :param game_version: The game version to calculate, if given it will only generate one restbl of that game version.
         """
 
         # Creating toplevel window
@@ -51,8 +52,14 @@ class RESTBL:
             + folder_path + '" --version '
         )
 
-        # Running command with all game versions
-        for version in ["100", "110", "111", "120", "121"]:
+        # Creating versions_list
+        if game_version is not None:
+            versions_list = [game_version]
+        else:
+            versions_list = ["100", "110", "111", "120", "121"]
+
+        # Running command with all game versions in versions_list
+        for version in versions_list:
             window.update()
             progress_label.configure(text=f"Generating 'ResourceSizeTable.Product.{version}.rsizetable.zs'...")
             progress_bar["value"] += 20
