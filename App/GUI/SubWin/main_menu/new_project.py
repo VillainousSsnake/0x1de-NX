@@ -3,7 +3,7 @@
 # Importing modules and/or libraries
 from App.AppLib.project_handler import ProjectHandler
 from tkinter import filedialog, messagebox
-import App.AppLib.customtkinter as ctk
+import App.AppLib.customtkinter as tk
 from functools import partial
 from PIL import Image
 import shutil
