@@ -10,7 +10,7 @@ import subprocess
 class RESTBL:
 
     @staticmethod
-    def generate_restbl_from_folder(folder_path: os.PathLike | str):
+    def generate_restbl_from_folder(folder_path: os.PathLike | str) -> None:
         """
         Generates a ResourceSizeTaBLe file for the given project path.
         :param folder_path: The input path for the folder that the function generates a rstb file from.
@@ -29,9 +29,6 @@ class RESTBL:
         for version in ["100", "110", "111", "120", "121"]:
             command = base_command + version
             subprocess.run(command)
-            print(f"restbl {version} generated")
 
-        # Output
-        print("Done!")
-
-        pass    # TODO: Stub
+        # Returning None
+        return None
