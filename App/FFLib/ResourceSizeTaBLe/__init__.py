@@ -13,7 +13,20 @@ class RESTBL:
 
     @staticmethod
     def get_game_version_from_romfs_dump(romfs_path: os.PathLike | str) -> str:
-        pass    # TODO: Stub
+        """
+        Returns string of game version based on romfs folder.
+        :param romfs_path: Path to the input romfs dump.
+        :return: ["100", "110", "111", "120", "121"]
+        """
+
+        # Getting the path to the target file
+        target_file = os.path.join(romfs_path, "System", "RegionLangMask.txt")
+
+        # Reading the target file
+        with open(target_file, "r") as f:
+            data = f.readlines()
+
+        return data[2].replace("\n", "")
 
     @staticmethod
     def generate_restbl_from_folder(folder_path: os.PathLike | str, game_version=None) -> None:
