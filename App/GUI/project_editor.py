@@ -218,7 +218,10 @@ class ProgFunc:
                     return 0
 
             # Generating the RESTBL files
-            RESTBL.generate_restbl_from_folder(str(src_folder))
+            RESTBL.generate_restbl_from_folder(
+                str(src_folder),
+                game_version=RESTBL.get_game_version_from_romfs_dump(app.settings["romfs_path"])
+            )
 
             # Copying the folder into the mod folder location
             shutil.copytree(src=str(src_folder), dst=str(dest_folder))
