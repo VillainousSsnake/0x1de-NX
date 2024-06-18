@@ -1,5 +1,5 @@
-# App/FFLib/StandardArchive/__init__.py
-# Contains Sarc class
+# App/FFLib/ResourceSizeTaBLe/__init__.py
+# Contains RESTBL class
 
 # Importing dependencies
 import App.AppLib.customtkinter as ctk
