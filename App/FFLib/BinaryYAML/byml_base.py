@@ -358,7 +358,7 @@ class Byml:
         with open(out_file, 'r') as f_in:
             return f_in.read()
 
-    # lazy reserialization for now, hopefully will work on getting all node types for later
+    # todo: lazy reserialization for now, hopefully will work on getting all node types for later
     def Reserialize(self, output_dir=''):
         with open(os.path.join(output_dir, self.filename), 'wb+') as f:
             buffer = WriteStream(f)
