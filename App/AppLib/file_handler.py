@@ -43,8 +43,8 @@ ValidFileFormats = {
         ".sarc": "SarcArchive",
         ".ta": "SarcArchive",
         # Binary Yaml
-        "byml": "BinaryYAML",
-        "bgyml": "BinaryYAML",
+        ".byml": "BinaryYAML",
+        ".bgyml": "BinaryYAML",
         # AAMP
         ".baglblm": "AAMP",
         ".baglccr": "AAMP",
@@ -71,6 +71,8 @@ ValidFileFormats = {
         ".asb": "AnimSequenceBinary",
         # BAEV
         ".baev": "BinaryAnimEvent",
+        # RSTBL
+        ".rsizetable": "ResourceSizeTable"
 }
 
 FileFormatIcons = {
@@ -84,6 +86,7 @@ FileFormatIcons = {
     "AAMP": chr(0x1F9B4),
     "BinaryAnimEvent": chr(0x1F9CE),
     "AnimSequenceBinary": chr(0x1F938),
+    "ResourceSizeTable": chr(0x1F5CE),  # TODO: fix later
     None: chr(0x1F5CB),
 }
 
@@ -1226,6 +1229,10 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 # Assigning the button functions
                 save_button.configure(command=save_file)
 
+                # Exiting function
+                return None
+
+            case "ResourceSizeTable":   # TODO: Displaying RESTBL format
                 # Exiting function
                 return None
 
