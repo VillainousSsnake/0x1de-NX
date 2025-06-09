@@ -86,7 +86,7 @@ FileFormatIcons = {
     "AAMP": chr(0x1F9B4),
     "BinaryAnimEvent": chr(0x1F9CE),
     "AnimSequenceBinary": chr(0x1F938),
-    "ResourceSizeTable": chr(0x1F5CE),  # TODO: fix later
+    "ResourceSizeTable": chr(0x1F5B9),  # TODO: fix later
     None: chr(0x1F5CB),
 }
 
