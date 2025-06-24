@@ -71,7 +71,7 @@ ValidFileFormats = {
         ".asb": "AnimSequenceBinary",
         # BAEV
         ".baev": "BinaryAnimEvent",
-        # RSTBL
+        # RESTBL
         ".rsizetable": "ResourceSizeTable"
 }
 
@@ -1233,6 +1233,9 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 return None
 
             case "ResourceSizeTable":   # TODO: Displaying RESTBL format
+
+                pass    # TODO: Write code here
+
                 # Exiting function
                 return None
 
