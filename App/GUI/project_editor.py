@@ -101,8 +101,6 @@ class ProgFunc:
                 # Creating the tab
                 tab = self.tabview.add(item_info["text"])
 
-                # TODO: Create the close button for the tab
-
                 # Displaying the file
                 FileHandler.display_file_to_tabview_from_info(app, self.tabview, item_info, self)
 
