@@ -197,6 +197,24 @@ ValidSarcExportFormats = (
         )
 
 
+# Create close button function
+def create_close_button(frame: ctk.CTkFrame, tabview: ctk.CTkTabview):
+    # Creating close button
+    close_button = ctk.CTkButton(
+        master=frame,
+        text=chr(0x0001F5AB) + " Close",
+        font=("Inter", 15),
+        anchor="w",
+    )
+    close_button.pack(anchor="w", side="left")
+
+    # Creating and assigning close button command
+    def close_file(tabview_: ctk.CTkTabview, event=None):
+        tabview.delete(tabview_.get())
+
+    close_button.configure(command=lambda: close_file(tabview))
+
+
 # The file handler class
 class FileHandler:
 
@@ -248,6 +266,9 @@ class FileHandler:
                     corner_radius=0,
                 )
                 top_navigation_frame.pack(fill="x")
+
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
 
                 # Creating the Save, Import, and Export buttons
                 save_button = ctk.CTkButton(
@@ -314,6 +335,9 @@ class FileHandler:
                 )
                 top_navigation_frame.pack(fill="x")
 
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
+
                 # Creating the Save, Import, and Export buttons
                 save_button = ctk.CTkButton(
                     master=top_navigation_frame,
@@ -379,6 +403,9 @@ class FileHandler:
                 )
                 top_navigation_frame.pack(fill="x")
 
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
+
                 # Creating the Save, Import, and Export buttons
                 save_button = ctk.CTkButton(
                     master=top_navigation_frame,
@@ -432,6 +459,9 @@ class FileHandler:
                     fg_color="#242424"
                 )
                 top_navigation_frame.pack(fill="x")
+
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
 
                 # Creating the Save, Import, and Export buttons
                 save_button = ctk.CTkButton(
@@ -864,6 +894,9 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 )
                 top_navigation_frame.pack(fill="x")
 
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
+
                 # Creating the Save, Import, and Export buttons
                 save_button = ctk.CTkButton(
                     master=top_navigation_frame,
@@ -939,6 +972,9 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     fg_color="#242424"
                 )
                 top_navigation_frame.pack(fill="x")
+
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
 
                 # Creating the Save, Import, and Export buttons
                 save_button = ctk.CTkButton(
@@ -1025,6 +1061,9 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 )
                 top_navigation_frame.pack(fill="x")
 
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
+
                 # Creating the Save, Import, and Export buttons
                 save_button = ctk.CTkButton(
                     master=top_navigation_frame,
@@ -1087,6 +1126,9 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     fg_color="#242424"
                 )
                 top_navigation_frame.pack(fill="x")
+
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
 
                 # Creating the Save, Import, and Export buttons
                 save_button = ctk.CTkButton(
@@ -1168,6 +1210,9 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 )
                 top_navigation_frame.pack(fill="x")
 
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
+
                 # Creating the Save, Import, and Export buttons
                 save_button = ctk.CTkButton(
                     master=top_navigation_frame,
@@ -1240,6 +1285,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 return None
 
             case "ZStandard":                       # TODO: Displaying ZSTD format
+
                 # Exiting function
                 return None
 
