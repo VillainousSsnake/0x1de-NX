@@ -14,6 +14,7 @@ import shutil
 import os
 
 # Importing modules and file dependencies
+from App.FFLib.ResourceSizeTaBLe import RESTBL
 from App.FFLib.StandardArchive import Sarc
 from App.FFLib.BinaryAnimEvent import BAEV
 from App.FFLib.AnimSeqBinary import ASB
@@ -1277,9 +1278,45 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 # Exiting function
                 return None
 
-            case "ResourceSizeTable":   # TODO: Displaying RESTBL format
+            case "ResourceSizeTable":
 
-                pass    # TODO: Write code here
+                # Creating the top navigation frame
+                top_navigation_frame = ctk.CTkFrame(
+                    master=master,
+                    height=30,
+                    fg_color="#242424"
+                )
+                top_navigation_frame.pack(fill="x")
+
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
+
+                # Creating label to display autogeneration notice
+                file_path_msg = ctk.CTkLabel(
+                    master=master,
+                    text=str(item_info["values"][0]),
+                    anchor="center",
+                    width=10,
+                    height=10,
+                    font=("monospace", 15, 'italic'),
+                    text_color="#bd5959",
+                    wraplength=600,
+                    pady=35,
+                )
+                file_path_msg.pack(anchor="n")
+                auto_generate_restbl_message = ctk.CTkLabel(
+                    master=master,
+                    text="Dont worry about editing this, we automatically generate it for you!",
+                    anchor="center",
+                    height=999999999,
+                    pady=-25,
+                    font=("monospace", 25, 'italic'),
+                    text_color="grey",
+                    wraplength=600,
+                )
+                auto_generate_restbl_message.pack(anchor="n")
+
+
 
                 # Exiting function
                 return None
