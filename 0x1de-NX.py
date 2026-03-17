@@ -36,6 +36,7 @@ app = App()
 
 # Removing the splash screen
 if getattr(sys, 'frozen', False):
+    # noinspection PyUnresolvedReferences
     import pyi_splash
     pyi_splash.close()
 
@@ -147,7 +148,8 @@ if not os.path.exists(str(app.settings["mod_folder_path"])):
 
         messagebox.showinfo(
             "0x1de-NX | Select The Mod Folder Path",
-            """Please select your Nintendo Switch Emulator's mod folder path for "The Legend of Zelda: Tears of the Kingdom"."""
+            "Please select your Nintendo Switch Emulator's mod folder path for" +
+            """The Legend of Zelda: Tears of the Kingdom"."""
         )
         mod_folder_path = filedialog.askdirectory(
             title="Select Zelda Mod Folder Path",
