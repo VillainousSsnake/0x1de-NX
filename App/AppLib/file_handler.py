@@ -28,13 +28,13 @@ import yaml
 
 # The types of files that this class can detect and handle
 ValidFileFormats = {
+        # TexToGo (texture files)
+        ".txtg": "TextureToGo",
         # Standard File Formats
         ".json": "JavaScriptObjectNotation",
         ".yaml": "YetAnotherMarkupLanguage",
         ".yml": "YetAnotherMarkupLanguage",
         ".txt": "TextFile",
-        # TexToGo (texture files)
-        ".txtg": "TextureToGo",
         # AINB
         ".ainb": "AINodeBinary",
         # Sarc Archives
@@ -90,6 +90,7 @@ FileFormatIcons = {
     "BinaryAnimEvent": chr(0x1F9CE),
     "AnimSequenceBinary": chr(0x1F938),
     "ResourceSizeTable": chr(0x1F5B9),
+    "TextureToGo": chr(0x1F5BC),
     None: chr(0x1F5CB),
 }
 
