@@ -33,6 +33,8 @@ ValidFileFormats = {
         ".yaml": "YetAnotherMarkupLanguage",
         ".yml": "YetAnotherMarkupLanguage",
         ".txt": "TextFile",
+        # TexToGo (texture files)
+        ".txtg": "TextureToGo",
         # AINB
         ".ainb": "AINodeBinary",
         # Sarc Archives
@@ -1317,6 +1319,14 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 auto_generate_restbl_message.pack(anchor="n")
 
 
+
+                # Exiting function
+                return None
+
+            case "TextureToGo":                     # TODO: Displaying TXTG format (texture files)
+
+                # TODO: Stub
+                pass
 
                 # Exiting function
                 return None
