@@ -1,13 +1,15 @@
 # App/FFLib/StandardArchive/__init__.py
 # Contains Sarc class
 
+import os
+import subprocess
+import typing
+
+import sarc
+import zstandard
+
 # Importing modules
 from App.FFLib.TotkZsDic import ZsDic
-import subprocess
-import zstandard
-import typing
-import sarc
-import os
 
 
 class Sarc:
@@ -18,10 +20,10 @@ class Sarc:
         :param file_name: The input file name.
         :return: A valid SARC format extension or None
         """
-        
+
         # Detecting zstandard compression
         if ".zs" in file_name:
-            
+
             # Detecting SARC format
             if ".bfarc" in file_name:
                 return ".bfarc.zs"
@@ -104,7 +106,7 @@ class Sarc:
     def extract_sarc_to_dir(
             _input: os.PathLike | bytes | typing.BinaryIO,
             out_dir: os.PathLike | str,
-            mode: str = "fp",) -> None:
+            mode: str = "fp", ) -> None:
         """
         Extracts SARC files and folders to a directory.
 
