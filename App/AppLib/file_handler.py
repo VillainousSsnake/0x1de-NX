@@ -6,6 +6,7 @@
 from tkinter import messagebox, ttk, filedialog
 from pygments.lexers import data as pylexers
 from tkinterdnd2 import DND_FILES
+from PIL import Image, ImageTk
 from functools import partial
 import customtkinter as ctk
 from chlorophyll import *
@@ -1326,8 +1327,59 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
 
             case "TextureToGo":                     # TODO: Displaying TXTG format (texture files)
 
-                # TODO: Stub
+                # Creating the top navigation frame
+                top_navigation_frame = ctk.CTkFrame(
+                    master=master,
+                    height=30,
+                    fg_color="#242424"
+                )
+                top_navigation_frame.pack(fill="x")
+
+                # Creating close button
+                create_close_button(top_navigation_frame, tabview)
+
+                # Creating the Save, Import, and Export buttons
+                save_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x0001F5AB) + " Save",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                save_button.pack(anchor="w", side="left")
+
+                import_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x2913) + " Import",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                import_button.pack(anchor="w", side="left")
+
+                export_button = ctk.CTkButton(
+                    master=top_navigation_frame,
+                    text=chr(0x21EE) + " Export",
+                    font=("Inter", 15),
+                    anchor="w",
+                )
+                export_button.pack(anchor="w", side="left")
+
+                # TODO: Add texture view
                 pass
+
+                # Creating the button commands for the Save, Import, and Export buttons
+                def save_file():
+                    pass    # TODO: Stub
+
+                def export_file():
+                    pass    # TODO: Stub
+
+                def import_file():
+                    pass    # TODO: Stub
+
+                # Assign button commands
+                save_button.configure(command=save_file)
+                export_button.configure(command=export_file)
+                import_button.configure(command=import_file)
 
                 # Exiting function
                 return None
