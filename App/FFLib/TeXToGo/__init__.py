@@ -1,5 +1,6 @@
 # /App/FFLib/TeXToGo/__init__.py
 # Contains TexToGo Class
+import io
 
 # Importing modules
 import App.FFLib.TeXToGo.TexToGo_base as txtgLib
@@ -17,7 +18,7 @@ class TexToGo:
 
         # Creating self variables
         self.file_path = file_path
-        self.controller = txtgLib.TXTG(file_path, os.path.basename(file_path))
+        self.controller = txtgLib.TXTG()
 
         # Detecting if the path is real
         if not os.path.exists(file_path):
@@ -33,7 +34,12 @@ class TexToGo:
 
     def to_bitmap(self):
 
+        self.controller.FilePath = self.file_path
+
         with open(self.file_path, "rb") as f_in:
-            print(self.controller.Load(f_in))
+            buffer = io.BytesIO(f_in.read())
+            self.controller.Load(buffer)
+            print(self.controller.GetImageData())
+
 
         pass    # TODO: Stub
