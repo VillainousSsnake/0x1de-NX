@@ -10,6 +10,7 @@ _Cache_
 output
 0x1de-NX
 RestblChangelog.json
+testing.py
 
 # C extensions
 *.so
