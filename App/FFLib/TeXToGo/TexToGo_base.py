@@ -2,12 +2,11 @@
 # Contains TexToGo class
 
 # Importing dependencies
-import sys
 import os
 import struct
 import zlib
 from enum import Enum
-from PIL import Image
+import codecs
 
 
 class FileType(Enum):
@@ -15,7 +14,7 @@ class FileType(Enum):
 
 
 class TXTG:
-    def __init__(self):
+    def __init__(self, filepath, filename):
         self.FileType = FileType.Image
         self.CanSave = True
         self.Description = ["Texture To Go"]
@@ -31,39 +30,10 @@ class TXTG:
         self.MipCount = 0
         self.Format = None
 
+
     def Identify(self, stream):
         signature = stream.read(4)
-        return signature == b"6PK0"
-
-    def Types(self):
-        return []
-
-    def CanEdit(self):
-        return True
-
-    def SupportedFormats(self):
-        return [
-            TEX_FORMAT.BC1_UNORM,
-            TEX_FORMAT.BC2_UNORM,
-            TEX_FORMAT.BC3_UNORM,
-            TEX_FORMAT.BC4_UNORM,
-            TEX_FORMAT.BC5_UNORM,
-            TEX_FORMAT.R8_UNORM,
-            TEX_FORMAT.R8G8_UNORM,
-            TEX_FORMAT.R8G8_UNORM,
-            TEX_FORMAT.R10G10B10A2_UNORM,
-            TEX_FORMAT.B5G6R5_UNORM,
-            TEX_FORMAT.B5G5R5A1_UNORM,
-            TEX_FORMAT.B4G4R4A4_UNORM,
-            TEX_FORMAT.R8G8B8A8_UNORM,
-            TEX_FORMAT.R8G8B8A8_UNORM_SRGB,
-        ]
-
-    def OnClick(self, treeview):
-        pass    # TODO: Stub
-
-    def UpdateEditor(self):
-        pass    # TODO: Stub
+        return signature == b"P\x00\x11\x00"
 
     class Header:
         def __init__(self):
@@ -97,21 +67,6 @@ class TXTG:
             self.ArrayLevel = 0
             self.SurfaceCount = 1
             self.Size = 0
-
-    class DisplayProperties:
-        def __init__(self):
-            self.Height = 0
-            self.Width = 0
-            self.Format = None
-            self.MipCount = 0
-            self.ArrayCount = 0
-            self.Hash = ""
-
-    def GetContextMenuItems(self):
-        items = []
-        items.append(ToolStripMenuItem("Save File", None, lambda o, e: STFileSaver.SaveFileFormat(self, self.FilePath)))
-        items.extend(base.GetContextMenuItems())
-        return items
 
     def Load(self, stream):
         self.Tag = self
@@ -161,10 +116,6 @@ class TXTG:
         self.ArrayCount = self.HeaderInfo.Depth
         self.MipCount = self.HeaderInfo.MipCount
 
-        self.RedChannel = ChannelList[self.HeaderInfo.CompSelectR]
-        self.GreenChannel = ChannelList[self.HeaderInfo.CompSelectG]
-        self.BlueChannel = ChannelList[self.HeaderInfo.CompSelectB]
-        self.AlphaChannel = ChannelList[self.HeaderInfo.CompSelectA]
 
         surfaces = []
         reader.SeekBegin(self.HeaderInfo.HeaderSize)
@@ -177,14 +128,6 @@ class TXTG:
 
         for i in range(self.MipCount * self.ArrayCount):
             surfaces[i].Size = reader.ReadUInt32()
-            reader.ReadUInt32()
-
-        pos = reader.Position
-
-        if self.HeaderInfo.Format in FormatList:
-            self.Format = FormatList[self.HeaderInfo.Format]
-        else:
-            raise Exception(f"Unsupported format! {self.HeaderInfo.Format:X}")
 
         data = []
         for i in range(self.MipCount * self.ArrayCount):
@@ -192,10 +135,10 @@ class TXTG:
             if len(data) <= surfaces[i].ArrayLevel:
                 data.append([])
             data[surfaces[i].ArrayLevel].append(Zstb.SDecompress(imageData))
+            # TODO: Fix error
         self.ImageList = data
 
     def Save(self, stream):
-        self.HeaderInfo.Format = next((k for k, v in FormatList.items() if v == self.Format), None)
         self.HeaderInfo.Width = self.Width
         self.HeaderInfo.Height = self.Height
         self.HeaderInfo.Depth = self.ArrayCount
@@ -267,76 +210,7 @@ class TXTG:
         tex.Texture.TextureData = [[]]
 
         tex.SetImageData(bitmap, ArrayLevel)
-        self.SetImage(tex, ArrayLevel)
 
-    def Replace(self, FileName):
-        tex = TextureData()
-        tex.Replace(FileName, self.MipCount, 0, self.Format, Syroot.NintenTools.NSW.Bntx.GFX.SurfaceDim.Dim2D, 1)
-
-        editor = LibraryGUI.GetActiveContent(ImageEditorBase)
-        targetArray = 0
-        if editor is not None:
-            targetArray = editor.GetArrayDisplayLevel()
-
-        self.SetImage(tex, targetArray)
-
-    def SetImage(self, tex, targetArray):
-        if tex.Texture is None:
-            return
-
-        for i in range(len(self.ImageList[0])):
-            print(f"SIZE 1 mip{i} {len(self.ImageList[0][i])}")
-
-        if len(self.ImageList) > 1 and self.Format != tex.Format:
-            raise Exception(f"Imported texture must use the original format for surface injecting! Expected {self.Format} but got {tex.Format}! If you need ASTC, use an astc encoder with .astc file format.")
-
-        if len(tex.Texture.TextureData) == 1:
-            self.ImageList[targetArray] = tex.Texture.TextureData[0]
-        else:
-            self.ImageList.clear()
-            self.ImageList.extend(tex.Texture.TextureData)
-
-        for i in range(len(self.ImageList[0])):
-            print(f"SIZE 2 mip{i} {len(self.ImageList[0][i])}")
-
-        self.Width = tex.Texture.Width
-        self.Height = tex.Texture.Height
-        self.MipCount = tex.Texture.MipCount
-        self.ArrayCount = len(self.ImageList)
-        self.Format = tex.Format
-
-        self.IsEdited = True
-
-        self.UpdateEditor()
-
-        self.LoadOpenGLTexture()
-
-ChannelList = {
-    0: STChannelType.Red,
-    1: STChannelType.Green,
-    2: STChannelType.Blue,
-    3: STChannelType.Alpha,
-    4: STChannelType.Zero,
-    5: STChannelType.One,
-}
-
-FormatList = {
-    0x101: TEX_FORMAT.ASTC_4x4_UNORM,
-    0x102: TEX_FORMAT.ASTC_8x8_UNORM,
-    0x105: TEX_FORMAT.ASTC_8x8_SRGB,
-    0x109: TEX_FORMAT.ASTC_4x4_SRGB,
-    0x202: TEX_FORMAT.BC1_UNORM,
-    0x203: TEX_FORMAT.BC1_UNORM_SRGB,
-    0x302: TEX_FORMAT.BC1_UNORM,
-    0x505: TEX_FORMAT.BC3_UNORM_SRGB,
-    0x602: TEX_FORMAT.BC4_UNORM,
-    0x606: TEX_FORMAT.BC4_UNORM,
-    0x607: TEX_FORMAT.BC4_UNORM,
-    0x702: TEX_FORMAT.BC5_UNORM,
-    0x703: TEX_FORMAT.BC5_UNORM,
-    0x707: TEX_FORMAT.BC5_UNORM,
-    0x901: TEX_FORMAT.BC7_UNORM,
-}
 
 class FileReader:
     def __init__(self, stream, isLittleEndian):
@@ -350,7 +224,11 @@ class FileReader:
         return struct.unpack("<H" if self.isLittleEndian else ">H", self.stream.read(2))[0]
 
     def ReadUInt32(self):
-        return struct.unpack("<I" if self.isLittleEndian else ">I", self.stream.read(4))[0]
+
+        if self.isLittleEndian:
+            return struct.unpack("<I", codecs.encode(self.stream.read(4), "hex"))[0]
+        else:
+            return struct.unpack(">I", self.stream.read(4))[0]
 
     def ReadByte(self):
         return struct.unpack("B", self.stream.read(1))[0]
@@ -363,6 +241,7 @@ class FileReader:
 
     def Position(self):
         return self.stream.tell()
+
 
 class FileWriter:
     def __init__(self, stream):
@@ -382,15 +261,6 @@ class FileWriter:
 
     def SeekBegin(self, offset):
         self.stream.seek(offset, os.SEEK_SET)
-
-class Zstb:
-    @staticmethod
-    def SDecompress(data):
-        return zlib.decompress(data)
-
-    @staticmethod
-    def SCompress(data, level):
-        return zlib.compress(data, level)
 
 class TextureData:
     def __init__(self):
@@ -447,10 +317,6 @@ class LibraryGUI:
     def LoadEditor(editor):
         pass
 
-class STFileSaver:
-    @staticmethod
-    def SaveFileFormat(txtg, FilePath):
-        pass
 
 class TEX_FORMAT(Enum):
     BC1_UNORM = 0
@@ -474,6 +340,7 @@ class TEX_FORMAT(Enum):
     BC3_UNORM_SRGB = 18
     BC7_UNORM = 19
 
+
 class STChannelType(Enum):
     Red = 0
     Green = 1
@@ -481,6 +348,7 @@ class STChannelType(Enum):
     Alpha = 3
     Zero = 4
     One = 5
+
 
 class Syroot:
     class NintenTools:
@@ -490,10 +358,12 @@ class Syroot:
                     def __init__(self):
                         self.TextureData = None
 
+
 class TegraX1Swizzle:
     @staticmethod
     def GetDirectImageData(txtg, data, MipLevel):
         return data
+
 
 class ToolStripMenuItem:
     def __init__(self, text, image, click):
@@ -501,25 +371,26 @@ class ToolStripMenuItem:
         self.Image = image
         self.Click = click
 
+
 class ToolStripItem:
     pass
+
 
 class ToolStripSeparator:
     pass
 
+
 class TreeView:
     pass
+
 
 class ToolStrip:
     pass
 
+
 class DockStyle:
     Fill = 0
 
-class Image:
-    @staticmethod
-    def open(filename):
-        return Image()
 
 class PIL:
     class Image:
@@ -548,1290 +419,3 @@ class Magic:
 
     def __str__(self):
         return self.value
-
-def TXTG():
-    return TXTG()
-
-def FileType():
-    return FileType()
-
-def CanSave():
-    return True
-
-def Description():
-    return ["Texture To Go"]
-
-def Extension():
-    return ["*.txtg"]
-
-def FileName():
-    return ""
-
-def FilePath():
-    return ""
-
-def IFileInfo():
-    return None
-
-def Identify(stream):
-    signature = stream.read(4)
-    return signature == b"6PK0"
-
-def Types():
-    return []
-
-def CanEdit():
-    return True
-
-def SupportedFormats():
-    return [
-        TEX_FORMAT.BC1_UNORM,
-        TEX_FORMAT.BC2_UNORM,
-        TEX_FORMAT.BC3_UNORM,
-        TEX_FORMAT.BC4_UNORM,
-        TEX_FORMAT.BC5_UNORM,
-        TEX_FORMAT.R8_UNORM,
-        TEX_FORMAT.R8G8_UNORM,
-        TEX_FORMAT.R8G8_UNORM,
-        TEX_FORMAT.R10G10B10A2_UNORM,
-        TEX_FORMAT.B5G6R5_UNORM,
-        TEX_FORMAT.B5G5R5A1_UNORM,
-        TEX_FORMAT.B4G4R4A4_UNORM,
-        TEX_FORMAT.R8G8B8A8_UNORM,
-        TEX_FORMAT.R8G8B8A8_UNORM_SRGB,
-    ]
-
-def OnClick(treeview):
-    UpdateEditor()
-
-def UpdateEditor():
-    editor = LibraryGUI.GetActiveContent(ImageEditorBase)
-    if editor is None:
-        editor = ImageEditorBase()
-        editor.Dock = DockStyle.Fill
-        LibraryGUI.LoadEditor(editor)
-
-    prop = DisplayProperties()
-    prop.Width = Width
-    prop.Height = Height
-    prop.MipCount = MipCount
-    prop.ArrayCount = ArrayCount
-    prop.Format = Format
-    prop.Hash = "".join([format(x, "X2") for x in HeaderInfo.Hash])
-
-    editor.Text = Text
-    editor.LoadProperties(prop)
-    editor.LoadImage(self)
-
-def GetContextMenuItems():
-    items = []
-    items.append(ToolStripMenuItem("Save File", None, lambda o, e: STFileSaver.SaveFileFormat(self, FilePath)))
-    items.extend(base.GetContextMenuItems())
-    return items
-
-def Load(stream):
-    Tag = self
-
-    CanReplace = True
-
-    ImageKey = "Texture"
-    SelectedImageKey = "Texture"
-
-    name = os.path.splitext(os.path.basename(FileName))[0]
-    Text = name
-
-    if name in PluginRuntime.TextureCache:
-        del PluginRuntime.TextureCache[name]
-    PluginRuntime.TextureCache[name] = self
-
-    reader = FileReader(stream, True)
-    reader.SetByteOrder(False)
-
-    HeaderInfo = Header()
-    HeaderInfo.HeaderSize = reader.ReadUInt16()
-    HeaderInfo.Version = reader.ReadUInt16()
-    HeaderInfo.Magic = reader.ReadBytes(4)
-    HeaderInfo.Width = reader.ReadUInt16()
-    HeaderInfo.Height = reader.ReadUInt16()
-    HeaderInfo.Depth = reader.ReadUInt16()
-    HeaderInfo.MipCount = reader.ReadByte()
-    HeaderInfo.Unknown1 = reader.ReadByte()
-    HeaderInfo.Unknown2 = reader.ReadByte()
-    HeaderInfo.Padding = reader.ReadUInt16()
-    HeaderInfo.FormatFlag = reader.ReadByte()
-    HeaderInfo.FormatSetting = reader.ReadUInt32()
-    HeaderInfo.CompSelectR = reader.ReadByte()
-    HeaderInfo.CompSelectG = reader.ReadByte()
-    HeaderInfo.CompSelectB = reader.ReadByte()
-    HeaderInfo.CompSelectA = reader.ReadByte()
-    HeaderInfo.Hash = reader.ReadBytes(32)
-    HeaderInfo.Format = reader.ReadUInt16()
-    HeaderInfo.Unknown3 = reader.ReadUInt16()
-    HeaderInfo.TextureSetting1 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting2 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting3 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting4 = reader.ReadUInt32()
-
-    Width = HeaderInfo.Width
-    Height = HeaderInfo.Height
-    ArrayCount = HeaderInfo.Depth
-    MipCount = HeaderInfo.MipCount
-
-    RedChannel = ChannelList[HeaderInfo.CompSelectR]
-    GreenChannel = ChannelList[HeaderInfo.CompSelectG]
-    BlueChannel = ChannelList[HeaderInfo.CompSelectB]
-    AlphaChannel = ChannelList[HeaderInfo.CompSelectA]
-
-    surfaces = []
-    reader.SeekBegin(HeaderInfo.HeaderSize)
-    for i in range(MipCount * ArrayCount):
-        surface = SurfaceInfo()
-        surface.ArrayLevel = reader.ReadUInt16()
-        surface.MipLevel = reader.ReadByte()
-        reader.ReadByte()
-        surfaces.append(surface)
-
-    for i in range(MipCount * ArrayCount):
-        surfaces[i].Size = reader.ReadUInt32()
-        reader.ReadUInt32()
-
-    pos = reader.Position
-
-    if HeaderInfo.Format in FormatList:
-        Format = FormatList[HeaderInfo.Format]
-    else:
-        raise Exception(f"Unsupported format! {HeaderInfo.Format:X}")
-
-    data = []
-    for i in range(MipCount * ArrayCount):
-        imageData = reader.ReadBytes(surfaces[i].Size)
-        if len(data) <= surfaces[i].ArrayLevel:
-            data.append([])
-        data[surfaces[i].ArrayLevel].append(Zstb.SDecompress(imageData))
-    ImageList = data
-
-def Save(stream):
-    HeaderInfo.Format = next((k for k, v in FormatList.items() if v == Format), None)
-    HeaderInfo.Width = Width
-    HeaderInfo.Height = Height
-    HeaderInfo.Depth = ArrayCount
-    HeaderInfo.MipCount = MipCount
-
-    writer = FileWriter(stream)
-    writer.WriteUInt16(HeaderInfo.HeaderSize)
-    writer.WriteUInt16(HeaderInfo.Version)
-    writer.WriteBytes(HeaderInfo.Magic)
-    writer.WriteUInt16(HeaderInfo.Width)
-    writer.WriteUInt16(HeaderInfo.Height)
-    writer.WriteUInt16(HeaderInfo.Depth)
-    writer.WriteByte(HeaderInfo.MipCount)
-    writer.WriteByte(HeaderInfo.Unknown1)
-    writer.WriteByte(HeaderInfo.Unknown2)
-    writer.WriteUInt16(HeaderInfo.Padding)
-    writer.WriteByte(HeaderInfo.FormatFlag)
-    writer.WriteUInt32(HeaderInfo.FormatSetting)
-    writer.WriteByte(HeaderInfo.CompSelectR)
-    writer.WriteByte(HeaderInfo.CompSelectG)
-    writer.WriteByte(HeaderInfo.CompSelectB)
-    writer.WriteByte(HeaderInfo.CompSelectA)
-    writer.WriteBytes(HeaderInfo.Hash)
-    writer.WriteUInt16(HeaderInfo.Format)
-    writer.WriteUInt16(HeaderInfo.Unknown3)
-    writer.WriteUInt32(HeaderInfo.TextureSetting1)
-    writer.WriteUInt32(HeaderInfo.TextureSetting2)
-    writer.WriteUInt32(HeaderInfo.TextureSetting3)
-    writer.WriteUInt32(HeaderInfo.TextureSetting4)
-
-    writer.SeekBegin(HeaderInfo.HeaderSize)
-
-    surfaceSizes = []
-    surfaceData = []
-
-    for mip in range(MipCount):
-        for array in range(ArrayCount):
-            writer.WriteUInt16(array)
-            writer.WriteByte(mip)
-            writer.WriteByte(1)
-
-            surface = Zstb.SCompress(ImageList[array][mip], 20)
-            surfaceSizes.append(len(surface))
-            surfaceData.append(surface)
-
-    for surface in surfaceSizes:
-        writer.WriteUInt32(surface)
-        writer.WriteUInt32(6)
-
-    for data in surfaceData:
-        writer.WriteBytes(data)
-
-def Dispose():
-    if FileName in PluginRuntime.TextureCache:
-        del PluginRuntime.TextureCache[FileName]
-
-def GetImageData(ArrayLevel=0, MipLevel=0, DepthLevel=0):
-    data = ImageList[ArrayLevel][MipLevel]
-    return TegraX1Swizzle.GetDirectImageData(self, data, MipLevel)
-
-def SetImageData(bitmap, ArrayLevel):
-    tex = TextureData()
-    tex.Texture = Syroot.NintenTools.NSW.Bntx.Texture()
-    tex.Format = Format
-    tex.Width = Width
-    tex.Height = Height
-    tex.MipCount = MipCount
-    tex.ArrayCount = ArrayCount
-    tex.Texture.TextureData = [[]]
-
-    tex.SetImageData(bitmap, ArrayLevel)
-    SetImage(tex, ArrayLevel)
-
-def Replace(FileName):
-    tex = TextureData()
-    tex.Replace(FileName, MipCount, 0, Format, Syroot.NintenTools.NSW.Bntx.GFX.SurfaceDim.Dim2D, 1)
-
-    editor = LibraryGUI.GetActiveContent(ImageEditorBase)
-    targetArray = 0
-    if editor is not None:
-        targetArray = editor.GetArrayDisplayLevel()
-
-    SetImage(tex, targetArray)
-
-def SetImage(tex, targetArray):
-    if tex.Texture is None:
-        return
-
-    for i in range(len(ImageList[0])):
-        print(f"SIZE 1 mip{i} {len(ImageList[0][i])}")
-
-    if len(ImageList) > 1 and Format != tex.Format:
-        raise Exception(f"Imported texture must use the original format for surface injecting! Expected {Format} but got {tex.Format}! If you need ASTC, use an astc encoder with .astc file format.")
-
-    if len(tex.Texture.TextureData) == 1:
-        ImageList[targetArray] = tex.Texture.TextureData[0]
-    else:
-        ImageList.clear()
-        ImageList.extend(tex.Texture.TextureData)
-
-    for i in range(len(ImageList[0])):
-        print(f"SIZE 2 mip{i} {len(ImageList[0][i])}")
-
-    Width = tex.Texture.Width
-    Height = tex.Texture.Height
-    MipCount = tex.Texture.MipCount
-    ArrayCount = len(ImageList)
-    Format = tex.Format
-
-    IsEdited = True
-
-    UpdateEditor()
-
-    LoadOpenGLTexture()
-
-def GetActiveContent(contentType):
-    return None
-
-def LoadEditor(editor):
-    pass
-
-def SaveFileFormat(txtg, FilePath):
-    pass
-
-def GetDirectImageData(txtg, data, MipLevel):
-    return data
-
-def open(filename):
-    return Image()
-
-def tobytes(self):
-    return b""
-
-def TXTG():
-    return TXTG()
-
-def FileType():
-    return FileType()
-
-def CanSave():
-    return True
-
-def Description():
-    return ["Texture To Go"]
-
-def Extension():
-    return ["*.txtg"]
-
-def FileName():
-    return ""
-
-def FilePath():
-    return ""
-
-def IFileInfo():
-    return None
-
-def Identify(stream):
-    signature = stream.read(4)
-    return signature == b"6PK0"
-
-def Types():
-    return []
-
-def CanEdit():
-    return True
-
-def SupportedFormats():
-    return [
-        TEX_FORMAT.BC1_UNORM,
-        TEX_FORMAT.BC2_UNORM,
-        TEX_FORMAT.BC3_UNORM,
-        TEX_FORMAT.BC4_UNORM,
-        TEX_FORMAT.BC5_UNORM,
-        TEX_FORMAT.R8_UNORM,
-        TEX_FORMAT.R8G8_UNORM,
-        TEX_FORMAT.R8G8_UNORM,
-        TEX_FORMAT.R10G10B10A2_UNORM,
-        TEX_FORMAT.B5G6R5_UNORM,
-        TEX_FORMAT.B5G5R5A1_UNORM,
-        TEX_FORMAT.B4G4R4A4_UNORM,
-        TEX_FORMAT.R8G8B8A8_UNORM,
-        TEX_FORMAT.R8G8B8A8_UNORM_SRGB,
-    ]
-
-def OnClick(treeview):
-    UpdateEditor()
-
-def UpdateEditor():
-    editor = LibraryGUI.GetActiveContent(ImageEditorBase)
-    if editor is None:
-        editor = ImageEditorBase()
-        editor.Dock = DockStyle.Fill
-        LibraryGUI.LoadEditor(editor)
-
-    prop = DisplayProperties()
-    prop.Width = Width
-    prop.Height = Height
-    prop.MipCount = MipCount
-    prop.ArrayCount = ArrayCount
-    prop.Format = Format
-    prop.Hash = "".join([format(x, "X2") for x in HeaderInfo.Hash])
-
-    editor.Text = Text
-    editor.LoadProperties(prop)
-    editor.LoadImage(self)
-
-def GetContextMenuItems():
-    items = []
-    items.append(ToolStripMenuItem("Save File", None, lambda o, e: STFileSaver.SaveFileFormat(self, FilePath)))
-    items.extend(base.GetContextMenuItems())
-    return items
-
-def Load(stream):
-    Tag = self
-
-    CanReplace = True
-
-    ImageKey = "Texture"
-    SelectedImageKey = "Texture"
-
-    name = os.path.splitext(os.path.basename(FileName))[0]
-    Text = name
-
-    if name in PluginRuntime.TextureCache:
-        del PluginRuntime.TextureCache[name]
-    PluginRuntime.TextureCache[name] = self
-
-    reader = FileReader(stream, True)
-    reader.SetByteOrder(False)
-
-    HeaderInfo = Header()
-    HeaderInfo.HeaderSize = reader.ReadUInt16()
-    HeaderInfo.Version = reader.ReadUInt16()
-    HeaderInfo.Magic = reader.ReadBytes(4)
-    HeaderInfo.Width = reader.ReadUInt16()
-    HeaderInfo.Height = reader.ReadUInt16()
-    HeaderInfo.Depth = reader.ReadUInt16()
-    HeaderInfo.MipCount = reader.ReadByte()
-    HeaderInfo.Unknown1 = reader.ReadByte()
-    HeaderInfo.Unknown2 = reader.ReadByte()
-    HeaderInfo.Padding = reader.ReadUInt16()
-    HeaderInfo.FormatFlag = reader.ReadByte()
-    HeaderInfo.FormatSetting = reader.ReadUInt32()
-    HeaderInfo.CompSelectR = reader.ReadByte()
-    HeaderInfo.CompSelectG = reader.ReadByte()
-    HeaderInfo.CompSelectB = reader.ReadByte()
-    HeaderInfo.CompSelectA = reader.ReadByte()
-    HeaderInfo.Hash = reader.ReadBytes(32)
-    HeaderInfo.Format = reader.ReadUInt16()
-    HeaderInfo.Unknown3 = reader.ReadUInt16()
-    HeaderInfo.TextureSetting1 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting2 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting3 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting4 = reader.ReadUInt32()
-
-    Width = HeaderInfo.Width
-    Height = HeaderInfo.Height
-    ArrayCount = HeaderInfo.Depth
-    MipCount = HeaderInfo.MipCount
-
-    RedChannel = ChannelList[HeaderInfo.CompSelectR]
-    GreenChannel = ChannelList[HeaderInfo.CompSelectG]
-    BlueChannel = ChannelList[HeaderInfo.CompSelectB]
-    AlphaChannel = ChannelList[HeaderInfo.CompSelectA]
-
-    surfaces = []
-    reader.SeekBegin(HeaderInfo.HeaderSize)
-    for i in range(MipCount * ArrayCount):
-        surface = SurfaceInfo()
-        surface.ArrayLevel = reader.ReadUInt16()
-        surface.MipLevel = reader.ReadByte()
-        reader.ReadByte()
-        surfaces.append(surface)
-
-    for i in range(MipCount * ArrayCount):
-        surfaces[i].Size = reader.ReadUInt32()
-        reader.ReadUInt32()
-
-    pos = reader.Position
-
-    if HeaderInfo.Format in FormatList:
-        Format = FormatList[HeaderInfo.Format]
-    else:
-        raise Exception(f"Unsupported format! {HeaderInfo.Format:X}")
-
-    data = []
-    for i in range(MipCount * ArrayCount):
-        imageData = reader.ReadBytes(surfaces[i].Size)
-        if len(data) <= surfaces[i].ArrayLevel:
-            data.append([])
-        data[surfaces[i].ArrayLevel].append(Zstb.SDecompress(imageData))
-    ImageList = data
-
-def Save(stream):
-    HeaderInfo.Format = next((k for k, v in FormatList.items() if v == Format), None)
-    HeaderInfo.Width = Width
-    HeaderInfo.Height = Height
-    HeaderInfo.Depth = ArrayCount
-    HeaderInfo.MipCount = MipCount
-
-    writer = FileWriter(stream)
-    writer.WriteUInt16(HeaderInfo.HeaderSize)
-    writer.WriteUInt16(HeaderInfo.Version)
-    writer.WriteBytes(HeaderInfo.Magic)
-    writer.WriteUInt16(HeaderInfo.Width)
-    writer.WriteUInt16(HeaderInfo.Height)
-    writer.WriteUInt16(HeaderInfo.Depth)
-    writer.WriteByte(HeaderInfo.MipCount)
-    writer.WriteByte(HeaderInfo.Unknown1)
-    writer.WriteByte(HeaderInfo.Unknown2)
-    writer.WriteUInt16(HeaderInfo.Padding)
-    writer.WriteByte(HeaderInfo.FormatFlag)
-    writer.WriteUInt32(HeaderInfo.FormatSetting)
-    writer.WriteByte(HeaderInfo.CompSelectR)
-    writer.WriteByte(HeaderInfo.CompSelectG)
-    writer.WriteByte(HeaderInfo.CompSelectB)
-    writer.WriteByte(HeaderInfo.CompSelectA)
-    writer.WriteBytes(HeaderInfo.Hash)
-    writer.WriteUInt16(HeaderInfo.Format)
-    writer.WriteUInt16(HeaderInfo.Unknown3)
-    writer.WriteUInt32(HeaderInfo.TextureSetting1)
-    writer.WriteUInt32(HeaderInfo.TextureSetting2)
-    writer.WriteUInt32(HeaderInfo.TextureSetting3)
-    writer.WriteUInt32(HeaderInfo.TextureSetting4)
-
-    writer.SeekBegin(HeaderInfo.HeaderSize)
-
-    surfaceSizes = []
-    surfaceData = []
-
-    for mip in range(MipCount):
-        for array in range(ArrayCount):
-            writer.WriteUInt16(array)
-            writer.WriteByte(mip)
-            writer.WriteByte(1)
-
-            surface = Zstb.SCompress(ImageList[array][mip], 20)
-            surfaceSizes.append(len(surface))
-            surfaceData.append(surface)
-
-    for surface in surfaceSizes:
-        writer.WriteUInt32(surface)
-        writer.WriteUInt32(6)
-
-    for data in surfaceData:
-        writer.WriteBytes(data)
-
-def Dispose():
-    if FileName in PluginRuntime.TextureCache:
-        del PluginRuntime.TextureCache[FileName]
-
-def GetImageData(ArrayLevel=0, MipLevel=0, DepthLevel=0):
-    data = ImageList[ArrayLevel][MipLevel]
-    return TegraX1Swizzle.GetDirectImageData(self, data, MipLevel)
-
-def SetImageData(bitmap, ArrayLevel):
-    tex = TextureData()
-    tex.Texture = Syroot.NintenTools.NSW.Bntx.Texture()
-    tex.Format = Format
-    tex.Width = Width
-    tex.Height = Height
-    tex.MipCount = MipCount
-    tex.ArrayCount = ArrayCount
-    tex.Texture.TextureData = [[]]
-
-    tex.SetImageData(bitmap, ArrayLevel)
-    SetImage(tex, ArrayLevel)
-
-def Replace(FileName):
-    tex = TextureData()
-    tex.Replace(FileName, MipCount, 0, Format, Syroot.NintenTools.NSW.Bntx.GFX.SurfaceDim.Dim2D, 1)
-
-    editor = LibraryGUI.GetActiveContent(ImageEditorBase)
-    targetArray = 0
-    if editor is not None:
-        targetArray = editor.GetArrayDisplayLevel()
-
-    SetImage(tex, targetArray)
-
-def SetImage(tex, targetArray):
-    if tex.Texture is None:
-        return
-
-    for i in range(len(ImageList[0])):
-        print(f"SIZE 1 mip{i} {len(ImageList[0][i])}")
-
-    if len(ImageList) > 1 and Format != tex.Format:
-        raise Exception(f"Imported texture must use the original format for surface injecting! Expected {Format} but got {tex.Format}! If you need ASTC, use an astc encoder with .astc file format.")
-
-    if len(tex.Texture.TextureData) == 1:
-        ImageList[targetArray] = tex.Texture.TextureData[0]
-    else:
-        ImageList.clear()
-        ImageList.extend(tex.Texture.TextureData)
-
-    for i in range(len(ImageList[0])):
-        print(f"SIZE 2 mip{i} {len(ImageList[0][i])}")
-
-    Width = tex.Texture.Width
-    Height = tex.Texture.Height
-    MipCount = tex.Texture.MipCount
-    ArrayCount = len(ImageList)
-    Format = tex.Format
-
-    IsEdited = True
-
-    UpdateEditor()
-
-    LoadOpenGLTexture()
-
-def GetActiveContent(contentType):
-    return None
-
-def LoadEditor(editor):
-    pass
-
-def SaveFileFormat(txtg, FilePath):
-    pass
-
-def GetDirectImageData(txtg, data, MipLevel):
-    return data
-
-def open(filename):
-    return Image()
-
-def tobytes(self):
-    return b""
-
-def TXTG():
-    return TXTG()
-
-def FileType():
-    return FileType()
-
-def CanSave():
-    return True
-
-def Description():
-    return ["Texture To Go"]
-
-def Extension():
-    return ["*.txtg"]
-
-def FileName():
-    return ""
-
-def FilePath():
-    return ""
-
-def IFileInfo():
-    return None
-
-def Identify(stream):
-    signature = stream.read(4)
-    return signature == b"6PK0"
-
-def Types():
-    return []
-
-def CanEdit():
-    return True
-
-def SupportedFormats():
-    return [
-        TEX_FORMAT.BC1_UNORM,
-        TEX_FORMAT.BC2_UNORM,
-        TEX_FORMAT.BC3_UNORM,
-        TEX_FORMAT.BC4_UNORM,
-        TEX_FORMAT.BC5_UNORM,
-        TEX_FORMAT.R8_UNORM,
-        TEX_FORMAT.R8G8_UNORM,
-        TEX_FORMAT.R8G8_UNORM,
-        TEX_FORMAT.R10G10B10A2_UNORM,
-        TEX_FORMAT.B5G6R5_UNORM,
-        TEX_FORMAT.B5G5R5A1_UNORM,
-        TEX_FORMAT.B4G4R4A4_UNORM,
-        TEX_FORMAT.R8G8B8A8_UNORM,
-        TEX_FORMAT.R8G8B8A8_UNORM_SRGB,
-    ]
-
-def OnClick(treeview):
-    UpdateEditor()
-
-def UpdateEditor():
-    editor = LibraryGUI.GetActiveContent(ImageEditorBase)
-    if editor is None:
-        editor = ImageEditorBase()
-        editor.Dock = DockStyle.Fill
-        LibraryGUI.LoadEditor(editor)
-
-    prop = DisplayProperties()
-    prop.Width = Width
-    prop.Height = Height
-    prop.MipCount = MipCount
-    prop.ArrayCount = ArrayCount
-    prop.Format = Format
-    prop.Hash = "".join([format(x, "X2") for x in HeaderInfo.Hash])
-
-    editor.Text = Text
-    editor.LoadProperties(prop)
-    editor.LoadImage(self)
-
-def GetContextMenuItems():
-    items = []
-    items.append(ToolStripMenuItem("Save File", None, lambda o, e: STFileSaver.SaveFileFormat(self, FilePath)))
-    items.extend(base.GetContextMenuItems())
-    return items
-
-def Load(stream):
-    Tag = self
-
-    CanReplace = True
-
-    ImageKey = "Texture"
-    SelectedImageKey = "Texture"
-
-    name = os.path.splitext(os.path.basename(FileName))[0]
-    Text = name
-
-    if name in PluginRuntime.TextureCache:
-        del PluginRuntime.TextureCache[name]
-    PluginRuntime.TextureCache[name] = self
-
-    reader = FileReader(stream, True)
-    reader.SetByteOrder(False)
-
-    HeaderInfo = Header()
-    HeaderInfo.HeaderSize = reader.ReadUInt16()
-    HeaderInfo.Version = reader.ReadUInt16()
-    HeaderInfo.Magic = reader.ReadBytes(4)
-    HeaderInfo.Width = reader.ReadUInt16()
-    HeaderInfo.Height = reader.ReadUInt16()
-    HeaderInfo.Depth = reader.ReadUInt16()
-    HeaderInfo.MipCount = reader.ReadByte()
-    HeaderInfo.Unknown1 = reader.ReadByte()
-    HeaderInfo.Unknown2 = reader.ReadByte()
-    HeaderInfo.Padding = reader.ReadUInt16()
-    HeaderInfo.FormatFlag = reader.ReadByte()
-    HeaderInfo.FormatSetting = reader.ReadUInt32()
-    HeaderInfo.CompSelectR = reader.ReadByte()
-    HeaderInfo.CompSelectG = reader.ReadByte()
-    HeaderInfo.CompSelectB = reader.ReadByte()
-    HeaderInfo.CompSelectA = reader.ReadByte()
-    HeaderInfo.Hash = reader.ReadBytes(32)
-    HeaderInfo.Format = reader.ReadUInt16()
-    HeaderInfo.Unknown3 = reader.ReadUInt16()
-    HeaderInfo.TextureSetting1 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting2 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting3 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting4 = reader.ReadUInt32()
-
-    Width = HeaderInfo.Width
-    Height = HeaderInfo.Height
-    ArrayCount = HeaderInfo.Depth
-    MipCount = HeaderInfo.MipCount
-
-    RedChannel = ChannelList[HeaderInfo.CompSelectR]
-    GreenChannel = ChannelList[HeaderInfo.CompSelectG]
-    BlueChannel = ChannelList[HeaderInfo.CompSelectB]
-    AlphaChannel = ChannelList[HeaderInfo.CompSelectA]
-
-    surfaces = []
-    reader.SeekBegin(HeaderInfo.HeaderSize)
-    for i in range(MipCount * ArrayCount):
-        surface = SurfaceInfo()
-        surface.ArrayLevel = reader.ReadUInt16()
-        surface.MipLevel = reader.ReadByte()
-        reader.ReadByte()
-        surfaces.append(surface)
-
-    for i in range(MipCount * ArrayCount):
-        surfaces[i].Size = reader.ReadUInt32()
-        reader.ReadUInt32()
-
-    pos = reader.Position
-
-    if HeaderInfo.Format in FormatList:
-        Format = FormatList[HeaderInfo.Format]
-    else:
-        raise Exception(f"Unsupported format! {HeaderInfo.Format:X}")
-
-    data = []
-    for i in range(MipCount * ArrayCount):
-        imageData = reader.ReadBytes(surfaces[i].Size)
-        if len(data) <= surfaces[i].ArrayLevel:
-            data.append([])
-        data[surfaces[i].ArrayLevel].append(Zstb.SDecompress(imageData))
-    ImageList = data
-
-def Save(stream):
-    HeaderInfo.Format = next((k for k, v in FormatList.items() if v == Format), None)
-    HeaderInfo.Width = Width
-    HeaderInfo.Height = Height
-    HeaderInfo.Depth = ArrayCount
-    HeaderInfo.MipCount = MipCount
-
-    writer = FileWriter(stream)
-    writer.WriteUInt16(HeaderInfo.HeaderSize)
-    writer.WriteUInt16(HeaderInfo.Version)
-    writer.WriteBytes(HeaderInfo.Magic)
-    writer.WriteUInt16(HeaderInfo.Width)
-    writer.WriteUInt16(HeaderInfo.Height)
-    writer.WriteUInt16(HeaderInfo.Depth)
-    writer.WriteByte(HeaderInfo.MipCount)
-    writer.WriteByte(HeaderInfo.Unknown1)
-    writer.WriteByte(HeaderInfo.Unknown2)
-    writer.WriteUInt16(HeaderInfo.Padding)
-    writer.WriteByte(HeaderInfo.FormatFlag)
-    writer.WriteUInt32(HeaderInfo.FormatSetting)
-    writer.WriteByte(HeaderInfo.CompSelectR)
-    writer.WriteByte(HeaderInfo.CompSelectG)
-    writer.WriteByte(HeaderInfo.CompSelectB)
-    writer.WriteByte(HeaderInfo.CompSelectA)
-    writer.WriteBytes(HeaderInfo.Hash)
-    writer.WriteUInt16(HeaderInfo.Format)
-    writer.WriteUInt16(HeaderInfo.Unknown3)
-    writer.WriteUInt32(HeaderInfo.TextureSetting1)
-    writer.WriteUInt32(HeaderInfo.TextureSetting2)
-    writer.WriteUInt32(HeaderInfo.TextureSetting3)
-    writer.WriteUInt32(HeaderInfo.TextureSetting4)
-
-    writer.SeekBegin(HeaderInfo.HeaderSize)
-
-    surfaceSizes = []
-    surfaceData = []
-
-    for mip in range(MipCount):
-        for array in range(ArrayCount):
-            writer.WriteUInt16(array)
-            writer.WriteByte(mip)
-            writer.WriteByte(1)
-
-            surface = Zstb.SCompress(ImageList[array][mip], 20)
-            surfaceSizes.append(len(surface))
-            surfaceData.append(surface)
-
-    for surface in surfaceSizes:
-        writer.WriteUInt32(surface)
-        writer.WriteUInt32(6)
-
-    for data in surfaceData:
-        writer.WriteBytes(data)
-
-def Dispose():
-    if FileName in PluginRuntime.TextureCache:
-        del PluginRuntime.TextureCache[FileName]
-
-def GetImageData(ArrayLevel=0, MipLevel=0, DepthLevel=0):
-    data = ImageList[ArrayLevel][MipLevel]
-    return TegraX1Swizzle.GetDirectImageData(self, data, MipLevel)
-
-def SetImageData(bitmap, ArrayLevel):
-    tex = TextureData()
-    tex.Texture = Syroot.NintenTools.NSW.Bntx.Texture()
-    tex.Format = Format
-    tex.Width = Width
-    tex.Height = Height
-    tex.MipCount = MipCount
-    tex.ArrayCount = ArrayCount
-    tex.Texture.TextureData = [[]]
-
-    tex.SetImageData(bitmap, ArrayLevel)
-    SetImage(tex, ArrayLevel)
-
-def Replace(FileName):
-    tex = TextureData()
-    tex.Replace(FileName, MipCount, 0, Format, Syroot.NintenTools.NSW.Bntx.GFX.SurfaceDim.Dim2D, 1)
-
-    editor = LibraryGUI.GetActiveContent(ImageEditorBase)
-    targetArray = 0
-    if editor is not None:
-        targetArray = editor.GetArrayDisplayLevel()
-
-    SetImage(tex, targetArray)
-
-def SetImage(tex, targetArray):
-    if tex.Texture is None:
-        return
-
-    for i in range(len(ImageList[0])):
-        print(f"SIZE 1 mip{i} {len(ImageList[0][i])}")
-
-    if len(ImageList) > 1 and Format != tex.Format:
-        raise Exception(f"Imported texture must use the original format for surface injecting! Expected {Format} but got {tex.Format}! If you need ASTC, use an astc encoder with .astc file format.")
-
-    if len(tex.Texture.TextureData) == 1:
-        ImageList[targetArray] = tex.Texture.TextureData[0]
-    else:
-        ImageList.clear()
-        ImageList.extend(tex.Texture.TextureData)
-
-    for i in range(len(ImageList[0])):
-        print(f"SIZE 2 mip{i} {len(ImageList[0][i])}")
-
-    Width = tex.Texture.Width
-    Height = tex.Texture.Height
-    MipCount = tex.Texture.MipCount
-    ArrayCount = len(ImageList)
-    Format = tex.Format
-
-    IsEdited = True
-
-    UpdateEditor()
-
-    LoadOpenGLTexture()
-
-def GetActiveContent(contentType):
-    return None
-
-def LoadEditor(editor):
-    pass
-
-def SaveFileFormat(txtg, FilePath):
-    pass
-
-def GetDirectImageData(txtg, data, MipLevel):
-    return data
-
-def open(filename):
-    return Image()
-
-def tobytes(self):
-    return b""
-
-def TXTG():
-    return TXTG()
-
-def FileType():
-    return FileType()
-
-def CanSave():
-    return True
-
-def Description():
-    return ["Texture To Go"]
-
-def Extension():
-    return ["*.txtg"]
-
-def FileName():
-    return ""
-
-def FilePath():
-    return ""
-
-def IFileInfo():
-    return None
-
-def Identify(stream):
-    signature = stream.read(4)
-    return signature == b"6PK0"
-
-def Types():
-    return []
-
-def CanEdit():
-    return True
-
-def SupportedFormats():
-    return [
-        TEX_FORMAT.BC1_UNORM,
-        TEX_FORMAT.BC2_UNORM,
-        TEX_FORMAT.BC3_UNORM,
-        TEX_FORMAT.BC4_UNORM,
-        TEX_FORMAT.BC5_UNORM,
-        TEX_FORMAT.R8_UNORM,
-        TEX_FORMAT.R8G8_UNORM,
-        TEX_FORMAT.R8G8_UNORM,
-        TEX_FORMAT.R10G10B10A2_UNORM,
-        TEX_FORMAT.B5G6R5_UNORM,
-        TEX_FORMAT.B5G5R5A1_UNORM,
-        TEX_FORMAT.B4G4R4A4_UNORM,
-        TEX_FORMAT.R8G8B8A8_UNORM,
-        TEX_FORMAT.R8G8B8A8_UNORM_SRGB,
-    ]
-
-def OnClick(treeview):
-    UpdateEditor()
-
-def UpdateEditor():
-    editor = LibraryGUI.GetActiveContent(ImageEditorBase)
-    if editor is None:
-        editor = ImageEditorBase()
-        editor.Dock = DockStyle.Fill
-        LibraryGUI.LoadEditor(editor)
-
-    prop = DisplayProperties()
-    prop.Width = Width
-    prop.Height = Height
-    prop.MipCount = MipCount
-    prop.ArrayCount = ArrayCount
-    prop.Format = Format
-    prop.Hash = "".join([format(x, "X2") for x in HeaderInfo.Hash])
-
-    editor.Text = Text
-    editor.LoadProperties(prop)
-    editor.LoadImage(self)
-
-def GetContextMenuItems():
-    items = []
-    items.append(ToolStripMenuItem("Save File", None, lambda o, e: STFileSaver.SaveFileFormat(self, FilePath)))
-    items.extend(base.GetContextMenuItems())
-    return items
-
-def Load(stream):
-    Tag = self
-
-    CanReplace = True
-
-    ImageKey = "Texture"
-    SelectedImageKey = "Texture"
-
-    name = os.path.splitext(os.path.basename(FileName))[0]
-    Text = name
-
-    if name in PluginRuntime.TextureCache:
-        del PluginRuntime.TextureCache[name]
-    PluginRuntime.TextureCache[name] = self
-
-    reader = FileReader(stream, True)
-    reader.SetByteOrder(False)
-
-    HeaderInfo = Header()
-    HeaderInfo.HeaderSize = reader.ReadUInt16()
-    HeaderInfo.Version = reader.ReadUInt16()
-    HeaderInfo.Magic = reader.ReadBytes(4)
-    HeaderInfo.Width = reader.ReadUInt16()
-    HeaderInfo.Height = reader.ReadUInt16()
-    HeaderInfo.Depth = reader.ReadUInt16()
-    HeaderInfo.MipCount = reader.ReadByte()
-    HeaderInfo.Unknown1 = reader.ReadByte()
-    HeaderInfo.Unknown2 = reader.ReadByte()
-    HeaderInfo.Padding = reader.ReadUInt16()
-    HeaderInfo.FormatFlag = reader.ReadByte()
-    HeaderInfo.FormatSetting = reader.ReadUInt32()
-    HeaderInfo.CompSelectR = reader.ReadByte()
-    HeaderInfo.CompSelectG = reader.ReadByte()
-    HeaderInfo.CompSelectB = reader.ReadByte()
-    HeaderInfo.CompSelectA = reader.ReadByte()
-    HeaderInfo.Hash = reader.ReadBytes(32)
-    HeaderInfo.Format = reader.ReadUInt16()
-    HeaderInfo.Unknown3 = reader.ReadUInt16()
-    HeaderInfo.TextureSetting1 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting2 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting3 = reader.ReadUInt32()
-    HeaderInfo.TextureSetting4 = reader.ReadUInt32()
-
-    Width = HeaderInfo.Width
-    Height = HeaderInfo.Height
-    ArrayCount = HeaderInfo.Depth
-    MipCount = HeaderInfo.MipCount
-
-    RedChannel = ChannelList[HeaderInfo.CompSelectR]
-    GreenChannel = ChannelList[HeaderInfo.CompSelectG]
-    BlueChannel = ChannelList[HeaderInfo.CompSelectB]
-    AlphaChannel = ChannelList[HeaderInfo.CompSelectA]
-
-    surfaces = []
-    reader.SeekBegin(HeaderInfo.HeaderSize)
-    for i in range(MipCount * ArrayCount):
-        surface = SurfaceInfo()
-        surface.ArrayLevel = reader.ReadUInt16()
-        surface.MipLevel = reader.ReadByte()
-        reader.ReadByte()
-        surfaces.append(surface)
-
-    for i in range(MipCount * ArrayCount):
-        surfaces[i].Size = reader.ReadUInt32()
-        reader.ReadUInt32()
-
-    pos = reader.Position
-
-    if HeaderInfo.Format in FormatList:
-        Format = FormatList[HeaderInfo.Format]
-    else:
-        raise Exception(f"Unsupported format! {HeaderInfo.Format:X}")
-
-    data = []
-    for i in range(MipCount * ArrayCount):
-        imageData = reader.ReadBytes(surfaces[i].Size)
-        if len(data) <= surfaces[i].ArrayLevel:
-            data.append([])
-        data[surfaces[i].ArrayLevel].append(Zstb.SDecompress(imageData))
-    ImageList = data
-
-def Save(stream):
-    HeaderInfo.Format = next((k for k, v in FormatList.items() if v == Format), None)
-    HeaderInfo.Width = Width
-    HeaderInfo.Height = Height
-    HeaderInfo.Depth = ArrayCount
-    HeaderInfo.MipCount = MipCount
-
-    writer = FileWriter(stream)
-    writer.WriteUInt16(HeaderInfo.HeaderSize)
-    writer.WriteUInt16(HeaderInfo.Version)
-    writer.WriteBytes(HeaderInfo.Magic)
-    writer.WriteUInt16(HeaderInfo.Width)
-    writer.WriteUInt16(HeaderInfo.Height)
-    writer.WriteUInt16(HeaderInfo.Depth)
-    writer.WriteByte(HeaderInfo.MipCount)
-    writer.WriteByte(HeaderInfo.Unknown1)
-    writer.WriteByte(HeaderInfo.Unknown2)
-    writer.WriteUInt16(HeaderInfo.Padding)
-    writer.WriteByte(HeaderInfo.FormatFlag)
-    writer.WriteUInt32(HeaderInfo.FormatSetting)
-    writer.WriteByte(HeaderInfo.CompSelectR)
-    writer.WriteByte(HeaderInfo.CompSelectG)
-    writer.WriteByte(HeaderInfo.CompSelectB)
-    writer.WriteByte(HeaderInfo.CompSelectA)
-    writer.WriteBytes(HeaderInfo.Hash)
-    writer.WriteUInt16(HeaderInfo.Format)
-    writer.WriteUInt16(HeaderInfo.Unknown3)
-    writer.WriteUInt32(HeaderInfo.TextureSetting1)
-    writer.WriteUInt32(HeaderInfo.TextureSetting2)
-    writer.WriteUInt32(HeaderInfo.TextureSetting3)
-    writer.WriteUInt32(HeaderInfo.TextureSetting4)
-
-    writer.SeekBegin(HeaderInfo.HeaderSize)
-
-    surfaceSizes = []
-    surfaceData = []
-
-    for mip in range(MipCount):
-        for array in range(ArrayCount):
-            writer.WriteUInt16(array)
-            writer.WriteByte(mip)
-            writer.WriteByte(1)
-
-            surface = Zstb.SCompress(ImageList[array][mip], 20)
-            surfaceSizes.append(len(surface))
-            surfaceData.append(surface)
-
-    for surface in surfaceSizes:
-        writer.WriteUInt32(surface)
-        writer.WriteUInt32(6)
-
-    for data in surfaceData:
-        writer.WriteBytes(data)
-
-def Dispose():
-    if FileName in PluginRuntime.TextureCache:
-        del PluginRuntime.TextureCache[FileName]
-
-def GetImageData(ArrayLevel=0, MipLevel=0, DepthLevel=0):
-    data = ImageList[ArrayLevel][MipLevel]
-    return TegraX1Swizzle.GetDirectImageData(self, data, MipLevel)
-
-def SetImageData(bitmap, ArrayLevel):
-    tex = TextureData()
-    tex.Texture = Syroot.NintenTools.NSW.Bntx.Texture()
-    tex.Format = Format
-    tex.Width = Width
-    tex.Height = Height
-    tex.MipCount = MipCount
-    tex.ArrayCount = ArrayCount
-    tex.Texture.TextureData = [[]]
-
-    tex.SetImageData(bitmap, ArrayLevel)
-    SetImage(tex, ArrayLevel)
-
-def Replace(FileName):
-    tex = TextureData()
-    tex.Replace(FileName, MipCount, 0, Format, Syroot.NintenTools.NSW.Bntx.GFX.SurfaceDim.Dim2D, 1)
-
-    editor = LibraryGUI.GetActiveContent(ImageEditorBase)
-    targetArray = 0
-    if editor is not None:
-        targetArray = editor.GetArrayDisplayLevel()
-
-    SetImage(tex, targetArray)
-
-def SetImage(tex, targetArray):
-    if tex.Texture is None:
-        return
-
-    for i in range(len(ImageList[0])):
-        print(f"SIZE 1 mip{i} {len(ImageList[0][i])}")
-
-    if len(ImageList) > 1 and Format != tex.Format:
-        raise Exception(f"Imported texture must use the original format for surface injecting! Expected {Format} but got {tex.Format}! If you need ASTC, use an astc encoder with .astc file format.")
-
-    if len(tex.Texture.TextureData) == 1:
-        ImageList[targetArray] = tex.Texture.TextureData[0]
-    else:
-        ImageList.clear()
-        ImageList.extend(tex.Texture.TextureData)
-
-    for i in range(len(ImageList[0])):
-        print(f"SIZE 2 mip{i} {len(ImageList[0][i])}")
-
-    Width = tex.Texture.Width
-    Height = tex.Texture.Height
-    MipCount = tex.Texture.MipCount
-    ArrayCount = len(ImageList)
-    Format = tex.Format
-
-    IsEdited = True
-
-    UpdateEditor()
-
-    LoadOpenGLTexture()
-
-def GetActiveContent(contentType):
-    return None
-
-def LoadEditor(editor):
-    pass
-
-def SaveFileFormat(txtg, FilePath):
-    pass
-
-def GetDirectImageData(txtg, data, MipLevel):
-    return data
-
-def open(filename):
-    return Image()
-
-def tobytes(self):
-    return b""
-
-def TXTG():
-    return TXTG()
-
-def FileType():
-    return FileType()
-
-def CanSave():
-    return True
-
-def Description():
-    return ["Texture To Go"]
-
-def Extension():
-    return ["*.txtg"]
-
-def FileName():
-    return ""
-
-def FilePath():
-    return ""
-
-def IFileInfo():
-    return None
-
-def Identify(stream):
-    signature = stream.read(4)
-    return signature == b"6PK0"
-
-def Types():
-    return []
-
-def CanEdit():
-    return True
-
-def SupportedFormats():
-    return [
-        TEX_FORMAT.BC1_UNORM,
-        TEX_FORMAT.BC2_UNORM,
-        TEX_FORMAT.BC3_UNORM,
-        TEX_FORMAT.BC4_UNORM,
-        TEX_FORMAT.BC5_UNORM,
-        TEX_FORMAT.R8_UNORM,
-        TEX_FORMAT.R8G8_UNORM,
-        TEX_FORMAT.R8G8_UNORM,
-        TEX_FORMAT.R10G10B10A2_UNORM,
-        TEX_FORMAT.B5G6R5_UNORM,
-        TEX_FORMAT.B5G5R5A1_UNORM,
-        TEX_FORMAT.B4G4R4A4_UNORM,
-        TEX_FORMAT.R8G8B8A8_UNORM,
-        TEX_FORMAT.R8G8B8A8_UNORM_SRGB,
-    ]
-
-def OnClick(treeview):
-    UpdateEditor()
-
-def UpdateEditor():
-    editor = LibraryGUI.GetActiveContent(ImageEditorBase)
-    if editor is None:
-        editor = ImageEditorBase()
-        editor.Dock = DockStyle.Fill
-        LibraryGUI.LoadEditor(editor)
-
-    prop = DisplayProperties()
-    prop.Width = Width
-    prop.Height = Height
-    prop.MipCount = MipCount
-    prop.ArrayCount = ArrayCount
-    prop.Format = Format
-    prop.Hash = "".join([format(x, "X2") for x in HeaderInfo.Hash])
-
-    editor.Text = Text
-    editor.LoadProperties(prop)
-    editor.LoadImage(self)
-
-def GetContextMenuItems():
-    items = []
-    items.append(ToolStripMenuItem("Save File", None, lambda o, e: STFileSaver.SaveFileFormat(self, FilePath)))
-    items.extend(base.GetContextMenuItems())
-    return items
-
-def Load(stream):
-    Tag = self
-
-    CanReplace = True
-
-    ImageKey = "Texture"
-    SelectedImageKey = "Texture"
-
-    name = os.path.splitext(os.path.basename(FileName))[0]
-    Text = name
-
-    if name in PluginRuntime.TextureCache:
-        del PluginRuntime.TextureCache[name]
-    PluginRuntime.TextureCache[name] = self
-
-    reader = FileReader(stream, True)
-    reader.SetByteOrder(False)
-
-    HeaderInfo = Header()
-    HeaderInfo.HeaderSize = reader.ReadUInt16()
-    HeaderInfo.Version = reader.ReadUInt
-
