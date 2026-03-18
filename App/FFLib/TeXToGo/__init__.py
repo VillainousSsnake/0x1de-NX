@@ -31,7 +31,7 @@ class TexToGo:
                     str(file_path)
                 )
 
-    def to_bitmap(self) -> bytes:
+    def to_bitmap(self):
 
         with open(self.file_path, "rb") as f_in:
             print(self.controller.Load(f_in))
