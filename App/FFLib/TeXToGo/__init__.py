@@ -4,6 +4,7 @@ import io
 
 # Importing modules
 import App.FFLib.TeXToGo.TexToGo_base as txtgLib
+from App.FFLib.TeXToGo.TexDataConvert import Converter
 import os
 
 
@@ -26,20 +27,37 @@ class TexToGo:
 
         # Detecting if it has texture data
         with open(file_path, "rb") as f_in:
-            if not self.controller.Identify(f_in):
+            buffer = io.BytesIO(f_in.read())
+            if not self.controller.Identify(buffer):
                 raise TypeError(
                     "File given does not contain correct texture data or might be corrupt! File path: " +
                     str(file_path)
                 )
 
-    def to_bitmap(self):
+        # Getting height and width of the image
+        self.controller.FilePath = self.file_path
+
+        with open(self.file_path, "rb") as f_in:
+            buffer = io.BytesIO(f_in.read())
+            self.controller.Load(buffer)
+
+        self.height = self.controller.Height
+        self.width = self.controller.Width
+        self.format = self.controller.Format
+
+        print(self.height)
+        print(self.width)
+        print(self.format)
+
+    def to_png(self, out_path):    # TODO: Finish
 
         self.controller.FilePath = self.file_path
 
         with open(self.file_path, "rb") as f_in:
             buffer = io.BytesIO(f_in.read())
             self.controller.Load(buffer)
-            print(self.controller.GetImageData())
 
+        Converter.to_png(self, self.controller.GetImageData(), out_path)
+        print("saved!")
 
         pass    # TODO: Stub
