@@ -3,6 +3,7 @@ import io
 import numpy as np
 from PIL import Image
 import struct
+import texture2ddecoder
 
 
 # Functions for classes
@@ -18,6 +19,12 @@ def rgb565_to_rgb888(c):
 
 
 def decode_bc1_block(block):
+    print(block)
+    print(len(block))
+    if len(block) > 8:  # TODO: Stub code
+        return []
+
+
     c0, c1, bits = struct.unpack("<HHI", block)
 
     color0 = rgb565_to_rgb888(c0)
