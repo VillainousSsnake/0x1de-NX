@@ -1,9 +1,10 @@
 
 # Importing dependencies
-from PIL import Image
+from App.FFLib.TeXToGo import TexToGo_base
+from App.FFLib.TotkZsDic import ZsDic
 import texture2ddecoder
 import py_tegra_swizzle
-from App.FFLib.TeXToGo import TexToGo_base
+from PIL import Image
 import math
 
 
@@ -17,18 +18,26 @@ def get_block_height(height):
 # To Png functions
 def bc1_to_png(controller: TexToGo_base.TXTG, data, out_path):
 
-    # Getting block height
-    block_h = get_block_height(math.ceil(controller.Height / 4))
+    # Decompressing zstandard data
+    data = ZsDic.auto_decompress_bytes(data)
 
-    # Deswizzling bytes
+    block_width = max(1, controller.Width // 4)
+    block_height_dim = max(1, controller.Height // 4)
+
+    block_h = get_block_height(block_height_dim)
+
+    print(f"Data length: {len(data)}, Expected: {controller.Width * controller.Height // 2}")
+    print(f"Block dims: {block_width}x{block_height_dim}, GOB block_height: {block_h}")
+
     deswizzled_bytes = py_tegra_swizzle.deswizzle_block_linear(
-        width=controller.Width,
-        height=controller.Height,
+        width=block_width,
+        height=block_height_dim,
         depth=controller.HeaderInfo.Depth,
         source=data,
         block_height=block_h,
         bytes_per_pixel=8,
     )
+
     # Decode BC1 to raw RGBA bytes
     rgba_bytes = texture2ddecoder.decode_bc1(deswizzled_bytes, controller.Width, controller.Height)
 
