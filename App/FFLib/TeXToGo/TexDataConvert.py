@@ -1,24 +1,24 @@
+
+# Importing dependencies
 from PIL import Image
 import texture2ddecoder
 
 
-# noinspection PyPep8Naming
-class BC1_UNORM:
+# To Png functions
+def bc1_to_png(data, width, height, out_path):
+    # Decode BC1 to raw RGBA bytes
+    rgba_bytes = texture2ddecoder.decode_bc1(data, width, height)
 
-    @staticmethod
-    def bc1_to_png(data, width, height, out_path):
-        # Decode BC1 to raw RGBA bytes
-        rgba_bytes = texture2ddecoder.decode_bc1(data, width, height)
+    # Create an image from RGBA bytes
+    img = Image.frombytes("RGBA", (width, height), rgba_bytes)
 
-        # Create an image from RGBA bytes
-        img = Image.frombytes("RGBA", (width, height), rgba_bytes)
-
-        # Save as PNG
-        img.save(out_path)
-        print(f"Decoded texture saved to {out_path}")
-        print("saved!")
+    # Save as PNG
+    img.save(out_path)
+    print(f"Decoded texture saved to {out_path}")
+    print("saved!")
 
 
+# Converter class
 class Converter:
     """
     This class contains functions to convert
