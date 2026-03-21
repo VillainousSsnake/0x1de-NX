@@ -1383,22 +1383,79 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 texture_controller.to_png(png_path)
 
                 # Creating texture view
-                texture_view = ctk.CTkFrame(
+                texture_view_frame = ctk.CTkFrame(
                     master=master,
-                    height=999999999,
                     fg_color="#242424",
                     corner_radius=0,
                 )
-                texture_view.pack(side="left")
+                texture_view_frame.pack(side="left")
 
                 # Putting image in texture view
                 label = ctk.CTkLabel(
-                    master=texture_view,
+                    master=texture_view_frame,
                     image=ImageTk.PhotoImage(Image.open(png_path)),
                     text="",
                     height=999999999,
                 )
                 label.pack(fill="both", anchor="w")
+
+                # Creating the info view frame
+                texture_info_frame = ctk.CTkFrame(
+                    master=master,
+                    height=999999999,
+                    width=999999999,
+                    fg_color="#242424",
+                    corner_radius=0,
+                )
+                texture_info_frame.pack(anchor="w", side="top", fill="both")
+
+                # Creating labels to display the info on the texture
+                infolabel = ctk.CTkLabel(
+                    master=texture_info_frame,
+                    text="Image Information:",
+                    font=("monospace", 15, 'bold')
+                )
+                infolabel.pack(anchor="w", side="top")
+
+                infolabel_height = ctk.CTkLabel(
+                    master=texture_info_frame,
+                    text="  Height:    " + str(texture_controller.controller.Height),
+                    font=("monospace", 13, 'bold'),
+                    text_color="gray",
+                )
+                infolabel_height.pack(anchor="w", side="top")
+
+                infolabel_width = ctk.CTkLabel(
+                    master=texture_info_frame,
+                    text="  Width:    " + str(texture_controller.controller.Width),
+                    font=("monospace", 13, 'bold'),
+                    text_color="gray",
+                )
+                infolabel_width.pack(anchor="w", side="top")
+
+                infolabel_format = ctk.CTkLabel(
+                    master=texture_info_frame,
+                    text="  Height:    " + str(texture_controller.controller.Format),
+                    font=("monospace", 13, 'bold'),
+                    text_color="gray",
+                )
+                infolabel_format.pack(anchor="w", side="top")
+
+                infolabel_mipcount = ctk.CTkLabel(
+                    master=texture_info_frame,
+                    text="  MipCount:    " + str(texture_controller.controller.MipCount),
+                    font=("monospace", 13, 'bold'),
+                    text_color="gray",
+                )
+                infolabel_mipcount.pack(anchor="w", side="top")
+
+                infolabel_arraycount = ctk.CTkLabel(
+                    master=texture_info_frame,
+                    text="  ArrayCount:    " + str(texture_controller.controller.ArrayCount),
+                    font=("monospace", 13, 'bold'),
+                    text_color="gray",
+                )
+                infolabel_arraycount.pack(anchor="w", side="top")
 
                 # Creating the button commands for the Save, Import, and Export buttons
                 def save_file():
