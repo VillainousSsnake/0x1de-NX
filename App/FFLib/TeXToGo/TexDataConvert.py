@@ -15,7 +15,6 @@ def get_block_height(height):
     return block_height
 
 
-# To Png functions
 def bc1_to_png(controller: TexToGo_base.TXTG, data, out_path):
 
     # Decompressing zstandard data
@@ -45,7 +44,7 @@ def bc1_to_png(controller: TexToGo_base.TXTG, data, out_path):
     img = Image.frombytes("RGBA", (controller.Width, controller.Height), rgba_bytes)
 
     # Save as PNG
-    img.save(out_path)
+    img.save(out_path, format="PNG")
     print(f"Decoded texture saved to {out_path}")
     print("saved!")
 
@@ -72,3 +71,7 @@ class Converter:
 
             case _:     # Throwing type error
                 TypeError("Image isn't a valid texture format")
+
+    @staticmethod
+    def to_txtg(controller, file_in, out_path):
+        pass    # TODO: Stub

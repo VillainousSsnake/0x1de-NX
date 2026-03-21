@@ -49,15 +49,23 @@ class TexToGo:
         print(self.width)
         print(self.format)
 
-    def to_png(self, out_path):    # TODO: Finish
+    def to_png(self, out_path):
+        """
+        Converting the TXTG file to PNG data and writing it to a file.
+        """
 
-        self.controller.FilePath = self.file_path
+        # Getting the file contents and loading the file controller
+        with open(self.file_path, "rb") as f_in:
+            buffer = io.BytesIO(f_in.read())
+            self.controller.Load(buffer)
+
+        # Converting the image to PNG format using the converter
+        Converter.to_png(self.controller, self.controller.GetImageData(), out_path)
+
+    def to_txtg(self, file_in, out_path):
 
         with open(self.file_path, "rb") as f_in:
             buffer = io.BytesIO(f_in.read())
             self.controller.Load(buffer)
 
-        Converter.to_png(self.controller, self.controller.GetImageData(), out_path)
-        print("Done!")
-
-        pass    # TODO: Stub
+        Converter.to_txtg(self.controller, file_in, out_path)
