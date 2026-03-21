@@ -15,10 +15,10 @@ import shutil
 import os
 
 # Importing modules and file dependencies
-from App.FFLib.ResourceSizeTaBLe import RESTBL
 from App.FFLib.StandardArchive import Sarc
 from App.FFLib.BinaryAnimEvent import BAEV
 from App.FFLib.AnimSeqBinary import ASB
+from App.FFLib.TeXToGo import TexToGo
 from App.FFLib.TotkZsDic import ZsDic
 from App.FFLib.BinaryYAML import BYML
 from App.FFLib.AAMP import AAMP
@@ -1320,8 +1320,6 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 )
                 auto_generate_restbl_message.pack(anchor="n")
 
-
-
                 # Exiting function
                 return None
 
@@ -1363,8 +1361,44 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 )
                 export_button.pack(anchor="w", side="left")
 
-                # TODO: Add texture view
-                pass
+                # Creating the TexToGo object
+                texture_controller = TexToGo(item_info["values"][0])
+
+                # Setting the file path for the png and the temp folder
+                temp_folder = os.path.join(os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_", "textures")
+                png_path = os.path.join(
+                    temp_folder,
+                    str(os.path.basename(item_info["values"][0])).replace(".txtg", ".png"),
+                )
+
+                # Deleting extract file if it exists
+                if os.path.isfile(png_path):
+                    os.remove(png_path)
+
+                # If the temp folder doesn't exist, create it
+                if not os.path.exists(temp_folder):
+                    os.makedirs(temp_folder)
+
+                # Creating the PNG file
+                texture_controller.to_png(png_path)
+
+                # Creating texture view
+                texture_view = ctk.CTkFrame(
+                    master=master,
+                    height=999999999,
+                    fg_color="#242424",
+                    corner_radius=0,
+                )
+                texture_view.pack(side="left")
+
+                # Putting image in texture view
+                label = ctk.CTkLabel(
+                    master=texture_view,
+                    image=ImageTk.PhotoImage(Image.open(png_path)),
+                    text="",
+                    height=999999999,
+                )
+                label.pack(fill="both", anchor="w")
 
                 # Creating the button commands for the Save, Import, and Export buttons
                 def save_file():
