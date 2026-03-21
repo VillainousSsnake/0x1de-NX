@@ -45,10 +45,6 @@ class TexToGo:
         self.width = self.controller.Width
         self.format = self.controller.Format
 
-        print(self.height)
-        print(self.width)
-        print(self.format)
-
     def to_png(self, out_path):
         """
         Converting the TXTG file to PNG data and writing it to a file.
