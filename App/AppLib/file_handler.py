@@ -1435,7 +1435,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
 
                 infolabel_format = ctk.CTkLabel(
                     master=texture_info_frame,
-                    text="  Height:    " + str(texture_controller.controller.Format),
+                    text="  Format:    " + str(texture_controller.controller.Format),
                     font=("monospace", 13, 'bold'),
                     text_color="gray",
                 )
