@@ -101,6 +101,10 @@ def bc1_to_png(controller: TexToGo_base.TXTG, data, out_path):
     print("saved!")
 
 
+def png_to_bc1():
+    pass    # TODO: Stub
+
+
 def bc4_to_png(controller: TexToGo_base.TXTG, data, out_path):
 
     # Decompressing zstandard data
