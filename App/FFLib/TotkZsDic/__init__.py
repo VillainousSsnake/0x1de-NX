@@ -125,3 +125,29 @@ class ZsDic:
 
         # Returning output
         return output
+
+    @staticmethod
+    def auto_compress_bytes(file_data: bytes, dict_type=".zs") -> bytes | None:
+        """
+        Automatically compressed a file depending on the file name into zstandard data.
+        :param file_data: The raw bytes data from the compressed file.
+        :param dict_type: The decompression dictionary type
+        :return: the decompressed input file.
+        """
+
+        # Getting the zstandard dictionary type
+        dict_type_ = ZsDic.detect_zstandard_dict(dict_type)
+
+        # Getting the correct zstandard dictionary data
+        dict_data = ZsDic.get_dict(dict_type_)
+
+        # Creating the zstandard decompressor
+        zs_compressor = zstandard.ZstdCompressor(
+            dict_data=dict_data,
+        )
+
+        # Decompressing the file data into the output variable
+        output = zs_compressor.compress(file_data)
+
+        # Returning output
+        return output
