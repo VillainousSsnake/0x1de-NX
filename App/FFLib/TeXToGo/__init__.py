@@ -57,7 +57,7 @@ class TexToGo:
             buffer = io.BytesIO(f_in.read())
             self.controller.Load(buffer)
 
-        Converter.to_png(self, self.controller.GetImageData(), out_path)
-        print("saved!")
+        Converter.to_png(self.controller, self.controller.GetImageData(), out_path)
+        print("Done!")
 
         pass    # TODO: Stub

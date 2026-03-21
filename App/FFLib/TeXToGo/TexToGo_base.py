@@ -1,7 +1,7 @@
 import io
 import struct
 from enum import Enum
-from typing import List, Dict, Any, Optional, Type
+from typing import List, Any, Type
 from PIL import Image
 
 
