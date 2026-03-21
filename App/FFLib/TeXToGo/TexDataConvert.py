@@ -133,6 +133,9 @@ def bc4_to_png(controller: TexToGo_base.TXTG, data, out_path):
     # Create an image from RGBA bytes
     img = Image.frombytes("RGBA", (controller.Width, controller.Height), rgba_bytes)
 
+    # Converting image to greyscale
+    img = img.convert(mode="L")
+
     # Save as PNG
     img.save(out_path, format="PNG")
     print(f"Decoded texture saved to {out_path}")
