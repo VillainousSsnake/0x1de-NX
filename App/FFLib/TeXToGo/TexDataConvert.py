@@ -73,14 +73,13 @@ def bc1_to_png(controller: TexToGo_base.TXTG, data, out_path):
     # Decompressing zstandard data
     data = ZsDic.auto_decompress_bytes(data)
 
+    # Getting image data for de-swizzling
     block_width = max(1, controller.Width // 4)
     block_height_dim = max(1, controller.Height // 4)
 
     block_h = get_block_height(block_height_dim)
 
-    print(f"Data length: {len(data)}, Expected: {controller.Width * controller.Height // 2}")
-    print(f"Block dims: {block_width}x{block_height_dim}, GOB block_height: {block_h}")
-
+    # De-swizzling bytes
     deswizzled_bytes = py_tegra_swizzle.deswizzle_block_linear(
         width=block_width,
         height=block_height_dim,
@@ -98,12 +97,27 @@ def bc1_to_png(controller: TexToGo_base.TXTG, data, out_path):
 
     # Save as PNG
     img.save(out_path, format="PNG")
-    print(f"Decoded texture saved to {out_path}")
-    print("saved!")
 
 
-def png_to_bc1():
-    pass    # TODO: Stub
+def png_to_bc1(controller: TexToGo_base.TXTG, data, out_path):
+
+    # Load PNG
+    img = Image.frombytes("RGBA", (controller.Width, controller.Height), data)
+    width, height = img.size
+    rgba_bytes = img.tobytes()
+
+    # Encode to BC1 (DXT1)
+    bc1_data = encode_bc1(rgba_bytes, width, height)
+
+    # Save raw BC1 blocks
+    with open("output.bc1", "wb") as f:
+        f.write(bc1_data)
+
+    print("BC1 size:", len(bc1_data))
+
+    # TODO: Finish
+
+
 
 
 def bc4_to_png(controller: TexToGo_base.TXTG, data, out_path):
