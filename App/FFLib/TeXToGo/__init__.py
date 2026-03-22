@@ -58,7 +58,6 @@ class TexToGo:
         # Converting the image to PNG format using the converter
         Converter.to_png(self.controller, self.controller.GetImageData(), out_path)
 
-    def to_txtg(self, img_type, tex_format, file_in, out_path):
+    def to_txtg(self, img_type, tex_format, filepath_in, out_path):
 
-        with open(file_in, "rb") as f_in:
-            Converter.to_txtg(self.controller, img_type, tex_format, f_in.read(), out_path)
+        Converter.to_txtg(self.controller, img_type, tex_format, filepath_in, out_path)

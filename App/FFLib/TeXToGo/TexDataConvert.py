@@ -1,5 +1,6 @@
-
 # Importing dependencies
+import zstandard
+
 from App.FFLib.TeXToGo import TexToGo_base
 from App.FFLib.TotkZsDic import ZsDic
 from tkinter import messagebox
@@ -8,6 +9,8 @@ import py_tegra_swizzle
 from PIL import Image
 import numpy as np
 import math
+import os
+import io
 
 
 # Converter class
@@ -50,8 +53,36 @@ class Converter:
                 TypeError("Image isn't a valid texture format")
 
     @staticmethod
-    def to_txtg(controller, file_in, out_path):
-        pass    # TODO: Stub
+    def to_txtg(controller: TexToGo_base.TXTG,
+                img_type: str,
+                tex_format: str,
+                filepath_in: bytes,
+                out_path: os.PathLike | str):
+        """
+        Converts regular image formats (eg. PNG, JPG) to TextureToGo format (eg. '.txtg')
+        @param controller: TexToGo_Base.TXTG object
+        @param img_type: Regular Image Format (Eg. 'PNG', etc.)
+        @param tex_format: The compression used (Eg. 'TEX_FORMAT.BC1_UNORM', etc.)
+        @param filepath_in: input png file path
+        @param out_path: the path where the export file will be generated
+        """
+        # Matching input image type
+        match img_type.lower():
+
+            case "png":     # From png
+
+                # Matching output texture format
+                match tex_format.upper():
+
+                    case "TEX_FORMAT.BC1_UNORM":  # Into BC1
+                        print("bc1 detected!")
+                        png_to_bc1(controller, filepath_in, out_path)
+
+                    case _:     # Unsupported texture format
+                        print("Unsupported convert INTO texture format: '" + tex_format + "'")
+
+            case _:     # Unsupported image type
+                print("Unsupported convert FROM image type: '" + img_type + "'")
 
 
 """
@@ -99,23 +130,9 @@ def bc1_to_png(controller: TexToGo_base.TXTG, data, out_path):
     img.save(out_path, format="PNG")
 
 
-def png_to_bc1(controller: TexToGo_base.TXTG, data, out_path):
+def png_to_bc1(controller: TexToGo_base.TXTG, filepath_in, out_path):
 
-    # Load PNG
-    img = Image.frombytes("RGBA", (controller.Width, controller.Height), data)
-    width, height = img.size
-    rgba_bytes = img.tobytes()
-
-    # Encode to BC1 (DXT1)
-    bc1_data = encode_bc1(rgba_bytes, width, height)
-
-    # Save raw BC1 blocks
-    with open("output.bc1", "wb") as f:
-        f.write(bc1_data)
-
-    print("BC1 size:", len(bc1_data))
-
-    # TODO: Finish
+    pass    # TODO: Stub
 
 
 
