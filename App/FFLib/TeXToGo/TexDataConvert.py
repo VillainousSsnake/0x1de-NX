@@ -135,8 +135,6 @@ def png_to_bc1(controller: TexToGo_base.TXTG, filepath_in, out_path):
     pass    # TODO: Stub
 
 
-
-
 def bc4_to_png(controller: TexToGo_base.TXTG, data, out_path):
 
     # Decompressing zstandard data

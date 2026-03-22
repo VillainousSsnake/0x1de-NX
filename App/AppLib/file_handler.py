@@ -1,6 +1,7 @@
 # /App/AppLib/texture_handler.py
 # This is a file handler module
 import pathlib
+import tkinter
 # Importing libraries
 from tkinter import messagebox, ttk, filedialog
 from pygments.lexers import data as pylexers
@@ -1389,14 +1390,49 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 )
                 texture_view_frame.pack(side="left")
 
-                # Putting image in texture view
-                label = ctk.CTkLabel(
+                # Creating the scale button view
+                scale_view_frame = ctk.CTkFrame(
                     master=texture_view_frame,
-                    image=ImageTk.PhotoImage(Image.open(png_path)),
+                    fg_color="#242424",
+                    corner_radius=5,
+                )
+                scale_view_frame.pack(anchor="w", side="top")
+
+                # Creating the current scale label and var
+                current_scale = tkinter.StringVar()
+                current_scale.set("Scale: (100%)")
+                current_scale_label = ctk.CTkLabel(
+                    master=scale_view_frame,
+                    textvariable=current_scale,
+                )
+                current_scale_label.pack(side="left")
+
+                # Creating the scaling buttons
+                upscale_button = ctk.CTkButton(
+                    master=scale_view_frame,
+                    text="+",
+                    width=5,
+                )
+                upscale_button.pack(side="left")
+
+                downscale_button = ctk.CTkButton(
+                    master=scale_view_frame,
+                    text="-",
+                    width=5,
+                )
+                downscale_button.pack(side="left")
+
+                # Making image for display texture view
+                display_img = Image.open(png_path)
+
+                # Putting image in texture view
+                display_img_label = ctk.CTkLabel(
+                    master=texture_view_frame,
+                    image=ImageTk.PhotoImage(display_img),
                     text="",
                     height=999999999,
                 )
-                label.pack(fill="both", anchor="w")
+                display_img_label.pack(fill="both", anchor="w")
 
                 # Creating the info view frame
                 texture_info_frame = ctk.CTkFrame(
@@ -1456,6 +1492,36 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 )
                 infolabel_arraycount.pack(anchor="w", side="top")
 
+                # Scaling button commands
+                def upscale_command(img):
+
+                    # Get current scale from tkinter variable type
+                    current_scale_ = current_scale.get()
+                    current_scale_ = int(
+                        current_scale_.replace("Scale: (", "").replace("%)", ""))
+
+                    # Set the scale label to +10% of the current scale
+                    current_scale_ *= 1.10
+                    current_scale_ = int(current_scale_)
+                    current_scale.set("Scale: (" + str(current_scale_) + "%)")
+
+                    # Getting variables
+                    display_width = img.width
+                    display_height = img.height
+
+                    # Setting the scale of the image
+                    img = img.resize(size=(int(display_width * 1.10), int(display_height * 1.10)))
+
+                    # configuring the label
+                    display_img_label.configure(image=ImageTk.PhotoImage(img))
+                    display_img_label.pack()
+
+                    # TODO: Fix upscaling
+
+
+                def downscale_command():
+                    pass    # TODO: Stub
+
                 # Creating the button commands for the Save, Import, and Export buttons
                 def save_file():
                     pass    # TODO: Stub
@@ -1513,6 +1579,8 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     pass    # TODO: Stub
 
                 # Assign button commands
+                upscale_button.configure(command=lambda: upscale_command(display_img))
+                downscale_button.configure(command=downscale_command)
                 save_button.configure(command=save_file)
                 export_button.configure(command=export_file)
                 import_button.configure(command=import_file)
