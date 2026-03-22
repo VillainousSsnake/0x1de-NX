@@ -1,7 +1,6 @@
 # /App/AppLib/texture_handler.py
 # This is a file handler module
-
-
+import pathlib
 # Importing libraries
 from tkinter import messagebox, ttk, filedialog
 from pygments.lexers import data as pylexers
@@ -1462,7 +1461,53 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     pass    # TODO: Stub
 
                 def export_file():
-                    pass    # TODO: Stub
+
+                    """
+                    Export button command:
+                     - Exports current working texture into desired format.
+
+                    TODO: Make export for TXTG, JPG, BitMap?, WEBP?.
+                    """
+
+                    # Getting the file path to save the new file
+                    file_explorer_path = filedialog.asksaveasfilename(
+                        title="Save texture file as...",
+                        filetypes=(('PNG', '.png'), ("TexToGo", [".txtg"])),
+                        confirmoverwrite=True,
+                        initialfile=str(os.path.basename(item_info["values"][0])).replace(".txtg", ".png"),
+                        defaultextension=".png",
+                    )
+
+                    # Exiting function if user canceled
+                    if file_explorer_path == "":
+                        return None
+
+                    # Getting the file extension
+                    file_ext = pathlib.Path(file_explorer_path).suffix
+
+                    # Exporting the file with the selected format
+                    match file_ext:
+
+                        case ".png":
+                            shutil.copy(png_path, file_explorer_path)
+
+                        case _:  # Throwing format not supported error
+
+                            # Displaying error message
+                            messagebox.showerror(
+                                title="file_format Error",
+                                message=str("This file is not supported for export!\n" + f"Unsupported File Extension: "
+                                            + file_ext)
+                            )
+
+                            # Exiting function
+                            return None
+
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX | TexToGo Export",
+                        "Successfully exported file to '" + file_explorer_path + "'",
+                    )
 
                 def import_file():
                     pass    # TODO: Stub
