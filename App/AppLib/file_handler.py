@@ -1371,7 +1371,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     str(os.path.basename(item_info["values"][0])).replace(".txtg", ".png"),
                 )
 
-                # Deleting extract file if it exists
+                # Deleting extract file if it already exists
                 if os.path.isfile(png_path):
                     os.remove(png_path)
 
@@ -1612,8 +1612,67 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                         "Successfully exported file to '" + file_explorer_path + "'",
                     )
 
-                def import_file():
-                    pass    # TODO: Stub
+                def import_file():  # TODO: Fix later
+
+                    # Getting the file path to save the new file
+                    file_explorer_path = filedialog.askopenfilename(
+                        title="Save texture file as...",
+                        filetypes=(('PNG', '.png'), ("TexToGo", [".txtg"])),
+                        initialfile=str(os.path.basename(item_info["values"][0])).replace(".txtg", ".png"),
+                        defaultextension=".png",
+                    )
+
+                    # Exiting function if user canceled
+                    if file_explorer_path == "":
+                        return None
+
+                    # Getting the file extension
+                    file_ext = pathlib.Path(file_explorer_path).suffix
+
+                    # Importing the file with the selected format
+                    match file_ext:
+
+                        case ".png":
+                            display_img_label.configure(image=ImageTk.PhotoImage(Image.open(file_explorer_path)))
+
+                            # Creating the TexToGo object
+                            texture_controller.__init__(file_explorer_path)
+
+                            # Deleting extract file if it already exists
+                            if os.path.isfile(os.path.join(temp_folder, str(os.path.basename(file_explorer_path)
+                                                                            ).replace(".txtg", ".png"))):
+                                os.remove(os.path.basename(file_explorer_path).replace(".txtg", ".png"))
+
+                            # If the temp folder doesn't exist, create it
+                            if not os.path.exists(
+                                    os.path.join(os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_", "textures")):
+                                os.makedirs(os.path.join(os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_", "textures"))
+
+                            # Creating the PNG file
+                            texture_controller.to_png(os.path.join(
+                                temp_folder,
+                                str(os.path.basename(file_explorer_path)).replace(".txtg", ".png"),
+                            ))
+
+                        case _:  # Throwing format not supported error
+
+                            # Displaying error message
+                            messagebox.showerror(
+                                title="file_format Error",
+                                message=str("This file is not supported for import!\n" + f"Unsupported File Extension: "
+                                            + file_ext)
+                            )
+
+                            # Exiting function
+                            return None
+
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX | TexToGo Import",
+                        "Imported image from " + file_ext + " to Texture" +
+                        """Import button command not fully tested, may not work correctly""",
+                        # TODO: Remove not implemented message
+                    )
 
                 # Assign button commands
                 upscale_button.configure(command=upscale_command)

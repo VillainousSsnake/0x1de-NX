@@ -61,3 +61,6 @@ class TexToGo:
     def to_txtg(self, img_type, tex_format, filepath_in, out_path):
 
         Converter.to_txtg(self.controller, img_type, tex_format, filepath_in, out_path)
+
+    def export_current_image(self):
+        pass    # TODO: Stub
