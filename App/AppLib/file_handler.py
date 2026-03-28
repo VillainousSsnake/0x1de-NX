@@ -1545,9 +1545,9 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     if scale_diff < 5:
                         current_scale_ = 100
 
-                    # Detecting if the scale needs to be rounded to 5%
-                    if current_scale_ < 5:
-                        current_scale_ = 5
+                    # Detecting if the scale needs to be rounded to 10%
+                    if current_scale_ < 10:
+                        current_scale_ = 10
 
                     # Set the scale label and make current scale a percent
                     current_scale.set("Scale: (" + str(current_scale_) + "%)")
