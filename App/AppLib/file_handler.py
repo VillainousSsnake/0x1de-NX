@@ -1493,7 +1493,10 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 infolabel_arraycount.pack(anchor="w", side="top")
 
                 # Scaling button commands
-                def upscale_command(img):
+                def upscale_command():
+
+                    # Getting image variable
+                    img = display_img
 
                     # Get current scale from tkinter variable type
                     current_scale_ = current_scale.get()
@@ -1503,24 +1506,58 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     # Set the scale label to +10% of the current scale
                     current_scale_ *= 1.10
                     current_scale_ = int(current_scale_)
-                    current_scale.set("Scale: (" + str(current_scale_) + "%)")
 
-                    # Getting variables
-                    display_width = img.width
-                    display_height = img.height
+                    # Detecting if the scale needs to be rounded to 100%
+                    scale_diff = abs(current_scale_ - 100)
+                    if scale_diff < 5:
+                        current_scale_ = 100
+
+                    # Detecting if the scale needs to be rounded to 250%
+                    if current_scale_ > 250:
+                        current_scale_ = 250
+
+                    # Set the scale label and make current scale a percent
+                    current_scale.set("Scale: (" + str(current_scale_) + "%)")
+                    current_scale_ = current_scale_ / 100
 
                     # Setting the scale of the image
-                    img = img.resize(size=(int(display_width * 1.10), int(display_height * 1.10)))
+                    img = img.resize(size=(int(img.width * current_scale_), int(img.height * current_scale_)))
 
                     # configuring the label
                     display_img_label.configure(image=ImageTk.PhotoImage(img))
-                    display_img_label.pack()
-
-                    # TODO: Fix upscaling
-
 
                 def downscale_command():
-                    pass    # TODO: Stub
+
+                    # Getting image variable
+                    img = display_img
+
+                    # Get current scale from tkinter variable type
+                    current_scale_ = current_scale.get()
+                    current_scale_ = int(
+                        current_scale_.replace("Scale: (", "").replace("%)", ""))
+
+                    # Set the scale to -10% of the current scale
+                    current_scale_ /= 1.10
+                    current_scale_ = int(current_scale_)
+
+                    # Detecting if the scale needs to be rounded to 100%
+                    scale_diff = abs(current_scale_ - 100)
+                    if scale_diff < 5:
+                        current_scale_ = 100
+
+                    # Detecting if the scale needs to be rounded to 5%
+                    if current_scale_ < 5:
+                        current_scale_ = 5
+
+                    # Set the scale label and make current scale a percent
+                    current_scale.set("Scale: (" + str(current_scale_) + "%)")
+                    current_scale_ = current_scale_ / 100
+
+                    # Setting the scale of the image
+                    img = img.resize(size=(int(img.width * current_scale_), int(img.height * current_scale_)))
+
+                    # configuring the label
+                    display_img_label.configure(image=ImageTk.PhotoImage(img))
 
                 # Creating the button commands for the Save, Import, and Export buttons
                 def save_file():
@@ -1579,7 +1616,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                     pass    # TODO: Stub
 
                 # Assign button commands
-                upscale_button.configure(command=lambda: upscale_command(display_img))
+                upscale_button.configure(command=upscale_command)
                 downscale_button.configure(command=downscale_command)
                 save_button.configure(command=save_file)
                 export_button.configure(command=export_file)
