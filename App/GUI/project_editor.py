@@ -296,9 +296,6 @@ class ProgFunc:
             # Making menu pop up
             rc_menu.tk_popup(x=event.x_root, y=event.y_root)
 
-            # Printing event
-            print(event)    # TODO: Finish
-
     class TopNavFrame:
         @staticmethod
         def launch_totk_command(app):
