@@ -11,6 +11,10 @@ import numpy as np
 import math
 import os
 import io
+import texfury
+
+
+import struct
 
 
 # Converter class
@@ -95,6 +99,136 @@ class Converter:
             |--------------------------------|
 """
 
+def encode_bc1(pil_image, alpha_cutoff=128):
+    """
+    Encode a Pillow RGBA image into BC1 (DXT1) compressed data (bytes).
+    Handles any RGBA image, divides into 4x4 blocks, and encodes each block.
+    Returns a bytes object containing BC1 blocks in row-major order.
+    """
+    # Ensure RGBA mode
+    if pil_image.mode != 'RGBA':
+        pil_image = pil_image.convert('RGBA')
+    width, height = pil_image.size
+    pixels = pil_image.tobytes()
+    stride = width * 4
+
+    # Helper: Quantize 8-bit RGB to R5G6B5
+    def rgb_to_565(r, g, b):
+        r5 = (r * 31 + 127) // 255
+        g6 = (g * 63 + 127) // 255
+        b5 = (b * 31 + 127) // 255
+        return (r5 << 11) | (g6 << 5) | b5
+
+    # Helper: Expand R5G6B5 to 8-bit RGB
+    def _565_to_rgb(c):
+        r = (c >> 11) & 0x1F
+        g = (c >> 5) & 0x3F
+        b = c & 0x1F
+        r8 = (r << 3) | (r >> 2)
+        g8 = (g << 2) | (g >> 4)
+        b8 = (b << 3) | (b >> 2)
+        return (r8, g8, b8)
+
+    # Helper: Interpolate between two colors
+    def interp(c0, c1, w0, w1):
+        return (
+            (w0 * c0[0] + w1 * c1[0]) // (w0 + w1),
+            (w0 * c0[1] + w1 * c1[1]) // (w0 + w1),
+            (w0 * c0[2] + w1 * c1[2]) // (w0 + w1)
+        )
+
+    # Helper: Compute luminance for endpoint selection
+    def luminance(rgb):
+        return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]
+
+    # Output buffer
+    blocks = []
+
+    # Process each 4x4 block
+    for by in range(0, height, 4):
+        for bx in range(0, width, 4):
+            block_rgba = []
+            has_alpha = False
+            for y in range(4):
+                py = min(by + y, height - 1)
+                for x in range(4):
+                    px = min(bx + x, width - 1)
+                    idx = (py * width + px) * 4
+                    r, g, b, a = pixels[idx:idx+4]
+                    block_rgba.append((r, g, b, a))
+                    if a < alpha_cutoff:
+                        has_alpha = True
+
+            # Endpoint selection: min/max luminance (fast heuristic)
+            opaque_pixels = [c for c in block_rgba if c[3] >= alpha_cutoff]
+            if opaque_pixels:
+                min_c = max_c = opaque_pixels[0][:3]
+                min_l = max_l = luminance(min_c)
+                for c in opaque_pixels:
+                    l = luminance(c[:3])
+                    if l < min_l:
+                        min_l = l
+                        min_c = c[:3]
+                    if l > max_l:
+                        max_l = l
+                        max_c = c[:3]
+            else:
+                # All transparent: use black
+                min_c = max_c = (0, 0, 0)
+
+            # Quantize endpoints to R5G6B5
+            c0_565 = rgb_to_565(*max_c)
+            c1_565 = rgb_to_565(*min_c)
+            c0_rgb = _565_to_rgb(c0_565)
+            c1_rgb = _565_to_rgb(c1_565)
+
+            # Determine mode: 4-color (opaque) or 3-color (1-bit alpha)
+            if has_alpha:
+                # 3-color mode: c0_565 <= c1_565
+                if c0_565 > c1_565:
+                    c0_565, c1_565 = c1_565, c0_565
+                    c0_rgb, c1_rgb = c1_rgb, c0_rgb
+                palette = [
+                    c0_rgb,
+                    c1_rgb,
+                    interp(c0_rgb, c1_rgb, 1, 1),
+                    (0, 0, 0)  # Transparent
+                ]
+            else:
+                # 4-color mode: c0_565 > c1_565
+                if c0_565 <= c1_565:
+                    c0_565, c1_565 = c1_565, c0_565
+                    c0_rgb, c1_rgb = c1_rgb, c0_rgb
+                palette = [
+                    c0_rgb,
+                    c1_rgb,
+                    interp(c0_rgb, c1_rgb, 2, 1),
+                    interp(c0_rgb, c1_rgb, 1, 2)
+                ]
+
+            # Assign indices
+            indices = 0
+            for i, (r, g, b, a) in enumerate(block_rgba):
+                if has_alpha and a < alpha_cutoff:
+                    idx = 3  # Transparent
+                else:
+                    # Find nearest palette color
+                    min_err = float('inf')
+                    idx = 0
+                    for j in range(4):
+                        pr, pg, pb = palette[j]
+                        err = (int(r) - pr) ** 2 + (int(g) - pg) ** 2 + (int(b) - pb) ** 2
+                        if err < min_err:
+                            min_err = err
+                            idx = j
+                indices |= (idx & 0x3) << (2 * i)
+
+            # Pack block: color0, color1, indices (little-endian)
+            block = struct.pack('<HHI', c0_565, c1_565, indices)
+            blocks.append(block)
+
+    return b''.join(blocks)
+
 
 def get_block_height(height):
     block_height = 16
@@ -136,7 +270,33 @@ def bc1_to_png(controller: TexToGo_base.TXTG, data, out_path):
 
 def png_to_bc1(controller: TexToGo_base.TXTG, filepath_in, out_path):
 
-    pass    # TODO: Stub
+    img = Image.open(filepath_in)
+    png_bytes = img.tobytes()
+
+    raw_tex = texfury.Texture.from_pil(img)
+    tex = raw_tex.to_format(format=texfury.BCFormat.BC1)
+    tex_data = tex.data
+
+    # Getting image data for swizzling
+    block_width = max(1, controller.Width // 4)
+    block_height_dim = max(1, controller.Height // 4)
+
+    block_h = get_block_height(block_height_dim)
+
+    swizzled_data = py_tegra_swizzle.swizzle_block_linear(
+        width=block_width,
+        height=block_height_dim,
+        depth=controller.HeaderInfo.Depth,
+        source=tex.data,
+        block_height=block_h,
+        bytes_per_pixel=8,
+    )
+
+    zstd_compressed_tex_data = zstandard.compress(swizzled_data, 20)
+
+    with open(out_path, "wb") as f_out:
+        f_out.write(zstd_compressed_tex_data)
+
 
 
 def bc4_to_png(controller: TexToGo_base.TXTG, data, out_path):
