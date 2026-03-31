@@ -49,6 +49,10 @@ class Converter:
 
                 bc5_to_png(controller, data, out_path)
 
+            case "TEX_FORMAT.BC7_UNORM":
+                print("BC4_UNORM detected!")
+                bc7_to_png(controller, data, out_path)
+
             case _:     # Throwing type error
                 TypeError("Image isn't a valid texture format")
 
@@ -248,5 +252,37 @@ def bc5_to_png(controller: TexToGo_base.TXTG, data, out_path):  # TODO: Fix this
 
     print(f"Decoded texture saved to {out_path}")
     print("saved!")
+
+
+def bc7_to_png(controller: TexToGo_base.TXTG, data, out_path):
+    # TODO: Test and review
+
+    # Decompressing zstandard data
+    data = ZsDic.auto_decompress_bytes(data)
+
+    # Getting image data for de-swizzling
+    block_width = max(1, controller.Width // 4)
+    block_height_dim = max(1, controller.Height // 4)
+
+    block_h = get_block_height(block_height_dim)
+
+    # De-swizzling bytes
+    deswizzled_bytes = py_tegra_swizzle.deswizzle_block_linear(
+        width=block_width,
+        height=block_height_dim,
+        depth=controller.HeaderInfo.Depth,
+        source=data,
+        block_height=block_h,
+        bytes_per_pixel=8,
+    )
+
+    # Decode BC1 to raw RGBA bytes
+    rgba_bytes = texture2ddecoder.decode_bc7(deswizzled_bytes, controller.Width, controller.Height)
+
+    # Create an image from RGBA bytes
+    img = Image.frombytes("RGBA", (controller.Width, controller.Height), rgba_bytes)
+
+    # Save as PNG
+    img.save(out_path, format="PNG")
 
 
