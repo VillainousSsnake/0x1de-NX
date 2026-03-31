@@ -41,11 +41,13 @@ class TreeviewRightClickMenu:
 
     @staticmethod
     def new_command(curItem, treeview, app):
+        # Displaying New dialog
         subwin_new_dialog(curItem, treeview, app)
 
     @staticmethod
-    def rename_command():
-        pass    # TODO: Stub
+    def rename_command(curItem, project_treeview, app):
+        # Displaying Refactor dialog
+        subwin_refactor_menu(curItem, project_treeview, app)
 
     @staticmethod
     def delete_command(self, curItem, file_editor):
@@ -273,7 +275,11 @@ class ProgFunc:
                     app
                 )
             )
-            rc_menu.add_command(label="Rename")     # TODO: Add command
+            rc_menu.add_command(
+                label="Rename",
+                command=partial(
+                    TreeviewRightClickMenu.rename_command, treeview.item(treeview.focus()), treeview, app)
+            )
             rc_menu.add_command(
                 label="Delete",
                 command=partial(
