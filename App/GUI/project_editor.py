@@ -4,6 +4,7 @@
 # Importing SubWin modules
 from App.GUI.SubWin.project_editor.rename_project_menu import rename_project_menu as subwin_rename_project_menu
 from App.GUI.SubWin.project_editor.settings_menu import settings_menu as subwin_settings_menu
+from App.GUI.SubWin.project_editor.refactor_menu import refactor_menu as subwin_refactor_menu
 from App.GUI.SubWin.project_editor.plugins_menu import plugins_menu as subwin_plugins_menu
 from App.GUI.SubWin.main_menu.open_project import open_project as subwin_open_project
 from App.GUI.SubWin.project_editor.new_dialog import new_dialog as subwin_new_dialog
@@ -39,12 +40,53 @@ class TreeviewRightClickMenu:
         file_editor.open_file(app, item_info=item_info)
 
     @staticmethod
-    def new_command():
-        pass    # TODO: Stub
+    def new_command(curItem, treeview, app):
+        subwin_new_dialog(curItem, treeview, app)
 
     @staticmethod
     def rename_command():
         pass    # TODO: Stub
+
+    @staticmethod
+    def delete_command(self, curItem, file_editor):
+
+        # Asking for confirmation
+        ok_cancel_prompt = messagebox.askokcancel(
+            "0x1de-NX | Delete File from Project (UNSAFE)",
+            "Are you sure you want to delete this file from the project?\nWARNING: THIS CANNOT BE UNDONE YET!!!"
+        )
+
+        # If confirmed
+        if ok_cancel_prompt:
+
+            # Removing the item from the tabview
+            item_name = self.focus()
+            self.delete(item_name)
+            if curItem["text"] in file_editor.tabview._tab_dict:
+                file_editor.tabview.delete(curItem["text"])
+
+            if file_editor.tabview.get() == "":
+                file_editor.tabview.pack_forget()
+                file_editor.nothing_opened_label.pack(anchor="center")
+
+            # Getting the recently deleted directory
+            recently_deleted_dir = os.path.join(
+                os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_", "_0_RECENTLY_0_DELETED_0_"
+            )
+
+            # Creating the recently deleted directory if it doesn't exist
+            if not os.path.exists(recently_deleted_dir):
+                os.makedirs(recently_deleted_dir)
+
+            # Creating the destination directory variables
+            folders_list = os.listdir(recently_deleted_dir)
+            dest_dir = os.path.join(recently_deleted_dir, str(len(folders_list)))
+
+            # Creating the destination directory
+            os.makedirs(dest_dir)
+
+            # Moving the file to the destination
+            shutil.move(src=curItem["values"][0], dst=dest_dir)
 
 
 # ProgFunc class
@@ -180,9 +222,11 @@ class ProgFunc:
                     shutil.move(src=curItem["values"][0], dst=dest_dir)
 
             elif event.keysym == "F2":
-                pass    # TODO: Stub (Renaming files)
+                # Displaying Refactor Dialog
+                subwin_refactor_menu(curItem, project_treeview, app)
 
             elif event.char == "\x0e":
+                # Displaying New Dialog
                 subwin_new_dialog(curItem, project_treeview, app)
 
         @staticmethod
@@ -212,12 +256,33 @@ class ProgFunc:
             # TODO: Reorder once working, add command assignments, and add more options...
             rc_menu.add_command(
                 label="Open",
-                command=partial(TreeviewRightClickMenu.open_command, treeview, file_editor, app)
+                command=partial(
+                    TreeviewRightClickMenu.open_command,
+                    treeview,
+                    file_editor,
+                    app
+                )
             )
             rc_menu.add_separator()
-            rc_menu.add_command(label="New")
-            rc_menu.add_command(label="Rename")
-            rc_menu.add_command(label="Delete")
+            rc_menu.add_command(
+                label="New",
+                command=partial(
+                    TreeviewRightClickMenu.new_command,
+                    treeview.item(treeview.focus()),
+                    treeview,
+                    app
+                )
+            )
+            rc_menu.add_command(label="Rename")     # TODO: Add command
+            rc_menu.add_command(
+                label="Delete",
+                command=partial(
+                    TreeviewRightClickMenu.delete_command,
+                    treeview,
+                    treeview.item(treeview.focus()),
+                    file_editor
+                ),
+            )
             rc_menu.add_separator()
             rc_menu.add_command(label="Add New File From RomFS")
             rc_menu.add_separator()
