@@ -19,7 +19,8 @@ from App.FFLib.ResourceSizeTaBLe import RESTBL
 import App.AppLib.customtkinter as ctk
 from ctkcomponents import CTkPopupMenu
 from App.AppLib.updater import Updater
-from tkinter import ttk, messagebox
+from App.AppLib.config import Config
+from tkinter import ttk, messagebox, filedialog
 from tkinterdnd2 import DND_FILES
 from PIL import ImageTk, Image
 from functools import partial
@@ -89,6 +90,16 @@ class TreeviewRightClickMenu:
 
             # Moving the file to the destination
             shutil.move(src=curItem["values"][0], dst=dest_dir)
+
+    @staticmethod
+    def add_romfs_file_command():
+        """
+        adds a file/folder from the RomFS path into the project
+        """
+
+        romfs_path = Config.get_setting("romfs_path")
+
+        print(romfs_path)   # TODO: Finish code
 
 
 # ProgFunc class
@@ -290,7 +301,12 @@ class ProgFunc:
                 ),
             )
             rc_menu.add_separator()
-            rc_menu.add_command(label="Add New File From RomFS")
+            rc_menu.add_command(
+                label="Add New File From RomFS",
+                command=partial(
+                    TreeviewRightClickMenu.add_romfs_file_command,
+                )
+            )
             rc_menu.add_separator()
 
             # Making menu pop up
