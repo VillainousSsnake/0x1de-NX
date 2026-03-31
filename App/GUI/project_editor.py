@@ -403,6 +403,7 @@ class ProgFunc:
         def new_project_command(root, app):
             subwin_new_project(app, root=root)
 
+        # noinspection PyPep8Naming
         class export_project_as:
             @staticmethod
             def tkcl_package_command(root, app):
