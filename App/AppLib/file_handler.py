@@ -1561,7 +1561,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
 
                 # Creating the button commands for the Save, Import, and Export buttons
                 def save_file():
-                    pass    # TODO: Stub
+                    pass    # TODO: Finish save export for txtg
 
                 def export_file():
 
@@ -1612,7 +1612,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                         "Successfully exported file to '" + file_explorer_path + "'",
                     )
 
-                def import_file():  # TODO: Fix later
+                def import_file():  # TODO: Fix import from popular file types (txtg)
 
                     # Getting the file path to save the new file
                     file_explorer_path = filedialog.askopenfilename(
