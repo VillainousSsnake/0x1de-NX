@@ -23,10 +23,28 @@ from tkinterdnd2 import DND_FILES
 from PIL import ImageTk, Image
 from functools import partial
 from CTkMenuBar import *
+import tkinter as tk
 import subprocess
 import hashlib
 import shutil
 import os
+
+
+# Right click command methods class
+class TreeviewRightClickMenu:
+    @staticmethod
+    def open_command(treeview, file_editor, app):
+        cur_item = treeview.focus()
+        item_info = treeview.item(cur_item)
+        file_editor.open_file(app, item_info=item_info)
+
+    @staticmethod
+    def new_command():
+        pass    # TODO: Stub
+
+    @staticmethod
+    def rename_command():
+        pass    # TODO: Stub
 
 
 # ProgFunc class
@@ -108,6 +126,7 @@ class ProgFunc:
                 self.tabview.set(item_info["text"])
 
     class ProjectTreeView:
+
         @staticmethod
         def on_double_click(self, file_editor, app, event=None):
             curItem = self.focus()
@@ -167,18 +186,44 @@ class ProgFunc:
                 subwin_new_dialog(curItem, project_treeview, app)
 
         @staticmethod
-        def on_right_click(root, self, event=None):
+        def on_right_click(root: ctk.CTk, treeview: ttk.Treeview, file_editor, app, event=None):
 
             # Setting selection to the item being hovered over
-            treeview_item = self.identify("item", event.x, event.y)
+            treeview_item = treeview.identify("item", event.x, event.y)
             if treeview_item == "":
                 return 0
-            self.focus(treeview_item)
-            self.selection_set(treeview_item)
+            treeview.focus(treeview_item)
+            treeview.selection_set(treeview_item)
 
             # Creating right click menu
-            rc_menu = CTkPopupMenu(master=root, title="RIGHT CLICK MENU")
-            rc_menu.option_add("Right CLick", "RightClick")
+            rc_menu = tk.Menu(
+                master=treeview,
+                tearoff=False,
+                background="#2B2B2B",
+                activeborderwidth=5,
+                foreground="white",
+                font=("monospace", 10),
+                relief=tk.FLAT,
+                bd=0,
+                activebackground="#4E5157",
+            )
+
+            # Adding the options to the menu
+            # TODO: Reorder once working, add command assignments, and add more options...
+            rc_menu.add_command(
+                label="Open",
+                command=partial(TreeviewRightClickMenu.open_command, treeview, file_editor, app)
+            )
+            rc_menu.add_separator()
+            rc_menu.add_command(label="New")
+            rc_menu.add_command(label="Rename")
+            rc_menu.add_command(label="Delete")
+            rc_menu.add_separator()
+            rc_menu.add_command(label="Add New File From RomFS")
+            rc_menu.add_separator()
+
+            # Making menu pop up
+            rc_menu.tk_popup(x=event.x_root, y=event.y_root)
 
             # Printing event
             print(event)    # TODO: Finish
@@ -758,7 +803,7 @@ def project_editor(app):
                                            app,
                                            )
                           )
-    project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, root, project_treeview))
+    project_treeview.bind("<Button-3>", partial(ProgFunc.ProjectTreeView.on_right_click, root, project_treeview, file_editor, app))
 
     # Inserting all the files and folders into tree view
     sub_directories = [x[0] for x in os.walk(app.variables["open_project_fp"])]
