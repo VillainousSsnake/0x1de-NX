@@ -127,6 +127,8 @@ class _func:
             case "Binary YAML":     # Binary YAML
                 pass  # TODO: Stub
 
+            # TODO: Add more file formats to create
+
         # Closing window
         window.destroy()
 
