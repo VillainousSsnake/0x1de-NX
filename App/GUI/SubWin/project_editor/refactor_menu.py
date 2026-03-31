@@ -1,14 +1,10 @@
 # /App/GUI/SubWin/project_editor/refactor_menu.py
 # Contains code for refactor dialog
-import tkinter
-
-# TODO: Convert code past here to rename a file in the project tree instead of renaming a project
 
 # Importing modules, packages and libraries
 import App.AppLib.customtkinter as ctk
 from tkinter import messagebox
 from functools import partial
-import json
 import pathlib
 import os
 
@@ -20,8 +16,27 @@ class ButtonFunc:
         window.destroy()
 
     @staticmethod
-    def rename():
-        pass    # TODO: Stub
+    def rename_entry_onkey_command(filetype: list, entry: ctk.CTkEntry, event=None):
+
+        # Check if the event does not have a character
+        if not event.char:
+
+            # Making text color red if the file extension(s) are edited
+            if pathlib.Path(entry.get()).suffixes == filetype:
+                entry.configure(text_color="#DCE4EE")
+            else:
+                entry.configure(text_color="red")
+
+    @staticmethod
+    def rename(cur_item, entry, event=None):
+
+        popup_msg = messagebox.askyesno(
+            title="0x1de-NX | Rename File...",
+            message="Rename File'" + os.path.basename(cur_item['values'][0]) + "' to '" + entry.get() + "'?",
+        )
+
+        if popup_msg:
+            pass    # TODO: Write code to rename the file and replace the treeview item
 
 
 # Defining rename_project_dialog function
@@ -75,12 +90,17 @@ def refactor_menu(cur_item, project_treeview, app):
             file_name_entry.pack(side="top", fill='x')
             file_name_entry.insert(0, filename)
 
-            file_name_entry.bind()
+            file_name_entry.bind("<Key>",
+                                 partial(
+                                     ButtonFunc.rename_entry_onkey_command,
+                                     filetype, file_name_entry
+                                    )
+                                 )
 
             rename_button = ctk.CTkButton(
                 master=window,
                 text="Rename",
-                command=partial(ButtonFunc.rename)
+                command=partial(ButtonFunc.rename, cur_item, file_name_entry)
             )
             rename_button.pack(anchor="se", side="right")
 
