@@ -146,6 +146,8 @@ class ZsDic:
         zs_compressor = zstandard.ZstdCompressor(
             dict_data=dict_data,
             level=level,
+            write_content_size=True,
+            write_checksum=True,
         )
 
         # Decompressing the file data into the output variable
