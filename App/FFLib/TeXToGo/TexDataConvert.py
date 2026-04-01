@@ -1,5 +1,8 @@
 # Importing dependencies
+import pathlib
+
 import zstandard
+from App.FFLib.TeXToGo.TexToGo_base import *
 
 from App.FFLib.TeXToGo import TexToGo_base
 from App.FFLib.TotkZsDic import ZsDic
@@ -268,34 +271,50 @@ def bc1_to_png(controller: TexToGo_base.TXTG, data, out_path):
     img.save(out_path, format="PNG")
 
 
-def png_to_bc1(controller: TexToGo_base.TXTG, filepath_in, out_path):
+def png_to_bc1(controller: TexToGo_base.TXTG, filepath_in, out_path):   # TODO: Fix
 
-    img = Image.open(filepath_in)
-    png_bytes = img.tobytes()
-
-    raw_tex = texfury.Texture.from_pil(img)
-    tex = raw_tex.to_format(format=texfury.BCFormat.BC1)
-    tex_data = tex.data
-
-    # Getting image data for swizzling
-    block_width = max(1, controller.Width // 4)
-    block_height_dim = max(1, controller.Height // 4)
-
-    block_h = get_block_height(block_height_dim)
-
-    swizzled_data = py_tegra_swizzle.swizzle_block_linear(
-        width=block_width,
-        height=block_height_dim,
-        depth=controller.HeaderInfo.Depth,
-        source=tex.data,
-        block_height=block_h,
-        bytes_per_pixel=8,
+    # Storing input image to Texture container
+    tex = texfury.Texture.from_image(
+        source=pathlib.Path(filepath_in),
+        format=texfury.BCFormat.BC1,
     )
 
-    zstd_compressed_tex_data = zstandard.compress(swizzled_data, 20)
+    # Apply generic properties
+    for k, v in TXTG.FormatList.items():
+        if v == controller.Format:
+            controller.HeaderInfo.Format = k
+            break
 
-    with open(out_path, "wb") as f_out:
-        f_out.write(zstd_compressed_tex_data)
+    controller.HeaderInfo.Width = int(tex.width)
+    controller.HeaderInfo.Height = int(tex.height)
+    controller.HeaderInfo.Depth = int(controller.ArrayCount)
+    controller.HeaderInfo.MipCount = int(tex.mip_count)
+
+    with open(out_path, "wb") as stream:
+
+        with FileWriter(stream) as writer:
+            writer.WriteStruct(controller.HeaderInfo)
+            writer.SeekBegin(controller.HeaderInfo.HeaderSize)
+
+            surfaceSizes = []
+            surfaceData = []
+
+            for mip in range(controller.MipCount):
+                for array in range(controller.ArrayCount):
+                    writer.Write(array)  # ushort
+                    writer.Write(mip)  # byte
+                    writer.Write(1)  # byte
+
+                    surface = Zstb.SCompress(controller.ImageList[array][mip], 20)
+                    surfaceSizes.append(len(surface))
+                    surfaceData.append(surface)
+
+            for size in surfaceSizes:
+                writer.Write(size)  # uint
+                writer.Write(6)  # uint
+
+            for data in surfaceData:
+                writer.Write(data)
 
 
 
