@@ -177,7 +177,7 @@ class FileWriter:
         pass
 
     def WriteStruct(self, header):
-        data = struct.pack(self.endian + 'HH4sHHHHBBBHBI4B32sHHIIII',
+        data = struct.pack(self.endian + 'HH4sHHHBBBHBI4B32sHHIIII',
                            header.HeaderSize, header.Version, header.Magic.encode('ascii'),
                            header.Width, header.Height, header.Depth, header.MipCount,
                            header.Unknown1, header.Unknown2, header.Padding,
