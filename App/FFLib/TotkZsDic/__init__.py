@@ -136,11 +136,17 @@ class ZsDic:
         :return: the decompressed input file.
         """
 
-        # Getting the zstandard dictionary type
-        dict_type_ = ZsDic.detect_zstandard_dict(dict_type)
+        # Creating dict_data as none
+        dict_data = None
 
-        # Getting the correct zstandard dictionary data
-        dict_data = ZsDic.get_dict(dict_type_)
+        # Detecting if dictionary type is specified
+        if dict_type is not None:
+
+            # Getting the zstandard dictionary type
+            dict_type_ = ZsDic.detect_zstandard_dict(dict_type)
+
+            # Setting dict_data to the correct zstandard dictionary data
+            dict_data = ZsDic.get_dict(dict_type_)
 
         # Creating the zstandard decompressor
         zs_compressor = zstandard.ZstdCompressor(
