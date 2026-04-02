@@ -1,4 +1,6 @@
 # Importing dependencies
+import PIL.Image
+
 from App.FFLib.TeXToGo.TexToGo_base import *
 from App.FFLib.TeXToGo import TexToGo_base
 from App.FFLib.TotkZsDic import ZsDic
@@ -285,20 +287,56 @@ def bc5_to_png(controller: TexToGo_base.TXTG, data, out_path):
     Image.fromarray(image, 'RGBA').save(out_path)
 
 
-def txtg_to_pil(controller: TexToGo_base.TXTG, data) -> bytes:
-
+def txtg_to_pil(data) -> PIL.Image.Image or None:
     """
+
     Takes txtg bytes and converts it to PIL
-    @param controller: The TXTG controller
     @param data: The input TXTG data
     @return: Converted TXTG bytes
+
     """
 
-    pass    # TODO: Stub
+    # TODO: Debug current BC1 decoding
+    # TODO: Add BC4 decoding support
+    # TODO: Add BC5 decoding support
+
+    # Creating output variable
+    output = None
+
+    # Creating controller
+    controller = TexToGo_base.TXTG()
+    controller.Load(io.BytesIO(data))
+
+    # Detecting the format of the input data
+    match str(controller.Format):
+
+        case "TEX_FORMAT.BC1_UNORM":    # Decoding TXTG using BC1 format
+
+            # Decode BC1 TXTG into RGBA Pillow Image
+            output = Image.frombytes(
+                mode="RGBA",
+                size=(controller.Width, controller.Height),
+                data=texture2ddecoder.decode_bc1(
+                    py_tegra_swizzle.deswizzle_block_linear(
+                        width=max(1, controller.Width // 4),
+                        height=max(1, controller.Height // 4),
+                        depth=controller.HeaderInfo.Depth,
+                        source=ZsDic.auto_decompress_bytes(data),
+                        block_height=get_block_height(max(1, controller.Height // 4)),
+                        bytes_per_pixel=8,
+                    ), controller.Width, controller.Height
+                )
+            )
+
+        case _:  # Throwing type error
+            TypeError("Image isn't a valid texture format")
+
+    # Returning the output
+    return output
 
 
 def pil_to_txtg(controller: TexToGo_base.TXTG,
-                      img: Image, encoding="TEX_FORMAT.BC1_UNORM") -> bytes:
+                img: PIL.Image.Image, encoding="TEX_FORMAT.BC1_UNORM") -> bytes:
 
     """
     Takes a PIL Image (from python pillow library) and converts it into raw TXTG (TexToGo) bytes
