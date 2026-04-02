@@ -1,12 +1,9 @@
 # Importing libraries
-import PIL.Image
-
 from App.FFLib.TeXToGo.TexToGo_base import *
 from App.FFLib.TeXToGo import TexToGo_base
 from App.FFLib.TotkZsDic import ZsDic
 
 # Importing dependencies
-from tkinter import messagebox
 import texture2ddecoder
 import py_tegra_swizzle
 import ctypes.wintypes
@@ -286,5 +283,19 @@ def bc5_to_png(controller: TexToGo_base.TXTG, data, out_path):
 
     # Save as PNG (requires Pillow)
     Image.fromarray(image, 'RGBA').save(out_path)
+
+
+def pil_to_txtg_bytes(controller: TexToGo_base.TXTG,
+                      img: Image, encoding="TEX_FORMAT.BC1_UNORM") -> bytes:
+
+    """
+    Takes a PIL Image (from python pillow library) and converts it into raw TXTG (TexToGo) bytes
+    @param controller: The TXTG controller
+    @param img: The input image (type: PIL.Image)
+    @param encoding: The texture format to encode the TXTG
+    @return: Converted TXTG bytes
+    """
+
+    pass    # TODO: Stub
 
 
