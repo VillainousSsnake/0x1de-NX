@@ -1,18 +1,18 @@
-# Importing libraries
+# Importing dependencies
 from App.FFLib.TeXToGo.TexToGo_base import *
 from App.FFLib.TeXToGo import TexToGo_base
 from App.FFLib.TotkZsDic import ZsDic
 
-# Importing dependencies
+# Importing libraries
 import texture2ddecoder
 import py_tegra_swizzle
 import ctypes.wintypes
 from PIL import Image
 import numpy as np
+import texfury
 import pathlib
 import math
 import os
-import texfury
 
 
 import struct
@@ -285,7 +285,19 @@ def bc5_to_png(controller: TexToGo_base.TXTG, data, out_path):
     Image.fromarray(image, 'RGBA').save(out_path)
 
 
-def pil_to_txtg_bytes(controller: TexToGo_base.TXTG,
+def txtg_to_pil(controller: TexToGo_base.TXTG, data) -> bytes:
+
+    """
+    Takes txtg bytes and converts it to PIL
+    @param controller: The TXTG controller
+    @param data: The input TXTG data
+    @return: Converted TXTG bytes
+    """
+
+    pass    # TODO: Stub
+
+
+def pil_to_txtg(controller: TexToGo_base.TXTG,
                       img: Image, encoding="TEX_FORMAT.BC1_UNORM") -> bytes:
 
     """
