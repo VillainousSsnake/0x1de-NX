@@ -1,11 +1,11 @@
 # /App/FFLib/TeXToGo/__init__.py
 # Contains TexToGo Class
-import io
 
 # Importing modules
 import App.FFLib.TeXToGo.TexToGo_base as txtgLib
 from App.FFLib.TeXToGo.TexDataConvert import Converter
 import os
+import io
 
 
 # TexToGo controller
@@ -62,5 +62,5 @@ class TexToGo:
 
         Converter.to_txtg(self.controller, img_type, tex_format, filepath_in, out_path)
 
-    def export_current_image(self):
+    def set_image_data(self):
         pass    # TODO: Stub
