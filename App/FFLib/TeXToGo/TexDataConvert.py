@@ -312,16 +312,16 @@ def txtg_to_pil(data) -> PIL.Image.Image or None:
 
         case "TEX_FORMAT.BC1_UNORM":    # Decoding TXTG using BC1 format
 
-            # Decode BC1 TXTG into RGBA Pillow Image
+            # Create an image from RGBA bytes
             output = Image.frombytes(
-                mode="RGBA",
-                size=(controller.Width, controller.Height),
-                data=texture2ddecoder.decode_bc1(
+                "RGBA",
+                (controller.Width, controller.Height),
+                texture2ddecoder.decode_bc1(
                     py_tegra_swizzle.deswizzle_block_linear(
                         width=max(1, controller.Width // 4),
                         height=max(1, controller.Height // 4),
                         depth=controller.HeaderInfo.Depth,
-                        source=ZsDic.auto_decompress_bytes(data),
+                        source=ZsDic.auto_decompress_bytes(controller.GetImageData(), dict_type=None),
                         block_height=get_block_height(max(1, controller.Height // 4)),
                         bytes_per_pixel=8,
                     ), controller.Width, controller.Height
