@@ -296,8 +296,7 @@ def txtg_to_pil(data) -> PIL.Image.Image or None:
 
     """
 
-    # TODO: Debug current BC1 decoding
-    # TODO: Add BC4 decoding support
+    # TODO: Test BC4 decoding
     # TODO: Add BC5 decoding support
 
     # Creating output variable
