@@ -16,9 +16,6 @@ import math
 import os
 
 
-import struct
-
-
 # Converter class
 class Converter:
     """
@@ -53,10 +50,10 @@ class Converter:
                 filepath_in: bytes,
                 out_path: os.PathLike | str):
         """
-        Converts regular image formats (eg. PNG, JPG) to TextureToGo format (eg. '.txtg')
+        Converts regular image formats (e.g. PNG, JPG) to TextureToGo format (e.g. '.txtg')
         @param controller: TexToGo_Base.TXTG object
-        @param img_type: Regular Image Format (Eg. 'PNG', etc.)
-        @param tex_format: The compression used (Eg. 'TEX_FORMAT.BC1_UNORM', etc.)
+        @param img_type: Regular Image Format (e.g. 'PNG', etc.)
+        @param tex_format: The compression used (e.g. 'TEX_FORMAT.BC1_UNORM', etc.)
         @param filepath_in: input png file path
         @param out_path: the path where the export file will be generated
         """
@@ -145,26 +142,26 @@ def png_to_bc1(controller: TexToGo_base.TXTG, filepath_in, out_path):   # TODO: 
             writer.WriteStruct(controller.HeaderInfo)
             writer.SeekBegin(controller.HeaderInfo.HeaderSize)
 
-            surfaceSizes = []
-            surfaceData = []
+            surface_sizes = []
+            surface_data = []
 
             for mip in range(controller.MipCount):
                 for array in range(controller.ArrayCount):
 
-                    # TODO: Figure out why this isnt working
+                    # TODO: Figure out why this isn't working
                     writer.Write(ctypes.c_short(array).value)  # ushort
                     writer.Write(bytes(mip))  # byte
                     writer.Write(bytes(1))  # byte
 
                     surface = ZsDic.auto_compress_bytes(controller.ImageList[array][mip], dict_type=None)
-                    surfaceSizes.append(len(surface))
-                    surfaceData.append(surface)
+                    surface_sizes.append(len(surface))
+                    surface_data.append(surface)
 
-            for size in surfaceSizes:
+            for size in surface_sizes:
                 writer.Write(size)  # uint
                 writer.Write(6)  # uint
 
-            for data in surfaceData:
+            for data in surface_data:
                 writer.Write(data)
 
 
@@ -434,7 +431,7 @@ def txtg_to_pil(data) -> Image.Image or None:
 
 
 def pil_to_txtg(controller: TexToGo_base.TXTG,
-                img: PIL.Image.Image, encoding="TEX_FORMAT.BC1_UNORM") -> bytes:
+                img: Image.Image, encoding="TEX_FORMAT.BC1_UNORM") -> bytes:
 
     """
     Takes a PIL Image (from python pillow library) and converts it into raw TXTG (TexToGo) bytes
@@ -445,5 +442,3 @@ def pil_to_txtg(controller: TexToGo_base.TXTG,
     """
 
     pass    # TODO: Stub
-
-
