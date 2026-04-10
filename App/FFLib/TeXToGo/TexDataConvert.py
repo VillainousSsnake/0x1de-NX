@@ -1,7 +1,9 @@
 # Importing dependencies
+import io
 
 from App.FFLib.TeXToGo.TexToGo_base import *
 from App.FFLib.TeXToGo import TexToGo_base
+from App.FFLib.TeXToGo.TexToGo_base import FileWriter
 from App.FFLib.TotkZsDic import ZsDic
 
 # Importing libraries
@@ -12,6 +14,7 @@ from PIL import Image
 import numpy as np
 import texfury
 import pathlib
+import etcpak
 import math
 import os
 
@@ -284,7 +287,7 @@ def bc5_to_png(controller: TexToGo_base.TXTG, data, out_path):
     Image.fromarray(image, 'RGBA').save(out_path)
 
 
-def txtg_to_pil(data) -> Image.Image or None:
+def txtg_to_pil(data) -> Image.Image | None:
     """
 
     Takes txtg bytes and converts it to PIL
@@ -430,15 +433,41 @@ def txtg_to_pil(data) -> Image.Image or None:
     return output
 
 
-def pil_to_txtg(controller: TexToGo_base.TXTG,
-                img: Image.Image, encoding="TEX_FORMAT.BC1_UNORM") -> bytes:
+def pil_to_txtg(img: Image.Image, orgin_data: bytes, encoding: TEX_FORMAT) -> bytes | None:
 
     """
     Takes a PIL Image (from python pillow library) and converts it into raw TXTG (TexToGo) bytes
-    @param controller: The TXTG controller
+    @param orgin_data: The original TXTG raw data
     @param img: The input image (type: PIL.Image)
     @param encoding: The texture format to encode the TXTG
     @return: Converted TXTG bytes
     """
 
-    pass    # TODO: Stub
+    # TODO: Implement BC1 support
+    # TODO: Implement BC4 support
+    # TODO: Implement BC5 support
+
+    # Creating output variable
+    output = None
+
+    # Creating controller
+    controller = TXTG()
+    controller.Load(io.BytesIO(orgin_data))
+
+    # Detecting the format of the input data
+    match str(encoding):
+
+        case "TEX_FORMAT.BC1_UNORM":  # Decoding TXTG using BC1 format
+            pass    # TODO: Stub
+
+        case "TEX_FORMAT.BC4_UNORM":  # Decoding TXTG using BC4 format
+            pass    # TODO: Stub
+
+        case "TEX_FORMAT.BC5_UNORM":  # Decoding TXTG using BC5 format
+            pass    # TODO: Stub
+
+        case _:  # Throwing type error
+            TypeError("Given encoding '" + encoding + "' isn't a valid texture format")
+
+    # Returning the output
+    return output
