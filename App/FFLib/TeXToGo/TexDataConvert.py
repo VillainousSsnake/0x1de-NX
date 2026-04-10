@@ -1,5 +1,4 @@
 # Importing dependencies
-import PIL.Image
 
 from App.FFLib.TeXToGo.TexToGo_base import *
 from App.FFLib.TeXToGo import TexToGo_base
@@ -274,6 +273,7 @@ def bc5_to_png(controller: TexToGo_base.TXTG, data, out_path):
                             # If BC5 is a normal map, reconstruct B
                             nx = (r / 255.0) * 2 - 1
                             ny = (g / 255.0) * 2 - 1
+                            # noinspection PyTypeChecker
                             nz = (1.0 - min(1.0, nx * nx + ny * ny)) ** 0.5
                             b = int((nz * 0.5 + 0.5) * 255)
                             img[py, px] = [r, g, b, 255]
@@ -287,17 +287,14 @@ def bc5_to_png(controller: TexToGo_base.TXTG, data, out_path):
     Image.fromarray(image, 'RGBA').save(out_path)
 
 
-def txtg_to_pil(data) -> PIL.Image.Image or None:
+def txtg_to_pil(data) -> Image.Image or None:
     """
 
     Takes txtg bytes and converts it to PIL
-    @param data: The input TXTG data
+    @param data: The raw TXTG file data in bytes
     @return: Converted TXTG bytes
 
     """
-
-    # TODO: Test BC4 decoding
-    # TODO: Add BC5 decoding support
 
     # Creating output variable
     output = None
@@ -343,10 +340,91 @@ def txtg_to_pil(data) -> PIL.Image.Image or None:
                         bytes_per_pixel=8,
                     ), controller.Width, controller.Height
                 )
-            )
+            ).convert("L")
 
-            # Convert to greyscale
-            output.convert(mode="L")
+        case "TEX_FORMAT.BC5_UNORM":    # Decoding TXTG using BC5 format
+
+            # Getting the image data
+            data = controller.GetImageData()
+
+            # Decompressing zstandard data
+            data = ZsDic.auto_decompress_bytes(data)
+
+            # Decoding Image
+            blocks_x = (controller.Width + 3) // 4
+            blocks_y = (controller.Height + 3) // 4
+            img = np.zeros((controller.Height, controller.Width, 4), dtype=np.uint8)
+            data = py_tegra_swizzle.deswizzle_block_linear(
+                width=blocks_x,
+                height=blocks_y,
+                depth=controller.HeaderInfo.Depth,
+                source=data,
+                block_height=8,
+                bytes_per_pixel=16,
+            )
+            offset = 0
+            for by in range(blocks_y):
+                for bx in range(blocks_x):
+                    # Decode red channel
+                    red0, red1 = data[offset:offset + 8][0], data[offset:offset + 8][1]
+                    indices = int.from_bytes(data[offset:offset + 8][2:8], byteorder='little')
+                    lookup = [0] * 8
+                    lookup[0] = red0
+                    lookup[1] = red1
+                    if red0 > red1:
+                        for i in range(2, 8):
+                            lookup[i] = ((8 - i) * red0 + (i - 1) * red1) // 7
+                    else:
+                        for i in range(2, 6):
+                            lookup[i] = ((6 - i) * red0 + (i - 1) * red1) // 5
+                        lookup[6] = 0
+                        lookup[7] = 255
+                    pixels = np.zeros((4, 4), dtype=np.uint8)
+                    for y in range(4):
+                        for x in range(4):
+                            idx = (indices >> (3 * (4 * y + x))) & 0x07
+                            pixels[y, x] = lookup[idx]
+                    red_block = pixels
+                    offset += 8
+                    # Decode green channel
+                    red0, red1 = data[offset:offset + 8][0], data[offset:offset + 8][1]
+                    indices = int.from_bytes(data[offset:offset + 8][2:8], byteorder='little')
+                    lookup = [0] * 8
+                    lookup[0] = red0
+                    lookup[1] = red1
+                    if red0 > red1:
+                        for i in range(2, 8):
+                            lookup[i] = ((8 - i) * red0 + (i - 1) * red1) // 7
+                    else:
+                        for i in range(2, 6):
+                            lookup[i] = ((6 - i) * red0 + (i - 1) * red1) // 5
+                        lookup[6] = 0
+                        lookup[7] = 255
+                    pixels = np.zeros((4, 4), dtype=np.uint8)
+                    for y in range(4):
+                        for x in range(4):
+                            idx = (indices >> (3 * (4 * y + x))) & 0x07
+                            pixels[y, x] = lookup[idx]
+                    green_block = pixels
+                    offset += 8
+                    # Place into image
+                    for y in range(4):
+                        for x in range(4):
+                            px = bx * 4 + x
+                            py = by * 4 + y
+                            if px < controller.Width and py < controller.Height:
+                                r = red_block[y, x]
+                                g = green_block[y, x]
+                                # If BC5 is a normal map, reconstruct B
+                                nx = (r / 255.0) * 2 - 1
+                                ny = (g / 255.0) * 2 - 1
+                                # noinspection PyTypeChecker
+                                nz = (1.0 - min(1.0, nx * nx + ny * ny)) ** 0.5
+                                b = int((nz * 0.5 + 0.5) * 255)
+                                img[py, px] = [r, g, b, 255]
+
+            # Set output to image
+            output = Image.fromarray(img, 'RGBA')
 
         case _:  # Throwing type error
             TypeError("Image isn't a valid texture format")
