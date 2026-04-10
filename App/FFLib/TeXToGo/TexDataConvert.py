@@ -433,11 +433,10 @@ def txtg_to_pil(data) -> Image.Image | None:
     return output
 
 
-def pil_to_txtg(img: Image.Image, orgin_data: bytes, encoding: TEX_FORMAT) -> bytes | None:
+def pil_to_txtg(img: Image.Image, encoding: TEX_FORMAT) -> bytes | None:
 
     """
     Takes a PIL Image (from python pillow library) and converts it into raw TXTG (TexToGo) bytes
-    @param orgin_data: The original TXTG raw data
     @param img: The input image (type: PIL.Image)
     @param encoding: The texture format to encode the TXTG
     @return: Converted TXTG bytes
@@ -452,7 +451,7 @@ def pil_to_txtg(img: Image.Image, orgin_data: bytes, encoding: TEX_FORMAT) -> by
 
     # Creating controller
     controller = TXTG()
-    controller.Load(io.BytesIO(orgin_data))
+    controller.Load(io.BytesIO())
 
     # Detecting the format of the input data
     match str(encoding):
