@@ -1035,15 +1035,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 # Exiting function
                 return None
 
-            case "BinaryYAML":
-
-                # Viewing or deleting tab based on user input
-                if not yes_no_prompt:
-                    # Deleting tab and exiting
-                    tabview.delete(item_info["text"])
-                    return None
-
-                # Viewing BinaryYAML file
+            case "BinaryYAML":      # Displaying BinaryYaml format
 
                 # Creating the BYML Controller
                 byml_controller = BYML(item_info["values"][0])
