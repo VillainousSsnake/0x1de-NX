@@ -449,15 +449,59 @@ def pil_to_txtg(img: Image.Image, encoding: TEX_FORMAT) -> bytes | None:
     # Creating output variable
     output = None
 
-    # Creating controller
-    controller = TXTG()
-    controller.Load(io.BytesIO())
-
     # Detecting the format of the input data
     match str(encoding):
 
         case "TEX_FORMAT.BC1_UNORM":  # Decoding TXTG using BC1 format
-            pass    # TODO: Stub
+
+            # TODO: Fix because this isnt acurate at all :(
+
+            img = img.convert("RGBA")
+            width, height = img.size
+
+            # Encode BC1
+            bc1 = etcpak.compress_bc1(img.tobytes(), width, height)
+
+            # Deswizzle BC1 blocks
+            bw, bh = max(1, width // 4), max(1, height // 4)
+            swz = py_tegra_swizzle.deswizzle_block_linear(
+                width=bw,
+                height=bh,
+                depth=1,
+                source=bc1,
+                block_height=get_block_height(bh),
+                bytes_per_pixel=8,
+            )
+
+            # Compress streams
+            streams = [ZsDic.auto_compress_bytes(swz, level=20) for _ in range(1)]
+            decomp_sizes = [len(swz)] * 1
+            comp_sizes = [len(s) for s in streams]
+
+            output = bytearray()
+
+            # Header
+            output += b"\x50\x00\x11\x00\x36\x50\x4B\x30"  # magic
+            output += struct.pack("<H", width)
+            output += struct.pack("<H", height)
+            output += b"\x00"  # unknown
+            output += struct.pack("<B", 1)
+            output += b"\x00" * (0x50 - len(output))  # pad to 0x50
+
+            # Decompressed sizes
+            for s in decomp_sizes:
+                output += struct.pack("<Q", s)
+
+            # Compressed sizes + control values
+            for s in comp_sizes:
+                output += struct.pack("<Q", s)
+                output += struct.pack("<Q", 6)
+
+            # Streams
+            for s in streams:
+                output += s
+
+            return bytes(output)
 
         case "TEX_FORMAT.BC4_UNORM":  # Decoding TXTG using BC4 format
             pass    # TODO: Stub
@@ -466,7 +510,7 @@ def pil_to_txtg(img: Image.Image, encoding: TEX_FORMAT) -> bytes | None:
             pass    # TODO: Stub
 
         case _:  # Throwing type error
-            TypeError("Given encoding '" + encoding + "' isn't a valid texture format")
+            TypeError("Given encoding '" + str(encoding) + "' isn't a valid texture format")
 
     # Returning the output
     return output
