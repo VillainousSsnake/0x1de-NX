@@ -7,6 +7,8 @@ import zlib
 import yaml
 from collections import OrderedDict
 from typing import Any, Dict, List, Tuple
+import os
+import shutil
 import mmh3
 import binascii
 
@@ -342,6 +344,19 @@ class Byml:
         else:
             self.root_node = {}
 
+    @classmethod
+    def from_yaml_root(cls, root, be=False):
+        """Create an empty BYML object with a given root node."""
+        obj = cls.__new__(cls)  # bypass __init__
+        obj.filename = "memory"
+        obj.magic = "BY" if be else "YB"
+        obj.bom = ">" if be else "<"
+        obj.version = 7
+        obj.key_table = []
+        obj.string_table = []
+        obj.root_node = root
+        return obj
+
     def ToYaml(self) -> str:
         temp_dir = tempfile.TemporaryDirectory()
         out_file = os.path.join(temp_dir.name, "output.yml")
@@ -404,19 +419,41 @@ class Byml:
                 else:
                     nonvalue_nodes.append((item, buffer.tell()))
                     buffer.write(u32(0))
+
         elif isinstance(node, dict):
-            # remind myself to check for uint keys from hash arrays
-            buffer.write(u8(0xC1))
-            buffer.write(u24(len(node), self.bom))
-            for key in sorted(node.keys()):
-                value = node[key]
-                buffer.write(u24(self.key_table.index(key), self.bom))
-                buffer.write(u8(self.GetNodeType(value)))
-                if self.IsValue(value):
-                    buffer.write(self.FormatValue(value, self.string_table, self.bom))
-                else:
-                    nonvalue_nodes.append((value, buffer.tell()))
-                    buffer.write(u32(0))
+            # Distinguish hash node (0x20) vs string-hash node (0xC1)
+            is_hash_dict = all(isinstance(k, int) for k in node.keys())
+
+            if is_hash_dict:
+                # 0x20 - Hash Node (keys are 32-bit hashes)
+                buffer.write(u8(0x20))
+                buffer.write(u24(len(node), self.bom))
+
+                # Entries must be sorted by hash value
+                for key in sorted(node.keys()):
+                    value = node[key]
+                    # 4-byte hash
+                    buffer.write(u32(key & 0xFFFFFFFF, self.bom))
+                    # 4-byte value or offset
+                    if self.IsValue(value):
+                        buffer.write(self.FormatValue(value, self.string_table, self.bom))
+                    else:
+                        nonvalue_nodes.append((value, buffer.tell()))
+                        buffer.write(u32(0))
+            else:
+                # 0xC1 - String Hash Node (keys from key_table)
+                buffer.write(u8(0xC1))
+                buffer.write(u24(len(node), self.bom))
+                for key in sorted(node.keys()):
+                    value = node[key]
+                    buffer.write(u24(self.key_table.index(key), self.bom))
+                    buffer.write(u8(self.GetNodeType(value)))
+                    if self.IsValue(value):
+                        buffer.write(self.FormatValue(value, self.string_table, self.bom))
+                    else:
+                        nonvalue_nodes.append((value, buffer.tell()))
+                        buffer.write(u32(0))
+
         elif isinstance(node, bytes):
             buffer.write(u32(len(node), self.bom))
             buffer.write(node)
@@ -609,7 +646,7 @@ class Byml:
             entries.append(self.GetArrayValue((array_type, 1)))
         return entries
 
-    # essentially pulled from byml library
+    # essentially pulled from byml library (fixed)
     def GenerateStringTables(self, data):
         if type(data) == str and data not in self.string_table:
             self.string_table.append(data)
@@ -618,11 +655,12 @@ class Byml:
                 self.GenerateStringTables(item)
         elif type(data) == dict:
             for k in data:
-                if k not in self.key_table:
+                # Only string keys belong in the key table (0xC1 nodes)
+                if isinstance(k, str) and k not in self.key_table:
                     self.key_table.append(k)
                 self.GenerateStringTables(data[k])
 
-    # from the byml library for now, should probably expand for all node types eventually
+    # from the byml library for now, should probably expand for all node types eventually (expanded btw)
     @staticmethod
     def GetNodeType(data):
         if isinstance(data, str):
@@ -632,6 +670,9 @@ class Byml:
         if isinstance(data, list):
             return 0xC0
         if isinstance(data, dict):
+            # BYML v7: 0x20 = hash node (int keys), 0xC1 = string hash node
+            if all(isinstance(k, int) for k in data.keys()):
+                return 0x20
             return 0xC1
         if isinstance(data, bool):
             return 0xD0
@@ -697,3 +738,31 @@ def ExtractPtcl(path_to_esetb):
             with open('ptcl/' + os.path.splitext(byml.filename)[0] + '.ptcl', 'wb') as f:
                 f.write(byml.root_node['PtclBin'])
 
+
+def yaml_string_to_byml_bytes(yaml_string: str, be: bool = False) -> bytes:
+    loader = yaml.SafeLoader
+    add_constructors(loader)
+    root = yaml.load(yaml_string, Loader=loader)
+
+    # Create BYML object WITHOUT parsing bytes
+    by = Byml.from_yaml_root(root, be=be)
+
+    # Creating path variables
+    extract_folder = os.path.join(
+        os.path.join(os.getenv("LOCALAPPDATA"), "0x1de-NX", "_temp_"), "BinaryYAML"
+    )
+
+    # Deleting extract folder if it exists
+    if os.path.exists(extract_folder):
+        shutil.rmtree(extract_folder)
+
+    # Creating the sarc_extract_folder
+    os.makedirs(extract_folder)
+
+    # Reserialize into temp file
+    out_path = os.path.join(extract_folder, "memory")
+    by.Reserialize(extract_folder)
+
+    # Return temp file data
+    with open(out_path, "rb") as f:
+        return f.read()

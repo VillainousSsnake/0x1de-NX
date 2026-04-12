@@ -1,7 +1,6 @@
+from App.FFLib.BinaryYAML.byml_base import Byml
 import json
 import yaml
-
-from App.FFLib.BinaryYAML.byml_base import Byml
 import os
 
 
@@ -56,4 +55,4 @@ class BYML:
             string = yaml.dump(json.loads(string))
 
         # Return output bytes
-        return byml_base.yaml_to_byml_v7(string, endian)
+        return byml_base.yaml_string_to_byml_bytes(string)
