@@ -1,19 +1,10 @@
 # Largely adapated from https://github.com/zeldamods/evfl
 import struct
-from io import BytesIO
 import io
 import tempfile
-import zlib
-import yaml
-from collections import OrderedDict
-from typing import Any, Dict, List, Tuple
-import os
 import shutil
 import mmh3
 import binascii
-
-import yaml
-from collections import OrderedDict
 
 
 class Stream:

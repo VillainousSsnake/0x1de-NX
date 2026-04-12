@@ -1035,14 +1035,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 # Exiting function
                 return None
 
-            case "BinaryYAML":                      # TODO: Displaying BYML format
-
-                # Asking to view the file
-                yes_no_prompt = messagebox.askokcancel(
-                    title="file_format Error",
-                    message=("This file is not fully supported!\n" + f"Unsupported File Format: " + file_format
-                             + "\n\nThere is no support for saving this file, do you want to attempt view it?")
-                )
+            case "BinaryYAML":
 
                 # Viewing or deleting tab based on user input
                 if not yes_no_prompt:
