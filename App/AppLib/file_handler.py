@@ -968,7 +968,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 aamp_controller = AAMP(item_info["values"][0])
 
                 # Getting the YAML data
-                json_data = aamp_controller.to_yaml()
+                yaml_data = aamp_controller.to_yaml()
 
                 # Creating the top navigation frame
                 top_navigation_frame = ctk.CTkFrame(
@@ -1010,7 +1010,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 code_view.pack(fill="both", side="top", anchor="w")
 
                 # Inserting the yaml data into the code view widget
-                code_view.insert(0.0, json_data + "\n")
+                code_view.insert(0.0, yaml_data + "\n")
 
                 # Removing the extra new line at the end of file
                 code_view.delete(str(float(code_view.index("end")) - 1), "end")
@@ -1056,7 +1056,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 byml_controller = BYML(item_info["values"][0])
 
                 # Getting the YAML data from the BYML Controller
-                json_data = byml_controller.to_yaml()
+                yaml_data = byml_controller.to_yaml()
 
                 # Creating the top navigation frame
                 top_navigation_frame = ctk.CTkFrame(
@@ -1098,16 +1098,24 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 code_view.pack(fill="both", side="top", anchor="w")
 
                 # Inserting the yaml data into the code view widget
-                code_view.insert(0.0, json_data)
+                code_view.insert(0.0, yaml_data)
 
                 # Removing the extra new line at the end of file
                 code_view.delete(str(float(code_view.index("end")) - 1), "end")
 
                 # Creating the update function
                 def save_file(event=None):
-                    messagebox.showerror(
-                        "Error: Saving BYML Files Not Supported!",
-                        "Currently the BYML File format does not support saving! Please try updating or wait for a future update to support saving BYML Files!"
+
+                    code_view_contents = code_view.get("0.0", "end")
+                    byml_data_out = byml_controller.to_byml(code_view_contents, 'yaml')
+
+                    with open(item_info["values"][0], "wb") as f:
+                        f.write(byml_data_out)
+
+                    # Showing output
+                    messagebox.showinfo(
+                        "0x1de-NX - Save Completed",
+                        "Saved BYML file to '" + item_info["values"][0] + "'",
                     )
 
                 # Assigning the button functions
@@ -1122,7 +1130,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 asb_controller = ASB(item_info["values"][0], app.settings["romfs_path"])
 
                 # Getting the YAML data
-                json_data = asb_controller.to_json()
+                yaml_data = asb_controller.to_json()
 
                 # Creating the top navigation frame
                 top_navigation_frame = ctk.CTkFrame(
@@ -1164,7 +1172,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 code_view.pack(fill="both", side="top", anchor="w")
 
                 # Inserting the yaml data into the code view widget
-                code_view.insert(0.0, json_data + "\n")
+                code_view.insert(0.0, yaml_data + "\n")
 
                 # Removing the extra new line at the end of file
                 code_view.delete(str(float(code_view.index("end")) - 1), "end")
@@ -1205,7 +1213,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 baev_controller = BAEV(item_info["values"][0], app.settings["romfs_path"])
 
                 # Getting the YAML data
-                json_data = baev_controller.to_json()
+                yaml_data = baev_controller.to_json()
 
                 # Creating the top navigation frame
                 top_navigation_frame = ctk.CTkFrame(
@@ -1247,7 +1255,7 @@ WARNING: THIS CANNOT BE UNDONE YET!!!"""
                 code_view.pack(fill="both", side="top", anchor="w")
 
                 # Inserting the yaml data into the code view widget
-                code_view.insert(0.0, json_data + "\n")
+                code_view.insert(0.0, yaml_data + "\n")
 
                 # Removing the extra new line at the end of file
                 code_view.delete(str(float(code_view.index("end")) - 1), "end")
