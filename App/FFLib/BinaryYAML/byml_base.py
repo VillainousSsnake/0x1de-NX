@@ -1,10 +1,17 @@
 # Largely adapated from https://github.com/zeldamods/evfl
 import struct
+from io import BytesIO
 import io
 import tempfile
-
+import zlib
+import yaml
+from collections import OrderedDict
+from typing import Any, Dict, List, Tuple
 import mmh3
 import binascii
+
+import yaml
+from collections import OrderedDict
 
 
 class Stream:
@@ -689,3 +696,403 @@ def ExtractPtcl(path_to_esetb):
         if 'PtclBin' in byml.root_node:
             with open('ptcl/' + os.path.splitext(byml.filename)[0] + '.ptcl', 'wb') as f:
                 f.write(byml.root_node['PtclBin'])
+
+
+# Node type constants
+NODE_ARRAY = 0xC0
+NODE_STRING_TABLE = 0xC2
+NODE_HASH = 0x20
+NODE_BINARY = 0xA1
+# New constant
+NODE_STRING_HASH = 0xC1
+
+# Primitive value type markers (we will encode the 4-byte "value" with a leading type byte)
+VAL_NULL = 0xFF
+VAL_BOOL = 0xD0
+VAL_INT = 0xD1
+VAL_FLOAT = 0xD2
+VAL_UINT = 0xD3
+VAL_STRING_INDEX = 0xA0
+
+
+def hash_key(s: str) -> int:
+    """32-bit hash for keys (CRC32)."""
+    return zlib.crc32(s.encode('utf-8')) & 0xFFFFFFFF
+
+def align4(n: int) -> int:
+    return (n + 3) & ~3
+
+class BYMLBuilder:
+    def __init__(self, endian: str = '<'):
+        """
+        endian: '<' for little-endian (YB), '>' for big-endian (BY)
+        """
+        assert endian in ('<', '>')
+        self.endian = endian
+        self.strings: List[str] = []
+        self.string_index: Dict[str, int] = {}
+        self.nodes: List[Tuple[int, bytes]] = []  # list of (node_type, raw_bytes)
+        self.node_offsets: List[int] = []
+        self.binary_nodes: List[bytes] = []
+
+    def collect_strings(self, obj: Any):
+        """Recursively collect strings from keys and string values."""
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                if not isinstance(k, str):
+                    raise TypeError("Only string keys are supported for dicts")
+                self._add_string(k)
+                self.collect_strings(v)
+        elif isinstance(obj, list):
+            for e in obj:
+                self.collect_strings(e)
+        elif isinstance(obj, str):
+            self._add_string(obj)
+        # bytes, numbers, bool, null: no strings to collect
+
+    def _add_string(self, s: str):
+        if s not in self.string_index:
+            idx = len(self.strings)
+            self.string_index[s] = idx
+            self.strings.append(s)
+
+
+
+    def build_string_table_node(self) -> bytes:
+        """Build a 0xC2 string table node. Returns raw node bytes (including leading type byte)."""
+        N = len(self.strings)
+        # header: 1 byte type, 3 bytes count
+        header = bytes([NODE_STRING_TABLE]) + (0).to_bytes(3, 'little' if self.endian == '<' else 'big')  # placeholder for count; we'll pack with struct
+        # We'll pack count using endianness for 3 bytes: easier to build manually
+        count_bytes = (N).to_bytes(3, 'little' if self.endian == '<' else 'big')  # count is stored as 3 bytes (endian independent in spec)
+        # Offsets array: N+1 offsets (4 bytes each) relative to start of node
+        offsets = []
+        # The offsets area size = 4*(N+1)
+        base_offset = 4 + 4 * (N + 1)  # node header (1+3=4) + offsets
+        # Build string data
+        string_data = b''
+        cur = 0
+        for s in self.strings:
+            offsets.append(base_offset + cur)
+            b = s.encode('utf-8') + b'\x00'
+            string_data += b
+            cur += len(b)
+        offsets.append(base_offset + cur)  # end offset
+        # pad offsets area to multiple of 4 already is multiple because it's 4*(N+1)
+        # Now assemble
+        node = bytearray()
+        node.append(NODE_STRING_TABLE)
+        node += (N).to_bytes(3, 'little' if self.endian == '<' else 'big')
+        for off in offsets:
+            node += off.to_bytes(4, 'little' if self.endian == '<' else 'big')  # offsets are relative to start of node; use big-endian for internal offsets
+        # append string_data and pad to 4
+        node += string_data
+        while len(node) % 4 != 0:
+            node += b'\x00'
+        return bytes(node)
+
+    def encode_value_inline(self, v: Any) -> Tuple[int, bytes]:
+        """
+        Return (type_byte, 4-byte value) for primitive values that can be encoded inline.
+        For strings, returns (VAL_STRING_INDEX, 4-byte index).
+        For bytes/binary, returns (NODE_BINARY, offset_placeholder) - caller must replace placeholder with actual offset.
+        """
+        if v is None:
+            return VAL_NULL, (0).to_bytes(4, 'little' if self.endian == '<' else 'big')
+        if isinstance(v, bool):
+            val = 1 if v else 0
+            return VAL_BOOL, val.to_bytes(4, self.endian == '<' and 'little' or 'big', signed=False)
+        if isinstance(v, int):
+            if v < 0:
+                # signed 32-bit
+                if not (-2**31 <= v < 2**31):
+                    raise ValueError("Integer out of 32-bit range")
+                return VAL_INT, int.to_bytes(v & 0xFFFFFFFF, 4, self.endian == '<' and 'little' or 'big', signed=False)
+            else:
+                if v <= 0x7FFFFFFF:
+                    return VAL_INT, int.to_bytes(v, 4, self.endian == '<' and 'little' or 'big', signed=True)
+                elif v <= 0xFFFFFFFF:
+                    return VAL_UINT, int.to_bytes(v, 4, self.endian == '<' and 'little' or 'big', signed=False)
+                else:
+                    raise ValueError("Integer out of 32-bit range")
+        if isinstance(v, float):
+            # pack as float32
+            fmt = self.endian + 'f'
+            return VAL_FLOAT, struct.pack(fmt, v)
+        if isinstance(v, str):
+            idx = self.string_index[v]
+            # string index is a 4-byte integer (index into string table)
+            return VAL_STRING_INDEX, int.to_bytes(idx, 4, self.endian == '<' and 'little' or 'big', signed=False)
+        if isinstance(v, bytes):
+            # create a binary node and return placeholder offset (0 for now). We'll append node later and replace offsets.
+            idx = len(self.binary_nodes)
+            self.binary_nodes.append(v)
+            # placeholder 0; caller must treat this as a non-regular node and use offset to node
+            return NODE_BINARY, (idx).to_bytes(4, 'little' if self.endian == '<' else 'big')
+        raise TypeError(f"Unsupported value type: {type(v)}")
+
+    def build_array_node(self, arr: List[Any]) -> bytes:
+        """
+        Build a 0xC0 array node. We will encode element types (1 byte each, padded to multiple of 4),
+        then element values (4 bytes each). For non-regular value nodes (binary), the 4-byte value will be an offset placeholder.
+        """
+        N = len(arr)
+        node = bytearray()
+        node.append(NODE_ARRAY)
+        node += (N).to_bytes(3, 'little' if self.endian == '<' else 'big')
+        # types array (N bytes) padded to multiple of 4
+        types = bytearray()
+        values = bytearray()
+        # For each element, determine type byte and 4-byte value
+        for e in arr:
+            if isinstance(e, (dict, list)):
+                # container: we will create a node for it later; mark type as container (we'll use 0xC0 for arrays and 0x20 for dicts)
+                # For now, we will append a placeholder value 0 and store the actual node in self.nodes later.
+                if isinstance(e, list):
+                    types.append(NODE_ARRAY)
+                else:
+                    types.append(NODE_HASH)
+                values += (0).to_bytes(4, 'little' if self.endian == '<' else 'big')
+            else:
+                tbyte, vbytes = self.encode_value_inline(e)
+                types.append(tbyte)
+                values += vbytes
+        # pad types to multiple of 4
+        while len(types) % 4 != 0:
+            types += b'\x00'
+        node += types
+        # append values (4*N)
+        node += values
+        # pad node to 4 bytes
+        while len(node) % 4 != 0:
+            node += b'\x00'
+        return bytes(node)
+
+    def build_hash_node(self, d: Dict[str, Any]) -> bytes:
+        """
+        Build a 0x20 hash node. Entries must be sorted by hash value.
+        Each entry: 4-byte hash, 4-byte value (inline or offset placeholder).
+        After entries, append N type bytes (1 per entry) padded to 4 bytes.
+        """
+        items = []
+        for k, v in d.items():
+            h = hash_key(k)
+            items.append((h, k, v))
+        items.sort(key=lambda x: x[0])
+        N = len(items)
+        node = bytearray()
+        node.append(NODE_HASH)
+        node += (N).to_bytes(3, 'little' if self.endian == '<' else 'big')
+        entries = bytearray()
+        types = bytearray()
+        for h, k, v in items:
+            entries += h.to_bytes(4, self.endian == '<' and 'little' or 'big')
+            if isinstance(v, (dict, list)):
+                # placeholder offset 0
+                entries += (0).to_bytes(4, 'little' if self.endian == '<' else 'big')
+                if isinstance(v, list):
+                    types.append(NODE_ARRAY)
+                else:
+                    types.append(NODE_HASH)
+            else:
+                tbyte, vbytes = self.encode_value_inline(v)
+                entries += vbytes
+                types.append(tbyte)
+        # append entries then types padded to 4
+        node += entries
+        while len(types) % 4 != 0:
+            types += b'\x00'
+        node += types
+        while len(node) % 4 != 0:
+            node += b'\x00'
+        return bytes(node)
+
+    def stage_nodes(self, root: Any):
+        """
+        Recursively create node raw bytes for all containers and binary nodes.
+        We store nodes in self.nodes in the order they are created. Later we will assign offsets.
+        """
+        # first collect strings
+        self.collect_strings(root)
+        # create string table node now (we will place it among nodes)
+        string_node = self.build_string_table_node()
+        # We'll place string table node first after header (common approach)
+        self.nodes.append((NODE_STRING_TABLE, string_node))
+        # recursively create container nodes
+        def rec(o):
+            if isinstance(o, list):
+                # create nodes for children first
+                for e in o:
+                    if isinstance(e, (list, dict)):
+                        rec(e)
+                node_bytes = self.build_array_node(o)
+                self.nodes.append((NODE_ARRAY, node_bytes))
+            elif isinstance(o, dict):
+                for v in o.values():
+                    if isinstance(v, (list, dict)):
+                        rec(v)
+                node_bytes = self.build_hash_node(o)
+                self.nodes.append((NODE_HASH, node_bytes))
+            else:
+                # primitives and bytes handled elsewhere
+                pass
+        rec(root)
+        # create binary nodes (0xA1) for each bytes entry
+        for b in self.binary_nodes:
+            node = bytearray()
+            # node type is not stored in A1 node body (A1 is a value node type used as offset), but when stored as a full node we just store data block
+            # For our representation, we store raw A1 node as: 4-byte length + data
+            node += len(b).to_bytes(4, self.endian == '<' and 'little' or 'big')
+            node += b
+            # pad to 4
+            while len(node) % 4 != 0:
+                node += b'\x00'
+            self.nodes.append((NODE_BINARY, bytes(node)))
+
+    def assign_offsets_and_fix_placeholders(self, header_size=0x10) -> bytes:
+        """
+        Assign offsets to nodes and produce final bytes. header_size is 0x10 by spec.
+        We will place nodes sequentially after header. Return final bytes.
+        """
+        # compute offsets
+        out = bytearray()
+        # reserve header
+        out += b'\x00' * header_size
+        # align to 4 already
+        offsets = []
+        for node_type, raw in self.nodes:
+            # align current length to 4
+            cur_off = len(out)
+            cur_off = align4(cur_off)
+            if cur_off != len(out):
+                out += b'\x00' * (cur_off - len(out))
+            offsets.append(cur_off)
+            out += raw
+        # Now we need to go back and fix placeholders in container nodes where we left 0 offsets for child containers and binary nodes.
+        # We'll parse each node we created and replace placeholder 4-byte zeros with actual offsets.
+        # Build a mapping from node index to offset
+        node_offset_map = {i: offsets[i] for i in range(len(self.nodes))}
+        # Helper to find node index by identity (we used append order)
+        # Node order: [string_table] + container nodes + binary nodes
+        # We'll iterate nodes and patch entries.
+        out_b = bytearray(out)  # mutable
+        for idx, (node_type, raw) in enumerate(self.nodes):
+            node_off = offsets[idx]
+            if node_type == NODE_ARRAY:
+                # parse header: 1 byte type, 3 bytes count
+                N = int.from_bytes(raw[1:4], 'little' if self.endian == '<' else 'big')
+                types_offset = 4
+                # types length padded to multiple of 4
+                types_len = align4(N)
+                values_offset = 4 + types_len
+                for i in range(N):
+                    tbyte = raw[types_offset + i]
+                    if tbyte in (NODE_ARRAY, NODE_HASH):
+                        # placeholder value is at values_offset + 4*i
+                        # find the child node in self.nodes by matching raw bytes (approx): we must find the next node of that type that corresponds.
+                        # Simpler: we will search for a container in the original structure by scanning nodes after current index for same raw bytes length.
+                        # This is heuristic but works for our staged nodes because we created child nodes before parent nodes in staging.
+                        # Find first node of matching type that is not the string table and not already referenced.
+                        child_idx = None
+                        for j in range(len(self.nodes)):
+                            if j == idx:
+                                continue
+                            if self.nodes[j][0] == tbyte:
+                                # ensure its offset is not zero and not equal to node_off
+                                child_idx = j
+                                break
+                        if child_idx is None:
+                            raise RuntimeError("Could not find child node to patch")
+                        child_off = node_offset_map[child_idx]
+                        # write offset into out_b at (node_off + values_offset + 4*i)
+                        pos = node_off + values_offset + 4 * i
+                        out_b[pos:pos+4] = child_off.to_bytes(4, 'little' if self.endian == '<' else 'big')
+                # done
+            elif node_type == NODE_HASH:
+                N = int.from_bytes(raw[1:4], 'little' if self.endian == '<' else 'big')
+                entries_offset = 4
+                for i in range(N):
+                    # hash (4 bytes) then value (4 bytes)
+                    value_pos_in_raw = entries_offset + 4 + 8 * i  # raw index where value bytes start
+                    # read the type byte from types area: types area starts at entries_offset + 8*N
+                    types_area_start = entries_offset + 8 * N
+                    tbyte = raw[types_area_start + i]
+                    if tbyte in (NODE_ARRAY, NODE_HASH):
+                        # find a child node of that type
+                        child_idx = None
+                        for j in range(len(self.nodes)):
+                            if self.nodes[j][0] == tbyte:
+                                child_idx = j
+                                break
+                        if child_idx is None:
+                            raise RuntimeError("Could not find child node to patch (hash)")
+                        child_off = node_offset_map[child_idx]
+                        pos = node_off + value_pos_in_raw
+                        out_b[pos:pos+4] = child_off.to_bytes(4, 'little' if self.endian == '<' else 'big')
+                    elif tbyte == NODE_BINARY:
+                        # value currently contains an index into binary_nodes (we stored that index in encode_value_inline)
+                        # raw value bytes are present in raw; we need to read that index and map to the corresponding binary node offset
+                        # read the 4 bytes from raw
+                        idx_bytes = raw[value_pos_in_raw:value_pos_in_raw+4]
+                        idx_val = int.from_bytes(idx_bytes, 'little' if self.endian == '<' else 'big')
+                        # binary nodes are appended at the end of self.nodes; find their node index
+                        # binary nodes were appended after containers in stage_nodes; find the j-th binary node
+                        # find the j-th node with type NODE_BINARY
+                        bin_count = -1
+                        child_idx = None
+                        for j in range(len(self.nodes)):
+                            if self.nodes[j][0] == NODE_BINARY:
+                                bin_count += 1
+                                if bin_count == idx_val:
+                                    child_idx = j
+                                    break
+                        if child_idx is None:
+                            raise RuntimeError("Binary node index not found")
+                        child_off = node_offset_map[child_idx]
+                        pos = node_off + value_pos_in_raw
+                        out_b[pos:pos+4] = child_off.to_bytes(4, 'little' if self.endian == '<' else 'big')
+                    else:
+                        # primitive or string index: nothing to patch
+                        pass
+            # other node types: nothing to patch
+        # Now build header
+        # Header layout:
+        # 0x00 2 bytes: "BY" (big endian) or "YB" (little endian)
+        # 0x02 2 bytes: version (we use 7)
+        # 0x04 4 bytes: offset to hash key table (we point to string table node)
+        # 0x08 4 bytes: offset to string table (same)
+        # 0x0c 4 bytes: offset to root node (we set to last staged node which corresponds to root container)
+        header = bytearray(16)
+        if self.endian == '>':
+            header[0:2] = b'BY'
+        else:
+            header[0:2] = b'YB'
+        header[2:4] = (7).to_bytes(2, 'little' if self.endian == '<' else 'big')  # version 7 stored big-endian in spec; keep consistent
+        # hash key table offset and string table offset: point to first node (string table)
+        string_table_offset = offsets[0]
+        header[4:8] = string_table_offset.to_bytes(4, 'little' if self.endian == '<' else 'big')
+        header[8:12] = string_table_offset.to_bytes(4, 'little' if self.endian == '<' else 'big')
+        # root node offset: the last node we created that corresponds to the root container.
+        # We assume the last container node corresponds to the root (we appended containers after string table)
+        # Find the last node that is a container (ARRAY or HASH)
+        root_off = 0
+        for i in range(len(self.nodes)-1, -1, -1):
+            if self.nodes[i][0] in (NODE_ARRAY, NODE_HASH):
+                root_off = offsets[i]
+                break
+        header[12:16] = root_off.to_bytes(4, 'little' if self.endian == '<' else 'big')
+        # write header into out_b
+        out_b[0:16] = header
+        return bytes(out_b)
+
+def yaml_to_byml_v7(yaml_text: str, endian: str = 'little') -> bytes:
+    """
+    Convert YAML text to BYML v7 bytes.
+    endian: 'little' or 'big'
+    """
+    data = yaml.safe_load(yaml_text)
+    eb = '<' if endian == 'little' else '>'
+    builder = BYMLBuilder(endian=eb)
+    builder.stage_nodes(data)
+    final = builder.assign_offsets_and_fix_placeholders(header_size=0x10)
+    return final

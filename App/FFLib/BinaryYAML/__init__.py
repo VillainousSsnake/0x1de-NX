@@ -1,4 +1,5 @@
-import tempfile
+import json
+import yaml
 
 from App.FFLib.BinaryYAML.byml_base import Byml
 import os
@@ -34,20 +35,25 @@ class BYML:
         """
         return self.byml_controller.ToYaml()
 
-    def to_byml(self, data, mode) -> None:      # TODO: Finish
+    def to_byml(self, string: str, mode: str = 'yaml') -> bytes:      # TODO: Finish
         """
         Converts JSON or YAML string to BYML Data.
-        :param data: JSON or YAML data
+        :param string: JSON or YAML string
         :param mode: Mode for data input type. Can be 'JSON' or 'YAML'
-        :return: TODO: Stub
+        :return: Converted BYML bytes
         """
 
-        temp_dir = tempfile.TemporaryDirectory()
+        # Getting endian
+        endian = None
+        match self.byml_controller.bom:
+            case ">":
+                endian = "big"
+            case "<":
+                endian = "little"
 
-        match mode:
+        # Convert json to yaml if mode is set to json
+        if mode.lower() == "json":
+            string = yaml.dump(json.loads(string))
 
-            case "JSON":
-                pass    # TODO: Stub
-
-            case "YAML":
-                pass    # TODO: Stub
+        # Return output bytes
+        return byml_base.yaml_to_byml_v7(string, endian)
